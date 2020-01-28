@@ -40,7 +40,7 @@ GETTING STARTED
 
 1) Change the main settings such as filenames and parameters in settings.yaml
 
-2) run python script run_geobo.py 
+2) python run_geobo.py 
 
 
 The main functions for acquisitian function  can be found in run_geobo.py
