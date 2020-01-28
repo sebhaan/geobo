@@ -1,9 +1,9 @@
-GEOBO
+GeoBO
 ==========================================
 
 Python package for Multi-Objective Bayesian Optimisation and Joint Inversion in Geosciences
 
-``GEOBO`` is build upon a probabilistic framework using Gaussian Process (GP) priors to jointly solve multi-linear forward models. This software generates multi-output 3D cubes of geophysical properties (e.g. density, magnetic susceptibility, mineral concentrations) and their uncertainties from 2D survey data (e.g. magnetics and gravity) and any pre-existing drillcore measurements. The reconstructed 3D model is then used to query the next most promising measurement location given an expensive cost function (e.g. for drillcores). A ranked list of new measurements is proposed based on user-defined objectives as defined in the acquisitian function which typically aims to optimize exploration (reducing global model uncertainty) and exploitation (focusing on highly promising regions) while minimizing costs.
+``GeoBO`` is build upon a probabilistic framework using Gaussian Process (GP) priors to jointly solve multi-linear forward models. This software generates multi-output 3D cubes of geophysical properties (e.g. density, magnetic susceptibility, mineral concentrations) and their uncertainties from 2D survey data (e.g. magnetics and gravity) and any pre-existing drillcore measurements. The reconstructed 3D model is then used to query the next most promising measurement location given an expensive cost function (e.g. for drillcores). A ranked list of new measurements is proposed based on user-defined objectives as defined in the acquisitian function which typically aims to optimize exploration (reducing global model uncertainty) and exploitation (focusing on highly promising regions) while minimizing costs.
 
 The probablistic framework includes all steps from  prior selection, data fusion and inversion, to sensor optimisation and real world model output.
 
@@ -46,8 +46,5 @@ GETTING STARTED
 The main functions for acquisitian function  can be found in run_geobo.py
 Visualisation functions and VTK export are defined in cubeshow.py
 Inversion functions are defined in inversion.py 
-
-
-For questions please contact: sebastian.haan@sydney.edu.au
 
 
