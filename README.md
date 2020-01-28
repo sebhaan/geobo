@@ -48,6 +48,3 @@ Visualisation functions and VTK export are defined in cubeshow.py
 Inversion functions are defined in inversion.py 
 
 
-For questions please contact: sebastian.haan@sydney.edu.au
-
-
