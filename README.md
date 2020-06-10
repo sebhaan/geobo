@@ -13,8 +13,8 @@
   - [Documentation](#documentation)
 - [Usage and Settings](#usage-and-settings) 
 - [Examples and Tests](#examples)
-  - [Synthetic Models]
-  - [Drillcore Test Example]
+  - [Synthetic Models](#synthetic-models)
+  - [Drillcore Test Example](#drillcore-estt-example)
 - [Literature](#literature)
 - [Attribution and Acknowledgments](#attribution-and-acknowledgements)
   - [Project Contributors](#project-contributors)
