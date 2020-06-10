@@ -7,7 +7,7 @@ Author: Sebastian Haan
 
 """
 
-from __future__ import print_function
+import os 
 import numpy as np
 import os
 import sys
@@ -32,7 +32,7 @@ def skplot2(density, Nsize, drill = [], sensor = [], savefig = True, show = True
         if not os.path.exists(path_out):
             raise ValueError("Path not found: " + path_out)
         else:
-            outfile = path_out + filename
+            outfile = os.path.join(path_out, filename)
     Nsize = np.asarray(Nsize)
     if len(drill) > 0:
         drill = np.asarray(drill)
@@ -94,7 +94,7 @@ def skplot2(density, Nsize, drill = [], sensor = [], savefig = True, show = True
 
 def skplot3(density, Nsize, drill = [], sensor = [], savefig = True, show = True, path_out = '', filename = 'density-drill-mesh.png'):
     """
-    Makes columetric 3D mesh plot at different density levels
+    Makes columetric 3D mesh plot at different density levels using MArching cubes levinger algorithm
     and plots non-vertical drillholes
     :params drill: x, y, z drillpositions
     """
@@ -102,7 +102,7 @@ def skplot3(density, Nsize, drill = [], sensor = [], savefig = True, show = True
         if not os.path.exists(path_out):
             raise ValueError("Path not found: " + path_out)
         else:
-            outfile = path_out + filename
+            outfile = os.path.join(path_out,filename)
     Nsize = np.asarray(Nsize)
     if len(drill) > 0:
         drill = np.asarray(drill)

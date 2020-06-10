@@ -1,12 +1,13 @@
 # User settings, filenames and global model parameters
 
 ##### Define Main file directories #########
-inpath: "../tests/data/synthetic/"
-outpath: "../tests/testresults/cylinders/" 
+inpath: "../examples/testdata/synthetic/"
+outpath: "../examples/results/cylinders/" 
 # Filenames for input drill core  data, for e.g. the synthetic cylinder model:
 FNAME_drilldata:  'simdrill_cylinders.csv' 
 FNAME_gravsurvey: 'gravity_simdata_cylinders.tif'
 FNAME_magsurvey:  'magnetic_simdata_cylinders.tif' 
+
 
 # Names of drillcore data that shoud be crosscorrelated need to match header names in drilldata file
 drill_features: ['DENSITY', 'MAGSUS']
@@ -32,13 +33,13 @@ zNcube: 16 # Number of voxels in vertical direction
 
 
 ### Will generate simulated data first before runing inversion (use for tetsing)
-gen_simulation: no
+gen_simulation: yes
 # specify model: 'cylinders', 'layers_2', 'layers_3'
 modelname: 'cylinders' 
 
 ##### Gaussian Process Settings ###
 gp_lengthscale: 2 # times voxelsize
-gp_err: [0.1, 0.1, 0.1] # regularisation term
+gp_err: [0.1, 0.1, 0.1] # regularisation terms, should correpsond to normalized input data uncertainity (input data normalized to unity)
 #Correlation between properties (w1,w2,w3)
 #w1: density - drill correlation factor
 #w2: magentic - drill correlation factor 
@@ -47,6 +48,9 @@ gp_coeff: [1.0, 0.2, 0.2]
 ## GP kernel function settings ##
 # Define kernel function, can be either  'sparse' (Default), 'exp' (squared exponential) or 'matern32'
 kernelfunc: 'sparse'
+# Optimize GP amplitude (default 1), lengthscale parameter (gp_lengthscale) and correlation coefficients (gp_coeff):
+optimize_gp: False # Warning: GP optmization can take a long time
+
 
 ### Magnetic settings ####
 # Earth's magnetic field value at site, need to be updated
@@ -57,7 +61,7 @@ YMAG: 0
 ZMAG: 1 
 
 
-###### PLotting options #########
+###### Plotting options #########
 plot_vertical: yes
 #plot_data2: no #use no/yes
 #plot_data3: no
@@ -93,3 +97,4 @@ c_GCM3_TO_SI: 1000.0
 fcor_grav: 1. 
 fcor_mag: 0.001 # magnetic susceptibility is measured in 0.001 SI units  
 ########################
+

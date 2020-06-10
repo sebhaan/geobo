@@ -1,7 +1,5 @@
 """
-Main script for running BO with joint inversion 
-
-Author: Sebastian Haan
+Copyright 2020 Sebastian Haan
 
 This script creates reconstructed Cubes with mean subtracted properties of density, magnetic susceptibility, 
 and  drill core properties plus their predicted variance cubes (see inversion.py for more details)
@@ -9,9 +7,12 @@ and  drill core properties plus their predicted variance cubes (see inversion.py
 See settings.yaml for specifications.
 
 ToDo: 
+- Create settings and call settings file as argument
 - Implement GP hyperparameter optimisation at adavanced user level
+- change readin in routine to os.path.join
 
 """
+import os
 import numpy as np
 import pandas as pd
 import rasterio
@@ -46,12 +47,12 @@ def read_surveydata(plot = True):
 	sensor locations
 	"""
 	if FNAME_gravsurvey is not None:
-		gravimg = rasterio.open(inpath + FNAME_gravsurvey)
+		gravimg = rasterio.open(os.path.join(inpath,FNAME_gravsurvey))
 		grav = gravimg.read(1)
 	else:
 		grav = None
 	if FNAME_magsurvey is not None:
-		magimg = rasterio.open(inpath + FNAME_magsurvey)
+		magimg = rasterio.open(os.path.join(inpath + FNAME_magsurvey))
 		mag = magimg.read(1)
 	else:
 		mag = None
@@ -72,21 +73,21 @@ def read_surveydata(plot = True):
 		os.makedirs(outpath)
 	if plot:
 		extent=[xmin,xmax,ymin,ymax]
-		plt.imshow(grav, aspect = 'equal', cmap = 'viridis', extent=extent)
+		plt.imshow(grav, aspect = 'equal', cmap = 'viridis', extent=extent, origin='lower')
 		plt.colorbar()
-		plt.savefig(outpath + 'gravfield.png')
+		plt.savefig(os.path.join(outpath,'gravfield.png'))
 		plt.clf()
-		plt.imshow(mag, aspect = 'equal', cmap = 'viridis', extent=extent)
+		plt.imshow(mag, aspect = 'equal', cmap = 'viridis', extent=extent, origin='lower')
 		plt.colorbar()
-		plt.savefig(outpath + 'magfield.png')
+		plt.savefig(os.path.join(outpath, 'magfield.png'))
 		plt.clf()
-		plt.imshow(grav2, aspect = 'equal', cmap = 'viridis', extent=extent)
+		plt.imshow(grav2, aspect = 'equal', cmap = 'viridis', extent=extent, origin='lower')
 		plt.colorbar()
-		plt.savefig(outpath + 'gravfield_downsampled.png')
+		plt.savefig(os.path.join(outpath, 'gravfield_downsampled.png'))
 		plt.clf()
-		plt.imshow(mag2, aspect = 'equal', cmap = 'viridis', extent=extent)
+		plt.imshow(mag2, aspect = 'equal', cmap = 'viridis', extent=extent, origin='lower')
 		plt.colorbar()
-		plt.savefig(outpath + 'magfield_downsampled.png')
+		plt.savefig(os.path.join(outpath,'magfield_downsampled.png'))
 		plt.close("all")
 	return grav2.flatten(), mag2.flatten(), locations
 
@@ -104,7 +105,7 @@ def read_drilldata(features):
 	x,y,z min,max arrays of drilldata
 	"""
 	if FNAME_drilldata is not None:
-		drill = pd.read_csv(inpath + FNAME_drilldata)
+		drill = pd.read_csv(os.path.join(inpath,FNAME_drilldata))
 		drill = drill[(drill.x >= xmin) & (drill.x <= xmax) & (drill.y >= ymin) & (drill.y <= ymax) & (drill.z <= zmax) & (drill.z >= zmin)].copy()
 	else: 
 		drill = None
@@ -270,22 +271,24 @@ def bayesopt_vert(drillcoord = None):
 	bopt_res = shgo(futility_vertical, bounds = ((1,yNcube - 1), (1,xNcube- 1)), n=20, iters=20, sampling_method='sobol' ) #tol =1e-6, method='SLSQP'
 	if not bopt_res.success:
 		print('WARNING: ' + bopt_res.message) 
-	print('New Drillcore Proposal:')
+	print('')
+	print('New vertical Drillcore Proposal:')
 	print('_______________________')
 	print('EASTING [meters]: ', np.round(bopt_res.x[1] * xvoxsize) + xmin + 0.5 * xvoxsize)
 	print('NORTHING [meters]: ', np.round(bopt_res.x[0] * yvoxsize) + ymin + 0.5 * yvoxsize)
+	print(' ')
 
 	# Write new drillcore proposals as csv file
-	print('Saving all new drillhole proposals in file: newdrill_proposals.csv')
+	print('Saving all new drillhole proposals in file: newdrill_proposals_vertical.csv')
 	newdf_values = bopt_res.xl 
 	newdf_head = ['NORTHING','EASTING']
 	df_newdrill = pd.DataFrame(np.round(newdf_values,2), columns = newdf_head)
 	df_newdrill['EASTING'] = np.round(df_newdrill['EASTING']) * xvoxsize + xmin + 0.5 * xvoxsize
 	df_newdrill['NORTHING'] = np.round(df_newdrill['NORTHING']) * yvoxsize + ymin + 0.5 * yvoxsize
 	df_newdrill['BO_GAIN'] = -np.round(bopt_res.funl,4)
-	df_newdrill.to_csv(outpath+ 'newdrill_vertical_proposals.csv', index=False)
+	df_newdrill.to_csv(os.path.join(outpath,'newdrill_proposals_vertical.csv'), index=False)
 
-	# Create image of porposed drillcore positions
+	# Create image of proposed drillcore positions
 	densimg = density_rec.mean(axis = 2)
 	magsusimg = magsus_rec.mean(axis = 2)
 	drillimg = drill_rec.mean(axis = 2)
@@ -303,7 +306,7 @@ def bayesopt_vert(drillcoord = None):
 	plt.scatter(df_newdrill.loc[0,'EASTING'], df_newdrill.loc[0,'NORTHING'], color='red')
 	plt.title('Proposed Vertical Drillcores')
 	plt.tight_layout()
-	plt.savefig(outpath + 'newdrill_vertical_proposals.png')
+	plt.savefig(os.path.join(outpath, 'newdrill_vertical_proposals.png'))
 	plt.close("all")
 
 
@@ -323,24 +326,26 @@ def bayesopt_nonvert(drillcoord = None):
 
 	bnds = ((yvoxsize,yLcube - yvoxsize), (xvoxsize,xLcube- xvoxsize), (0,360),(30,90))
 	bopt_res = shgo(futility_drill, bnds, n=10, iters=500, sampling_method='sobol')
-	print('New Drillcore Proposal:')
+	print('')
+	print('New non-vertical Drillcore Proposal:')
 	print('_______________________')
 	print('EASTING [meters]: ', np.round(bopt_res.x[1] + ymin))
 	print('NORTHING [meters]: ', np.round(bopt_res.x[0] + xmin))
 	print('Azimuth Angle [degree]: ', np.round(bopt_res.x[2],1))
 	print('Dip Angle [degree]: ', np.round(bopt_res.x[3],1))
+	print(' ')
 
 	# Write new drillcore proposals as csv file
-	print('Saving all new drillhole proposals in file: newdrill_proposals.csv')
+	print('Saving all new drillhole proposals in file: newdrill_proposals_non-vertical.csv')
 	newdf_values = bopt_res.xl
 	newdf_head = ['NORTHING', 'EASTING', 'AZIMUTH', 'DIP']
 	df_newdrill = pd.DataFrame(np.round(newdf_values,2), columns = newdf_head)
 	df_newdrill['EASTING'] = np.round(df_newdrill['EASTING'] + xmin,1)
 	df_newdrill['NORTHING'] = np.round(df_newdrill['NORTHING'] + ymin,1)
 	df_newdrill['BO_GAIN'] = -np.round(bopt_res.funl,4)
-	df_newdrill.to_csv(outpath+ 'newdrill_proposals.csv', index=False)
+	df_newdrill.to_csv(os.path.join(outpath,'newdrill_proposals_non-vertical.csv'), index=False)
 
-	# Create image of prpposed drillcore positions
+	# Create image of proposed drillcore positions
 	densimg = density_rec.mean(axis = 2)
 	magsusimg = magsus_rec.mean(axis = 2)
 	drillimg = drill_rec.mean(axis = 2)
@@ -426,17 +431,17 @@ if plot_vertical:
 	drillimg = drill_rec.mean(axis = 2)
 	extent=[xmin + xvoxsize, xmax - xvoxsize,ymin + yvoxsize,ymax- yvoxsize]
 	plt.clf()
-	plt.imshow(densimg, aspect = 'equal', cmap = 'viridis', extent=extent)
+	plt.imshow(densimg, aspect = 'equal', cmap = 'viridis', extent=extent, origin='lower')
 	plt.colorbar()
-	plt.savefig(outpath + 'dens_rec2D_loc2.png')
+	plt.savefig(os.path.join(outpath,'dens_rec2D_loc2.png'))
 	plt.clf()
-	plt.imshow(magsusimg, aspect = 'equal', cmap = 'viridis', extent=extent)
+	plt.imshow(magsusimg, aspect = 'equal', cmap = 'viridis', extent=extent, origin='lower')
 	plt.colorbar()
-	plt.savefig(outpath + 'magsus_rec2D_loc2.png')
+	plt.savefig(os.path.join(outpath,'magsus_rec2D_loc2.png'))
 	plt.clf()
-	plt.imshow(drillimg, aspect = 'equal', cmap = 'viridis', extent=extent)
+	plt.imshow(drillimg, aspect = 'equal', cmap = 'viridis', extent=extent, origin='lower')
 	plt.colorbar()
-	plt.savefig(outpath + 'drill_rec2D_loc2.png')
+	plt.savefig(os.path.join(outpath, 'drill_rec2D_loc2.png'))
 	plt.close('all')
 
 

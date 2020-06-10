@@ -11,7 +11,7 @@ Other custom models can be included by adding a new model in function create_syn
 
 Author: Sebastian Haan
 """
-
+import os
 from mpl_toolkits.mplot3d import axes3d
 import matplotlib.pyplot as plt
 from matplotlib import cm
@@ -87,13 +87,13 @@ def create_syncube(modelname, voxelpos):
 	# Create simulated VTK cube
 	origin = (voxelpos[0].min(), voxelpos[1].min(), voxelpos[2].min())
 	voxelsize = (xvoxsize, yvoxsize,zvoxsize)
-	cs.create_vtkcube(density, origin, voxelsize, fname = inpath + 'simcube_' + modelname + '.vtk')
+	cs.create_vtkcube(density, origin, voxelsize, fname = os.path.join(inpath,'simcube_' + modelname + '.vtk'))
 
 	# Save simulated data as csv file:
 	newdf_head = ['x','y','z', 'DENSITY', 'MAGSUS']
 	data = np.asarray([x3.flatten(), y3.flatten(), z3.flatten(), density.flatten(), magsus.flatten()])
 	df= pd.DataFrame(data.T, columns = newdf_head)
-	df.to_csv(inpath + 'simcube_' + modelname + '.csv', index = False)
+	df.to_csv(os.path.join(inpath,'simcube_' + modelname + '.csv'), index = False)
 
 	# Create simulated drill data from 4 drillcores:
 	#select four random x,y coordinates
@@ -104,7 +104,7 @@ def create_syncube(modelname, voxelpos):
 	ydrill = np.asarray(ydrill) * yvoxsize+ 0.5 * yvoxsize
 	dfdrill = dfdrill.loc[(dfdrill['x'].isin(xdrill)) & (dfdrill['y'].isin(ydrill))]
 	dfdrill['SiteID'] = 'SiteID_' + dfdrill['x'].astype(str) + dfdrill['y'].astype(str)
-	dfdrill.to_csv(inpath + 'simdrill_' + modelname + '.csv', index = False)
+	dfdrill.to_csv(os.path.join(inpath,'simdrill_' + modelname + '.csv'), index = False)
 
 	return density, magsus
 
@@ -147,7 +147,7 @@ def create_synsurvey(modelname, density, magsus):
 	newdf_head = ['X','Y', 'GRAVITY', 'MAGNETIC']
 	data = np.asarray([xx.flatten(), yy.flatten(), gravfield, magfield])
 	df= pd.DataFrame(data.T, columns = newdf_head)
-	df.to_csv(inpath + 'simsurveydata_' + modelname + '.csv', index = False)
+	df.to_csv(os.path.join(inpath,'simsurveydata_' + modelname + '.csv'), index = False)
 
 	return grav2D, magn2D
 
@@ -183,9 +183,9 @@ def create_simdata(modelname = "cylinders", plot = True):
 	grav2D, magn2D = create_synsurvey(modelname, density, magsus)
 
 	# Create tif survey files:
-	with rasterio.open(inpath + 'gravity_simdata_' + modelname +'.tif', 'w',driver = 'GTiff', width = grav2D.shape[1], height=grav2D.shape[0], count=1, dtype='float32') as dst: 
+	with rasterio.open(os.path.join(inpath,'gravity_simdata_' + modelname +'.tif'), 'w',driver = 'GTiff', width = grav2D.shape[1], height=grav2D.shape[0], count=1, dtype='float32') as dst: 
 		dst.write(grav2D.astype(rasterio.float32), 1) 
-	with rasterio.open(inpath + 'magnetic_simdata_' + modelname +'.tif', 'w',driver = 'GTiff', width = magn2D.shape[1], height=magn2D.shape[0], count=1, dtype='float32') as dst: 
+	with rasterio.open(os.path.join(inpath,'magnetic_simdata_' + modelname +'.tif'), 'w',driver = 'GTiff', width = magn2D.shape[1], height=magn2D.shape[0], count=1, dtype='float32') as dst: 
 		dst.write(magn2D.astype(rasterio.float32), 1) 
 
 	# Plot sensor data and integrated cube data along vertical axis
@@ -206,5 +206,5 @@ def create_simdata(modelname = "cylinders", plot = True):
 		axs[1,1].set_title('Vertical Sum Magnetic Susceptibility')
 		axs[1,1].grid(True)
 		plt.tight_layout()
-		plt.savefig(inpath + 'figure_simdata_' + modelname +'.png', dpi = 300)
+		plt.savefig(os.path.join(inpath,'figure_simdata_' + modelname +'.png'), dpi = 300)
 		plt.close()

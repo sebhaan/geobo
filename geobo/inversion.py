@@ -7,9 +7,11 @@ Author: Sebastian Haan
 import numpy as np
 import sys
 from scipy.linalg import pinv, solve, cholesky, solve_triangular
+from scipy.optimize import minimize, shgo
 from config_loader import *
 import kernels as kernel #for Gaussian Process prior
-from sensormodel import * 
+import sensormodel as sm
+#from sensormodel import A_sens, A_drill
 
 class Inversion:
 	"""
@@ -39,6 +41,7 @@ class Inversion:
 		self.gp_length = gp_lengthscale * np.asarray([xvoxsize, xvoxsize, xvoxsize]) # 2*voxelsize seems to have max logl
 		self.gp_sigma = np.asarray(gp_err)
 		self.coeffm = np.asarray(gp_coeff) # coefficients for GP kernel mix
+		self.gp_amp = 1.
 
 
 	def create_cubegeometry(self):
@@ -79,7 +82,7 @@ class Inversion:
 		"""
 		# Calculate kernel 3x3 block matrix:
 		self.datastd = np.mean([np.nanstd(self.gravfield), np.nanstd(self.magfield), np.nanstd(self.drillfield)])
-		self.kcov = kernel.create_cov(self.D2, self.gp_length, self.coeffm, fkernel = kernelfunc)
+		self.kcov = self.gp_amp * kernel.create_cov(self.D2, self.gp_length, self.coeffm, fkernel = kernelfunc)
 		#Ak = np.dot(self.Asens3, kcov) # shape (3*Nsensor, 3*Ncube^3)
 		yerr = np.hstack((self.gravfield * 0. + self.gp_sigma[0], self.magfield * 0. + self.gp_sigma[1], self.drillfield *0. + self.gp_sigma[2]))
 		#try:
@@ -110,6 +113,63 @@ class Inversion:
 		#	print("Warning: GP Inversion failed!")
 		#	mu, covar, logl = np.zeros(3*xNcube*yNcube*zNcube), kcov * 1e9, np.inf 
 		return mu, covar, logl
+
+
+	def calc_logl(self, params):
+		"""
+		Calculation of the (negative) marginal log-likelihood of GP. Similar to function predict3(), but trimmed for faster optimisation
+
+		PARAMETERS
+
+		:param params: llist of hyperparameters (amplitude, lengthscale, cross-correlation coefficients)
+
+		RETURN: 
+		log-likelihood
+		"""
+		gp_amp = params[0]
+		gp_length = params[1] * np.asarray([xvoxsize, xvoxsize, xvoxsize])
+		coeffm = params[2:]
+		try:
+			# Calculate kernel 3x3 block matrix:
+			kcov = gp_amp * kernel.create_cov(self.D2, gp_length, coeffm, fkernel = kernelfunc)
+			yerr = np.hstack((self.gravfield * 0. + self.gp_sigma[0], self.magfield * 0. + self.gp_sigma[1], self.drillfield *0. + self.gp_sigma[2]))
+			# Cholesky decomposition
+			AkA = np.dot(self.Asens3, np.dot(kcov, self.Asens3.T)) + np.diag(yerr**2)
+			AkA_chol = cholesky(AkA, lower=True)
+			usolve = solve_triangular(AkA_chol, self.Fs3, lower=True) #shape(2*Nsensor)
+			log_det_AkA = np.log(np.diag(AkA_chol)**2).sum()
+			#n_log_2pi = xNcube * yNcube * zNcube * np.log(2 * np.pi)
+			logl = -0.5 * (np.dot(usolve, usolve) + log_det_AkA)# + n_log_2pi)
+		except:
+			logl = - np.inf
+		return -logl
+
+
+	def optimize_gp(self):
+		"""
+		Optimisation of Gaussian Process hyperparameters, including lengthscale, amplitude, and correlation coeffcients.
+		Optimisation is done via maximising the log marginal likelihood.
+		"""	
+		print("Optimizing GP hyperparameters and correlation coefficients, this may take a while...")
+		self.datastd = np.mean([np.nanstd(self.gravfield), np.nanstd(self.magfield), np.nanstd(self.drillfield)])
+		# run optimisation
+		bopt_res = shgo(self.calc_logl, bounds = ((0.5,2), (0.5*gp_lengthscale, 10*gp_lengthscale),
+		 (0.5 *gp_coeff[0], 1), (0.5 *gp_coeff[1], 1), (0.5 * gp_coeff[2], 1)), n=10, iters=10, sampling_method='sobol') #tol =1e-6, method='SLSQP'
+		#bopt_res = minimize(self.calc_logl, x0 = np.asarray([self.gp_amp, gp_lengthscale, gp_coeff[0], gp_coeff[1], gp_coeff[2]]), 
+		#	method = 'SLSQP', options={'maxiter': 10, 'disp': True, 'ftol': 1e-02}) 
+		if not bopt_res.success:
+			# Don't update parameters
+			print('WARNING: ' + bopt_res.message) 
+		else:
+			# Update parameters with optimised solution
+			print("Initial parameter [amplitude, lengthscale, corr1, corr2, corr3]:")
+			print(self.gp_amp, self.gp_length, self.coeffm)
+			self.gp_amp = bopt_res.x[0]
+			self.gp_length = bopt_res.x[1] 
+			self.coeffm = np.asarray([bopt_res.x[2:]]).flatten()
+			print("Optimized parameter [amplitude, lengthscale, corr1, corr2, corr3]:")
+			print(self.gp_amp, self.gp_length, self.coeffm)
+
 
 	
 	def cubing(self, gravfield, magfield, drillfield, sensor_locations, drilldata0):
@@ -153,14 +213,17 @@ class Inversion:
 		# Combine data:
 		self.Fs3 = np.hstack((gravfield_norm, magfield_norm, drillfield_norm))
 		# Calculate Sensitivity matrix
-		Asens_grav, _ = A_sens(magneticField * 0., self.sensor_locations, self.Edges, 'grav')
-		Asens_mag, _ = A_sens(magneticField, self.sensor_locations, self.Edges, 'magn')
-		Asens_drill = A_drill(voxelpos_drill, self.voxelpos)
+		Asens_grav, _ = sm.A_sens(magneticField * 0., self.sensor_locations, self.Edges, 'grav')
+		Asens_mag, _ = sm.A_sens(magneticField, self.sensor_locations, self.Edges, 'magn')
+		Asens_drill = sm.A_drill(voxelpos_drill, self.voxelpos)
 		# Calculate total transformation matrix
 		Asens_g= np.vstack([Asens_grav, np.zeros_like(Asens_mag), np.zeros_like(Asens_drill)])
 		Asens_m= np.vstack([np.zeros_like(Asens_grav), Asens_mag, np.zeros_like(Asens_drill)])
 		Asens_d= np.vstack([np.zeros_like(Asens_grav), np.zeros_like(Asens_mag), Asens_drill])
 		self.Asens3 = np.hstack([Asens_g, Asens_m, Asens_d])
+		# Optimize GP hyperpameters and correaltion coeffcients:
+		if optimize_gp:
+			self.optimize_gp()
 		# Run actual GP inversion
 		self.mu_rec, self.cov_rec, self.logl = self.predict3(calclogl = True)
 		# Reshape results and multiply with stadnard deviatio 

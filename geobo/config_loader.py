@@ -2,13 +2,23 @@
 
 import yaml
 import os
+import sys
 import numpy as np
 
-with open('settings.yaml') as f:
-	cfg = yaml.safe_load(f)
+# Load settings:
+if len(sys.argv) >= 2:
+	fname_settings = str(sys.argv[1])
+else:
+	fname_settings ='settings.yaml'
+	print("No settings file specified, using settings in: " + fname_settings)
 
+with open(fname_settings) as f:
+	cfg = yaml.safe_load(f)
 for key in cfg:
 	globals()[str(key)] = cfg[key]
+
+# Create result output directory if it not exists already
+os.makedirs(outpath, exist_ok=True)
 
 xLcube = xmax - xmin # x Lenght of cube in meters. 
 yLcube = ymax - ymin # y Lenght of cube in meters. 
