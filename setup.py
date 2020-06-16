@@ -1,17 +1,3 @@
-## To install locally: python setup.py build && python setup.py install
-## (If there are problems with installation of the documentation, it may be that
-##  the egg file is out of sync and will need to be manually deleted - see error message
-##  for details of the corrupted zip file. )
-##
-## To push a version through to pip.
-##  - Make sure it installs correctly locally as above
-##  - Update the version information in this file
-##  - python setup.py sdist upload -r pypitest  # for the test version
-##  - python setup.py sdist upload -r pypi      # for the real version
-##
-## (see https://gist.github.com/davydany/b08acef08f75fe297e13ae4d24ce9f4d)
-
-
 from setuptools import setup, find_packages
 from numpy.distutils.core import setup, Extension
 from os import path
@@ -19,7 +5,7 @@ import os
 import subprocess
 import io
 
-## in development set version to none and ...
+## in development set version
 PYPI_VERSION = '0.1.0'
 
 # Return the git revision as a string (from numpy)
@@ -79,13 +65,11 @@ if __name__ == "__main__":
           python_requires   = '>=3.6',
           setup_requires    = ["pytest-runner", 'webdav'],
           tests_require     = ["pytest", 'webdav'],
-          packages          = ['geobo', 'examples'],
-          package_data      = {'geobo': ['*.yaml'],
-                               'examples': ['testdata/sample/*',
-                                        '*.yaml']},
-                                          #'example/testsdata/*',
-                                          #'example/testsdata/sample/*',
-                                          #'example/testsdata/synthetic/*'] },
+          packages          = ['geobo'],
+          package_data      = {'geobo': ['*.yaml',
+                                        'tests/*',
+                                        'tests/testdata/sample/*',
+                                        'tests/testdata/synthetic/*']},
           include_package_data = False,
           classifiers       = ['Programming Language :: Python :: 3',
                                'Programming Language :: Python :: 3.4',
