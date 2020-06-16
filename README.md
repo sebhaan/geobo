@@ -215,6 +215,6 @@ Key project contributors to the GeoBO project are:
 
 ## License
 
-Copyright 2020 The University of Sydney
+Copyright 2020 Sebastian Haan, The University of Sydney
 
 This is a free software made available under the AGPL License. For details see the LICENSE file.
