@@ -8,9 +8,9 @@ import numpy as np
 import sys
 from scipy.linalg import pinv, solve, cholesky, solve_triangular
 from scipy.optimize import minimize, shgo
-from config_loader import *
-import kernels as kernel #for Gaussian Process prior
-import sensormodel as sm
+from .config_loader import *
+from . import kernels as kernel #for Gaussian Process prior
+from . import sensormodel as sm
 #from sensormodel import A_sens, A_drill
 
 class Inversion:

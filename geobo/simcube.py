@@ -9,7 +9,8 @@ as well as the corresponding 2D gravity and magnetic remote sensor measurements.
 
 Other custom models can be included by adding a new model in function create_syncube()
 
-Author: Sebastian Haan
+Copyright 2020 Sebastian Haan, The University of Sydney
+This is a free software made available under the AGPL License.
 """
 import os
 from mpl_toolkits.mplot3d import axes3d
@@ -18,10 +19,10 @@ from matplotlib import cm
 import pandas as pd
 import random
 import rasterio
-from config_loader import *
-import inversion
-from sensormodel import * 
-import cubeshow as cs
+from .config_loader import *
+from . import inversion
+from .sensormodel import * 
+from . import cubeshow as cs
 
 
 def create_syncube(modelname, voxelpos):
@@ -172,6 +173,9 @@ def create_simdata(modelname = "cylinders", plot = True):
 	Gravity and magentic survey data as tif file.
 	Plots of sensor and vertically integrated cube data are saved in output directory.
 	"""
+	# Check that input path exists
+	os.makedirs(inpath, exist_ok=True)
+
 	inv = inversion.Inversion()
 
 	voxelpos = inv.create_cubegeometry()

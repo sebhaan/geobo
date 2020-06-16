@@ -1,13 +1,24 @@
-# config_loader.py
+"""
+Loading configuration and settings from settings yaml file
+
+Author: Sebastian Haan
+"""
 
 import yaml
 import os
 import sys
 import numpy as np
 
-# Load settings:
-if len(sys.argv) >= 2:
-	fname_settings = str(sys.argv[1])
+# Load settings as arguments:
+if len(sys.argv) == 2:
+	if os.path.isfile(sys.argv[1]):
+		fname_settings = str(sys.argv[1])
+	elif sys.argv[1] == '':
+		fname_settings ='settings.yaml'
+		print("No settings file specified, using settings in: " + fname_settings)
+	else:
+		print('File ' + str(argv[1]) + ' does not exist')
+		exit()
 else:
 	fname_settings ='settings.yaml'
 	print("No settings file specified, using settings in: " + fname_settings)

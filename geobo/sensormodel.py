@@ -15,7 +15,7 @@ Author: Sebastian Haan
 """
 
 import numpy as np
-from config_loader import *
+from .config_loader import *
 
 
 

@@ -5,7 +5,7 @@ import pandas as pd
 import rasterio
 import os
 from scipy.ndimage.interpolation import zoom
-from config_loader import *
+from .config_loader import *
 
 def spherical2cartes(x0, y0, z0, phi, theta, r):
 	""" Conversion from spherical coordinates to cartesian

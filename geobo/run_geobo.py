@@ -1,18 +1,13 @@
 """
-Copyright 2020 Sebastian Haan
-
 This script creates reconstructed Cubes with mean subtracted properties of density, magnetic susceptibility, 
 and  drill core properties plus their predicted variance cubes (see inversion.py for more details)
 
 See settings.yaml for specifications.
 
-ToDo: 
-- Create settings and call settings file as argument
-- Implement GP hyperparameter optimisation at adavanced user level
-- change readin in routine to os.path.join
-
+Author: Sebastian Haan
 """
 import os
+import sys
 import numpy as np
 import pandas as pd
 import rasterio
@@ -24,14 +19,6 @@ from scipy import interpolate
 from mpl_toolkits.mplot3d import axes3d
 import matplotlib.pyplot as plt
 from matplotlib import cm
-
-# Import custom functions
-from config_loader import * # loads settings
-import cubeshow as cs 
-from utils import *
-import inversion
-import simcube
-
 
 
 def read_surveydata(plot = True):
@@ -206,7 +193,7 @@ def futility_vertical(params, costs = None):
 	return -func # (negative if optimiser use minimize)
 
 
-def futility_drill(params, length_newdrill = zLcube, costs = None): 
+def futility_drill(params, costs = None): 
 	"""
 	Calculates utility function for proposed non-vertical drillcore, 
 	which takes into account the azimuth and dip in addition to location and drill-core length
@@ -221,6 +208,7 @@ def futility_drill(params, length_newdrill = zLcube, costs = None):
 	"""
 	if costs is None:
 		costs = drill_rec * 0.
+	length_newdrill = zLcube
 	x0, y0, azimuth, dip = params
 	nstep = int(2 * length_newdrill/np.min([xvoxsize, yvoxsize, zvoxsize]))
 	rladder = np.linspace(0,length_newdrill, nstep)
@@ -367,102 +355,112 @@ def bayesopt_nonvert(drillcoord = None):
 	plt.close('all')
 
 
-def create_costcube(cubeshape = (xNcube, yNcube, zNcube)):
+def create_costcube():
 	"""
 	User function to create costcube for drilling. Need to be same cube shape as reconstructed cube.
 	By default set to zero costs.
-
-	INPUT
-	param cubeshape: shape of cube, by default: (xNcube, yNcube, zNcube)
 
 	RETURN
 	costcube
 	"""
 	# Here costs are set to zero, change below
-	costcube = np.zeros(cubeshape)
-
+	costcube = np.zeros((xNcube, yNcube, zNcube))
 	return costcube
 
 
+# Run main functions:
 
-### Main computation ###
+if len(sys.argv) < 2:
+	fname_settings = input("Please provide settings file name (including path):  ")
+	sys.argv.append(fname_settings)
 
-if gen_simulation:
-	# Create first simulated datacube, see settings.yaml
-	simcube.create_simdata(modelname)  
+if len(sys.argv) == 2:
+	from .config_loader import *  # loads settings
+	from .utils import *
+	from . import cubeshow as cs 
+	from . import inversion
+	from . import simcube
+	
+	if gen_simulation:
+		# Create first simulated datacube, see settings.yaml
+		simcube.create_simdata(modelname)  
 
-# Initiate inversion  class
-inv = inversion.Inversion()
+	# Initiate inversion  class
+	inv = inversion.Inversion()
 
-# Create new cube geometry
-voxelpos = inv.create_cubegeometry()
-xxx, yyy, zzz = voxelpos
-xxx = inv.xxx = xxx.reshape(xNcube, yNcube, zNcube)
-yyy = inv.yyy = yyy.reshape(xNcube, yNcube, zNcube)
-zzz = inv.zzz = zzz.reshape(xNcube, yNcube, zNcube)
+	# Create new cube geometry
+	voxelpos = inv.create_cubegeometry()
+	xxx, yyy, zzz = voxelpos
+	xxx = inv.xxx = xxx.reshape(xNcube, yNcube, zNcube)
+	yyy = inv.yyy = yyy.reshape(xNcube, yNcube, zNcube)
+	zzz = inv.zzz = zzz.reshape(xNcube, yNcube, zNcube)
 
-# Read in survey data
-gravfield, magfield, sensor_locations = read_surveydata()
+	# Read in survey data
+	gravfield, magfield, sensor_locations = read_surveydata()
 
-# # Read in existing drillcore data
-drilldata, drillcoord, drillminmax = read_drilldata(drill_features)
-drilldata0 = drilldata[ifeature]
-drillfield = drilldata0[drilldata0 != 0]
-xdrillminmax, ydrillminmax, zdrillminmax = drillminmax
+	# # Read in existing drillcore data
+	drilldata, drillcoord, drillminmax = read_drilldata(drill_features)
+	drilldata0 = drilldata[ifeature]
+	drillfield = drilldata0[drilldata0 != 0]
+	xdrillminmax, ydrillminmax, zdrillminmax = drillminmax
 
-# Joint Inversion and reconmstyrcuting of cube with geophysical properties:
-density_rec, magsus_rec, drill_rec, density_var, magsus_var, drill_var = inv.cubing(gravfield, magfield, drillfield, sensor_locations, drilldata0)
+	# Joint Inversion and reconmstyrcuting of cube with geophysical properties:
+	density_rec, magsus_rec, drill_rec, density_var, magsus_var, drill_var = inv.cubing(gravfield, magfield, drillfield, sensor_locations, drilldata0)
 
-### Create VTK cubes or reconstructed cubes:  
-origin = (voxelpos[0].min(), voxelpos[1].min(), voxelpos[2].min())
-voxelsize = (xvoxsize, yvoxsize,zvoxsize)
-cs.create_vtkcube(density_rec, origin, voxelsize, fname = outpath + 'cube_density.vtk')
-cs.create_vtkcube(magsus_rec, origin, voxelsize, fname = outpath + 'cube_magsus.vtk')
-cs.create_vtkcube(drill_rec, origin, voxelsize, fname = outpath + 'cube_drill.vtk')
-cs.create_vtkcube(density_var, origin, voxelsize, fname = outpath + 'cube_density_variance.vtk')
-cs.create_vtkcube(magsus_var, origin, voxelsize, fname = outpath + 'cube_magsus_variance.vtk')
-cs.create_vtkcube(drill_var, origin, voxelsize, fname = outpath + 'cube_drill_variance.vtk')
-
-
-# Create plots of 2D maps of vertically integrated cube properties:
-if plot_vertical:	
-	densimg = density_rec.mean(axis = 2)
-	magsusimg = magsus_rec.mean(axis = 2)
-	drillimg = drill_rec.mean(axis = 2)
-	extent=[xmin + xvoxsize, xmax - xvoxsize,ymin + yvoxsize,ymax- yvoxsize]
-	plt.clf()
-	plt.imshow(densimg, aspect = 'equal', cmap = 'viridis', extent=extent, origin='lower')
-	plt.colorbar()
-	plt.savefig(os.path.join(outpath,'dens_rec2D_loc2.png'))
-	plt.clf()
-	plt.imshow(magsusimg, aspect = 'equal', cmap = 'viridis', extent=extent, origin='lower')
-	plt.colorbar()
-	plt.savefig(os.path.join(outpath,'magsus_rec2D_loc2.png'))
-	plt.clf()
-	plt.imshow(drillimg, aspect = 'equal', cmap = 'viridis', extent=extent, origin='lower')
-	plt.colorbar()
-	plt.savefig(os.path.join(outpath, 'drill_rec2D_loc2.png'))
-	plt.close('all')
+	### Create VTK cubes or reconstructed cubes:  
+	origin = (voxelpos[0].min(), voxelpos[1].min(), voxelpos[2].min())
+	voxelsize = (xvoxsize, yvoxsize,zvoxsize)
+	cs.create_vtkcube(density_rec, origin, voxelsize, fname = outpath + 'cube_density.vtk')
+	cs.create_vtkcube(magsus_rec, origin, voxelsize, fname = outpath + 'cube_magsus.vtk')
+	cs.create_vtkcube(drill_rec, origin, voxelsize, fname = outpath + 'cube_drill.vtk')
+	cs.create_vtkcube(density_var, origin, voxelsize, fname = outpath + 'cube_density_variance.vtk')
+	cs.create_vtkcube(magsus_var, origin, voxelsize, fname = outpath + 'cube_magsus_variance.vtk')
+	cs.create_vtkcube(drill_var, origin, voxelsize, fname = outpath + 'cube_drill_variance.vtk')
 
 
-# Create 3D Cube plot if needed (same data as in VTK cube)
-if plot3d:
+	# Create plots of 2D maps of vertically integrated cube properties:
+	if plot_vertical:	
+		densimg = density_rec.mean(axis = 2)
+		magsusimg = magsus_rec.mean(axis = 2)
+		drillimg = drill_rec.mean(axis = 2)
+		extent=[xmin + xvoxsize, xmax - xvoxsize,ymin + yvoxsize,ymax- yvoxsize]
 		plt.clf()
-		#cs.skplot3(density_rec, Nsize = (xNcube, yNcube, zNcube), drill = (yyydrill/xvoxsize,xxxdrill/yvoxsize,-zzzdrill/zvoxsize), sensor = (x_sensor/xvoxsize, y_sensor/yvoxsize, x_sensor * 0.), show = False, path_out = outpath, filename = 'density-drill-mesh.png')
-		cs.skplot3(density_rec, Nsize = (yNcube, xNcube, zNcube), drill = (ydrillminmax/xvoxsize, xdrillminmax/yvoxsize,-zdrillminmax/zvoxsize), sensor = (sensor_locations[1]/xvoxsize,sensor_locations[0]/yvoxsize, sensor_locations[2] * 0. + zmax), show = False, path_out = outpath, filename = 'density-mesh3D.png')
+		plt.imshow(densimg, aspect = 'equal', cmap = 'viridis', extent=extent, origin='lower')
+		plt.colorbar()
+		plt.savefig(os.path.join(outpath,'dens_rec2D_loc2.png'))
 		plt.clf()
-		cs.skplot3(drill_rec, Nsize = (yNcube, xNcube, zNcube), drill = (ydrillminmax/xvoxsize, xdrillminmax/yvoxsize,-zdrillminmax/zvoxsize), sensor = (sensor_locations[1]/xvoxsize,sensor_locations[0]/yvoxsize, sensor_locations[2] * 0. + zmax), show = False, path_out = outpath, filename = 'drill-mesh3D.png')
+		plt.imshow(magsusimg, aspect = 'equal', cmap = 'viridis', extent=extent, origin='lower')
+		plt.colorbar()
+		plt.savefig(os.path.join(outpath,'magsus_rec2D_loc2.png'))
+		plt.clf()
+		plt.imshow(drillimg, aspect = 'equal', cmap = 'viridis', extent=extent, origin='lower')
+		plt.colorbar()
+		plt.savefig(os.path.join(outpath, 'drill_rec2D_loc2.png'))
 		plt.close('all')
 
 
-# Default: no costs, change in function create_costcube to specify costs 
-costcube = create_costcube
+	# Create 3D Cube plot if needed (same data as in VTK cube)
+	if plot3d:
+			plt.clf()
+			#cs.skplot3(density_rec, Nsize = (xNcube, yNcube, zNcube), drill = (yyydrill/xvoxsize,xxxdrill/yvoxsize,-zzzdrill/zvoxsize), sensor = (x_sensor/xvoxsize, y_sensor/yvoxsize, x_sensor * 0.), show = False, path_out = outpath, filename = 'density-drill-mesh.png')
+			cs.skplot3(density_rec, Nsize = (yNcube, xNcube, zNcube), drill = (ydrillminmax/xvoxsize, xdrillminmax/yvoxsize,-zdrillminmax/zvoxsize), sensor = (sensor_locations[1]/xvoxsize,sensor_locations[0]/yvoxsize, sensor_locations[2] * 0. + zmax), show = False, path_out = outpath, filename = 'density-mesh3D.png')
+			plt.clf()
+			cs.skplot3(drill_rec, Nsize = (yNcube, xNcube, zNcube), drill = (ydrillminmax/xvoxsize, xdrillminmax/yvoxsize,-zdrillminmax/zvoxsize), sensor = (sensor_locations[1]/xvoxsize,sensor_locations[0]/yvoxsize, sensor_locations[2] * 0. + zmax), show = False, path_out = outpath, filename = 'drill-mesh3D.png')
+			plt.close('all')
 
-# Propose new drill-core, chose in settings.yaml sepcifications and whether vertical or non-vertical drillcores
-if bayesopt_vertical:
-	bayesopt_vert(drillcoord)
 
-if bayesopt_nonvertical:
-	bayesopt_nonvert(drillcoord)
+	# Default: no costs, change in function create_costcube to specify costs 
+	costcube = create_costcube
+
+	# Propose new drill-core, chose in settings.yaml sepcifications and whether vertical or non-vertical drillcores
+	if bayesopt_vertical:
+		bayesopt_vert(drillcoord)
+
+	if bayesopt_nonvertical:
+		bayesopt_nonvert(drillcoord)
+
+
+
+
 
 

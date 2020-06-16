@@ -1,8 +1,10 @@
 # User settings, filenames and global model parameters
+# Please change example settings below
+# Author: Sebastian Haan
 
 ##### Define Main file directories #########
-inpath: "../tests/data/synthetic/"
-outpath: "../tests/testresults/cylinders/" 
+inpath: "tests/data/synthetic/"
+outpath: "tests/testresults/cylinders/" 
 # Filenames for input drill core  data, for e.g. the synthetic cylinder model:
 FNAME_drilldata:  'simdrill_cylinders.csv' 
 FNAME_gravsurvey: 'gravity_simdata_cylinders.tif'
