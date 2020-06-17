@@ -86,7 +86,8 @@ pip3 install geobo
 The installation can be tested by running the example with included synthetic data and default settings:
 
 ```sh
-python run_geobo.py settings_example1.yaml
+cd geobo/
+python main.py tests/settings_example1.yaml
 ```
 
 ### Requirements
@@ -113,7 +114,7 @@ pandoc -V geometry:margin=1.0in README.md -o README.pdf
 
 A complete API documentation for all modules can be found here:
 
-- [`run_geobo.py`](docs/APIdocs/geobo/run_geobo.md)
+- [`run_geobo.py`](https://htmlpreview.github.io/?https://github.com/sebhaan/geobo/blob/release/docs/APIdocs/geobo/run_geobo.html)
 - [`inversion.py`](docs/APIdocs/geobo/inversion.html)
 - [`kernels.py`](docs/APIdocs/geobo/kernels.html)
 - [`cubeshow.py`](docs/APIdocs/geobo/cubeshow.html)
