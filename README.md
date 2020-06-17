@@ -114,13 +114,13 @@ pandoc -V geometry:margin=1.0in README.md -o README.pdf
 
 A complete API documentation for all modules can be found here:
 
-- [`run_geobo.py`](https://rawgit.com/sebhaan/geobo/tree/release/docs/APIdocs/geobo/run_geobo.html)
-- [`inversion.py`](docs/APIdocs/geobo/inversion.html)
-- [`kernels.py`](docs/APIdocs/geobo/kernels.html)
-- [`cubeshow.py`](docs/APIdocs/geobo/cubeshow.html)
-- [`sensormodel.py`](docs/APIdocs/geobo/sensormodel.html)
-- [`simcube.py`](docs/APIdocs/geobo/simcube.html)
-- [`utils.py`](docs/APIdocs/geobo/utils.html)
+- [`run_geobo.py`](http://htmlpreview.github.io/?https://github.com/sebhaan/geobo/blob/release/docs/APIdocs/geobo/run_geobo.html)
+- [`inversion.py`](http://htmlpreview.github.io/?https://github.com/sebhaan/geobo/blob/release/docs/APIdocs/geobo/inversion.html)
+- [`kernels.py`](http://htmlpreview.github.io/?https://github.com/sebhaan/geobo/blob/release/docs/APIdocs/geobo/kernels.html)
+- [`cubeshow.py`](http://htmlpreview.github.io/?https://github.com/sebhaan/geobo/blob/release/docs/APIdocs/geobo/cubeshow.html)
+- [`sensormodel.py`](http://htmlpreview.github.io/?https://github.com/sebhaan/geobo/blob/release/docs/APIdocs/geobo/sensormodel.html)
+- [`simcube.py`](http://htmlpreview.github.io/?https://github.com/sebhaan/geobo/blob/release/docs/APIdocs/geobo/simcube.html)
+- [`utils.py`](http://htmlpreview.github.io/?https://github.com/sebhaan/geobo/blob/release/docs/APIdocs/geobo/utils.html)
 
 
 ## Usage and Settings
