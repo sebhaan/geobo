@@ -1,0 +1,631 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.7.4" />
+<title>geobo.inversion API documentation</title>
+<meta name="description" content="Script for running inversion and reconstructing 3D cubes from 2D sensor data using Gaussina processes …" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>geobo.inversion</code></h1>
+</header>
+<section id="section-intro">
+<p>Script for running inversion and reconstructing 3D cubes from 2D sensor data using Gaussina processes</p>
+<p>Author: Sebastian Haan</p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">&#34;&#34;&#34;
+Script for running inversion and reconstructing 3D cubes from 2D sensor data using Gaussina processes
+
+Author: Sebastian Haan
+&#34;&#34;&#34;
+
+import numpy as np
+import sys
+from scipy.linalg import pinv, solve, cholesky, solve_triangular
+from config_loader import *
+import kernels as kernel #for Gaussian Process prior
+import sensormodel
+
+class Inversion:
+        &#34;&#34;&#34;
+        Class for Inversion and reconstructon of 3D cubes from 2D sensor data.
+
+        To solve the inverse problem for linear systems, we deploy a Bayesian framework with Gaussian process priors 
+        over the physical properties of interest. Gaussian processes (GP) are a flexible, probabilistic approach 
+        using kernel machines with non-parametric priors (see e.g. Rasmussen 2006).  An important advantage of 
+        the Bayesian method is that it generates a predictive distribution with a mean and variance, 
+        which are prerequisites for Bayesian optimisation with respect to, e.g., information gain from a new measurement. 
+        Another advantage is that the GP marginal likelihood function is well defined by the values of their hyper-parameters, 
+        which allows it to optimise them exactly. This reasoning about functions under uncertainty and their well-tuned 
+        interpolation character allows GPs to work extremely well for sparse data as well as for big data 
+        (using sparse covariance matrix, see e.g. Melkumyan 2000).
+
+        To take fully into account cross-covariances between multiple model parameters 
+        (e.g., rock density and magnetic susceptibility), we construct sparse cross-covariance terms 
+        between all kernel pairs following Melkumyan 2011. The full covariance matrix is then constructed 
+        by setting sparse covariance functions on all diagonal block elements and sparse-sparse cross-covariance functions 
+        on all non-diagonal block elements. Cross-covariance amplitude terms are given by the linear correlation coefficients 
+        between the corresponding geophysical properties.
+
+        Call function cubing() for running inversion.
+        &#34;&#34;&#34;
+        def __init__(self):
+                # Set Lengthscale and amplitude for GP
+                self.gp_length = gp_lengthscale * np.asarray([xvoxsize, xvoxsize, xvoxsize]) # 2*voxelsize seems to have max logl
+                self.gp_sigma = np.asarray(gp_err)
+                self.coeffm = np.asarray(gp_coeff) # coefficients for GP kernel mix
+
+
+        def create_cubegeometry(self):
+                &#34;&#34;&#34;
+                Create Cube geometry and coordinates
+
+                See settings.yaml for cube specifications
+                &#34;&#34;&#34;
+                # Create voxel Edge coordinates:
+                xedge = np.linspace(0, xNcube, xNcube + 1) * xvoxsize
+                yedge = np.linspace(0, yNcube, yNcube + 1) * yvoxsize
+                zedge = np.linspace(0, -zNcube, zNcube + 1) * zvoxsize + zmax
+                #zedge = np.linspace(0.,Ncube/zfactor, Ncube/zfactor+1) * voxsize
+                xEdges, yEdges, zEdges = np.meshgrid(xedge, yedge, zedge)
+                self.Edges = np.asarray([xEdges, yEdges, -zEdges])
+                # Create voxel coordinates
+                xnew = np.arange(xvoxsize/2., xLcube + xvoxsize/2., xvoxsize)
+                ynew = np.arange(yvoxsize/2., yLcube + yvoxsize/2., yvoxsize)
+                znew = zmax - np.arange(zvoxsize/2., zLcube + zvoxsize/2., zvoxsize)
+                xx ,yy = np.meshgrid(xnew,ynew)
+                self.xxx, self.yyy, self.zzz = np.meshgrid(xnew, ynew, znew)
+                self.voxelpos = np.vstack([self.xxx.flatten(), self.yyy.flatten(), self.zzz.flatten()])
+                return self.voxelpos
+
+
+        def predict3(self, calclogl = False):
+                &#34;&#34;&#34;
+                Calculate mean, variance, and likelihood likelihood for GP with 3x3 kernel block matrix 
+            
+            PARAMETERS
+
+            :param calclogl: if True calculate marginal GP loglikelihood, if False logl return is set to 0
+
+            RETURN: 
+            mean
+            covariance
+            log-likelihood
+                &#34;&#34;&#34;
+                # Calculate kernel 3x3 block matrix:
+                self.datastd = np.mean([np.nanstd(self.gravfield), np.nanstd(self.magfield), np.nanstd(self.drillfield)])
+                self.kcov = kernel.create_cov(self.D2, self.gp_length, self.coeffm, fkernel = kernelfunc)
+                #Ak = np.dot(self.Asens3, kcov) # shape (3*Nsensor, 3*Ncube^3)
+                yerr = np.hstack((self.gravfield * 0. + self.gp_sigma[0], self.magfield * 0. + self.gp_sigma[1], self.drillfield *0. + self.gp_sigma[2]))
+                #try:
+                AkA = np.dot(self.Asens3, np.dot(self.kcov, self.Asens3.T)) + np.diag(yerr**2)
+                #AkA = np.dot(Ak, self.Asens3.T) + np.diag(yerr**2) # shape(2*Nsensor, 2*Nsensor)
+                # Cholesky decomposition
+                try:
+                        AkA_chol = cholesky(AkA, lower=True)
+                except:
+                        print(&#34;Cholesky decompostion failed, AkA matrix i likely not positive semitive.&#34;)
+                        print(&#34;Change GP parameter settings&#34;)
+                        sys.exit(1)
+                usolve = solve_triangular(AkA_chol, self.Fs3, lower=True) #shape(2*Nsensor)
+                # Calculate Likelihood if option is set
+                if calclogl:
+                        log_det_AkA = np.log(np.diag(AkA_chol)**2).sum()
+                        n_log_2pi = xNcube * yNcube * zNcube * np.log(2 * np.pi)
+                        logl = -0.5 * (np.dot(usolve, usolve) + log_det_AkA + n_log_2pi)
+                else:
+                        logl = 0.
+                # predicted mean
+                self._V = solve_triangular(AkA_chol, np.dot(self.Asens3, self.kcov), lower=True) #shape(2*Nsensor, 2* Ncube^3)
+                mu = np.dot(self._V.T, usolve) #* _fstd + _fmean
+                # covariance
+                covar = self.kcov - np.dot(self._V.T, self._V)
+                #var = np.diagonal(covar) #* _fstd**2
+                #except:
+                #       print(&#34;Warning: GP Inversion failed!&#34;)
+                #       mu, covar, logl = np.zeros(3*xNcube*yNcube*zNcube), kcov * 1e9, np.inf 
+                return mu, covar, logl
+
+        
+        def cubing(self, gravfield, magfield, drillfield, sensor_locations, drilldata0):
+                &#34;&#34;&#34;
+                Joint Inversion and Cubing of sensor data
+
+                PARAMETERS
+
+                :param gravfield: 2D gravitational survey data
+                :param magfield: 2D magnetic survey data
+                :param drillfield: drilldata
+
+                RETURN
+
+                density_rec: cube with mean density 
+                magsus_rec: cube with mean magnetic susceptibility
+                drill_rec: cube with mean drill-core property  
+                density_var: varicance cube with density 
+                magsus_var: variance cube with magnetic susceptibility  
+                drill_var: varianbce cube with drill-core property  
+
+
+                &#34;&#34;&#34;
+                self.gravfield = gravfield
+                self.magfield = magfield
+                self.drillfield = drillfield
+                self.sensor_locations = sensor_locations
+                self.drilldata0 = drilldata0
+                # Normalize data
+                grav_mean, grav_std = self.gravfield.mean(), self.gravfield.std()
+                gravfield_norm = (self.gravfield - grav_mean) / grav_std
+                magn_mean, magn_std = self.magfield.mean(), self.magfield.std()
+                magfield_norm = (self.magfield - magn_mean) / magn_std
+                drill_mean, drill_std = self.drillfield.mean(), self.drillfield.std()
+                drillfield_norm = (self.drillfield - drill_mean) / drill_std
+                # Create kernel distance matrix
+                self.points3D = kernel.calcGridPoints3D((xNcube, yNcube, zNcube), (xvoxsize, yvoxsize, zvoxsize))
+                self.D2 = kernel.calcDistanceMatrix(self.points3D)
+                # Combine Data and Forward models
+                voxelpos_drill = np.vstack([self.xxx[self.drilldata0 != 0], self.yyy[self.drilldata0 != 0], self.zzz[self.drilldata0 != 0]])
+                # Combine data:
+                self.Fs3 = np.hstack((gravfield_norm, magfield_norm, drillfield_norm))
+                # Calculate Sensitivity matrix
+                Asens_grav, _ = A_sens(magneticField * 0., self.sensor_locations, self.Edges, &#39;grav&#39;)
+                Asens_mag, _ = A_sens(magneticField, self.sensor_locations, self.Edges, &#39;magn&#39;)
+                Asens_drill = A_drill(voxelpos_drill, self.voxelpos)
+                # Calculate total transformation matrix
+                Asens_g= np.vstack([Asens_grav, np.zeros_like(Asens_mag), np.zeros_like(Asens_drill)])
+                Asens_m= np.vstack([np.zeros_like(Asens_grav), Asens_mag, np.zeros_like(Asens_drill)])
+                Asens_d= np.vstack([np.zeros_like(Asens_grav), np.zeros_like(Asens_mag), Asens_drill])
+                self.Asens3 = np.hstack([Asens_g, Asens_m, Asens_d])
+                # Run actual GP inversion
+                self.mu_rec, self.cov_rec, self.logl = self.predict3(calclogl = True)
+                # Reshape results and multiply with stadnard deviatio 
+                results_rec = self.mu_rec.reshape(3, yNcube, xNcube, zNcube)
+                results_var = np.diag(self.cov_rec).reshape(3, yNcube, xNcube, zNcube)
+                #Cut off outer voxel rows
+                #results_rec = results_rec[:, 1:yNcube-1, 1:xNcube-1, :]
+                #results_var = results_var[:, 1:yNcube-1, 1:xNcube-1, :]
+                density_rec = results_rec[0] * grav_std  # Model represents deviation from the mean
+                density_var = results_var[0] * grav_std**2
+                magsus_rec = results_rec[1] * magn_std # Model represents deviation from the mean
+                magsus_var = results_var[1] * magn_std**2
+                drill_rec = results_rec[2] * drill_std  # Model represents deviation from the mean
+                drill_var = results_var[2] * drill_std**2
+                return density_rec, magsus_rec, drill_rec, density_var, magsus_var, drill_var</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="geobo.inversion.Inversion"><code class="flex name class">
+<span>class <span class="ident">Inversion</span></span>
+</code></dt>
+<dd>
+<section class="desc"><p>Class for Inversion and reconstructon of 3D cubes from 2D sensor data.</p>
+<p>To solve the inverse problem for linear systems, we deploy a Bayesian framework with Gaussian process priors
+over the physical properties of interest. Gaussian processes (GP) are a flexible, probabilistic approach
+using kernel machines with non-parametric priors (see e.g. Rasmussen 2006).
+An important advantage of
+the Bayesian method is that it generates a predictive distribution with a mean and variance,
+which are prerequisites for Bayesian optimisation with respect to, e.g., information gain from a new measurement.
+Another advantage is that the GP marginal likelihood function is well defined by the values of their hyper-parameters,
+which allows it to optimise them exactly. This reasoning about functions under uncertainty and their well-tuned
+interpolation character allows GPs to work extremely well for sparse data as well as for big data
+(using sparse covariance matrix, see e.g. Melkumyan 2000).</p>
+<p>To take fully into account cross-covariances between multiple model parameters
+(e.g., rock density and magnetic susceptibility), we construct sparse cross-covariance terms
+between all kernel pairs following Melkumyan 2011. The full covariance matrix is then constructed
+by setting sparse covariance functions on all diagonal block elements and sparse-sparse cross-covariance functions
+on all non-diagonal block elements. Cross-covariance amplitude terms are given by the linear correlation coefficients
+between the corresponding geophysical properties.</p>
+<p>Call function cubing() for running inversion.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Inversion:
+        &#34;&#34;&#34;
+        Class for Inversion and reconstructon of 3D cubes from 2D sensor data.
+
+        To solve the inverse problem for linear systems, we deploy a Bayesian framework with Gaussian process priors 
+        over the physical properties of interest. Gaussian processes (GP) are a flexible, probabilistic approach 
+        using kernel machines with non-parametric priors (see e.g. Rasmussen 2006).  An important advantage of 
+        the Bayesian method is that it generates a predictive distribution with a mean and variance, 
+        which are prerequisites for Bayesian optimisation with respect to, e.g., information gain from a new measurement. 
+        Another advantage is that the GP marginal likelihood function is well defined by the values of their hyper-parameters, 
+        which allows it to optimise them exactly. This reasoning about functions under uncertainty and their well-tuned 
+        interpolation character allows GPs to work extremely well for sparse data as well as for big data 
+        (using sparse covariance matrix, see e.g. Melkumyan 2000).
+
+        To take fully into account cross-covariances between multiple model parameters 
+        (e.g., rock density and magnetic susceptibility), we construct sparse cross-covariance terms 
+        between all kernel pairs following Melkumyan 2011. The full covariance matrix is then constructed 
+        by setting sparse covariance functions on all diagonal block elements and sparse-sparse cross-covariance functions 
+        on all non-diagonal block elements. Cross-covariance amplitude terms are given by the linear correlation coefficients 
+        between the corresponding geophysical properties.
+
+        Call function cubing() for running inversion.
+        &#34;&#34;&#34;
+        def __init__(self):
+                # Set Lengthscale and amplitude for GP
+                self.gp_length = gp_lengthscale * np.asarray([xvoxsize, xvoxsize, xvoxsize]) # 2*voxelsize seems to have max logl
+                self.gp_sigma = np.asarray(gp_err)
+                self.coeffm = np.asarray(gp_coeff) # coefficients for GP kernel mix
+
+
+        def create_cubegeometry(self):
+                &#34;&#34;&#34;
+                Create Cube geometry and coordinates
+
+                See settings.yaml for cube specifications
+                &#34;&#34;&#34;
+                # Create voxel Edge coordinates:
+                xedge = np.linspace(0, xNcube, xNcube + 1) * xvoxsize
+                yedge = np.linspace(0, yNcube, yNcube + 1) * yvoxsize
+                zedge = np.linspace(0, -zNcube, zNcube + 1) * zvoxsize + zmax
+                #zedge = np.linspace(0.,Ncube/zfactor, Ncube/zfactor+1) * voxsize
+                xEdges, yEdges, zEdges = np.meshgrid(xedge, yedge, zedge)
+                self.Edges = np.asarray([xEdges, yEdges, -zEdges])
+                # Create voxel coordinates
+                xnew = np.arange(xvoxsize/2., xLcube + xvoxsize/2., xvoxsize)
+                ynew = np.arange(yvoxsize/2., yLcube + yvoxsize/2., yvoxsize)
+                znew = zmax - np.arange(zvoxsize/2., zLcube + zvoxsize/2., zvoxsize)
+                xx ,yy = np.meshgrid(xnew,ynew)
+                self.xxx, self.yyy, self.zzz = np.meshgrid(xnew, ynew, znew)
+                self.voxelpos = np.vstack([self.xxx.flatten(), self.yyy.flatten(), self.zzz.flatten()])
+                return self.voxelpos
+
+
+        def predict3(self, calclogl = False):
+                &#34;&#34;&#34;
+                Calculate mean, variance, and likelihood likelihood for GP with 3x3 kernel block matrix 
+            
+            PARAMETERS
+
+            :param calclogl: if True calculate marginal GP loglikelihood, if False logl return is set to 0
+
+            RETURN: 
+            mean
+            covariance
+            log-likelihood
+                &#34;&#34;&#34;
+                # Calculate kernel 3x3 block matrix:
+                self.datastd = np.mean([np.nanstd(self.gravfield), np.nanstd(self.magfield), np.nanstd(self.drillfield)])
+                self.kcov = kernel.create_cov(self.D2, self.gp_length, self.coeffm, fkernel = kernelfunc)
+                #Ak = np.dot(self.Asens3, kcov) # shape (3*Nsensor, 3*Ncube^3)
+                yerr = np.hstack((self.gravfield * 0. + self.gp_sigma[0], self.magfield * 0. + self.gp_sigma[1], self.drillfield *0. + self.gp_sigma[2]))
+                #try:
+                AkA = np.dot(self.Asens3, np.dot(self.kcov, self.Asens3.T)) + np.diag(yerr**2)
+                #AkA = np.dot(Ak, self.Asens3.T) + np.diag(yerr**2) # shape(2*Nsensor, 2*Nsensor)
+                # Cholesky decomposition
+                try:
+                        AkA_chol = cholesky(AkA, lower=True)
+                except:
+                        print(&#34;Cholesky decompostion failed, AkA matrix i likely not positive semitive.&#34;)
+                        print(&#34;Change GP parameter settings&#34;)
+                        sys.exit(1)
+                usolve = solve_triangular(AkA_chol, self.Fs3, lower=True) #shape(2*Nsensor)
+                # Calculate Likelihood if option is set
+                if calclogl:
+                        log_det_AkA = np.log(np.diag(AkA_chol)**2).sum()
+                        n_log_2pi = xNcube * yNcube * zNcube * np.log(2 * np.pi)
+                        logl = -0.5 * (np.dot(usolve, usolve) + log_det_AkA + n_log_2pi)
+                else:
+                        logl = 0.
+                # predicted mean
+                self._V = solve_triangular(AkA_chol, np.dot(self.Asens3, self.kcov), lower=True) #shape(2*Nsensor, 2* Ncube^3)
+                mu = np.dot(self._V.T, usolve) #* _fstd + _fmean
+                # covariance
+                covar = self.kcov - np.dot(self._V.T, self._V)
+                #var = np.diagonal(covar) #* _fstd**2
+                #except:
+                #       print(&#34;Warning: GP Inversion failed!&#34;)
+                #       mu, covar, logl = np.zeros(3*xNcube*yNcube*zNcube), kcov * 1e9, np.inf 
+                return mu, covar, logl
+
+        
+        def cubing(self, gravfield, magfield, drillfield, sensor_locations, drilldata0):
+                &#34;&#34;&#34;
+                Joint Inversion and Cubing of sensor data
+
+                PARAMETERS
+
+                :param gravfield: 2D gravitational survey data
+                :param magfield: 2D magnetic survey data
+                :param drillfield: drilldata
+
+                RETURN
+
+                density_rec: cube with mean density 
+                magsus_rec: cube with mean magnetic susceptibility
+                drill_rec: cube with mean drill-core property  
+                density_var: varicance cube with density 
+                magsus_var: variance cube with magnetic susceptibility  
+                drill_var: varianbce cube with drill-core property  
+
+
+                &#34;&#34;&#34;
+                self.gravfield = gravfield
+                self.magfield = magfield
+                self.drillfield = drillfield
+                self.sensor_locations = sensor_locations
+                self.drilldata0 = drilldata0
+                # Normalize data
+                grav_mean, grav_std = self.gravfield.mean(), self.gravfield.std()
+                gravfield_norm = (self.gravfield - grav_mean) / grav_std
+                magn_mean, magn_std = self.magfield.mean(), self.magfield.std()
+                magfield_norm = (self.magfield - magn_mean) / magn_std
+                drill_mean, drill_std = self.drillfield.mean(), self.drillfield.std()
+                drillfield_norm = (self.drillfield - drill_mean) / drill_std
+                # Create kernel distance matrix
+                self.points3D = kernel.calcGridPoints3D((xNcube, yNcube, zNcube), (xvoxsize, yvoxsize, zvoxsize))
+                self.D2 = kernel.calcDistanceMatrix(self.points3D)
+                # Combine Data and Forward models
+                voxelpos_drill = np.vstack([self.xxx[self.drilldata0 != 0], self.yyy[self.drilldata0 != 0], self.zzz[self.drilldata0 != 0]])
+                # Combine data:
+                self.Fs3 = np.hstack((gravfield_norm, magfield_norm, drillfield_norm))
+                # Calculate Sensitivity matrix
+                Asens_grav, _ = A_sens(magneticField * 0., self.sensor_locations, self.Edges, &#39;grav&#39;)
+                Asens_mag, _ = A_sens(magneticField, self.sensor_locations, self.Edges, &#39;magn&#39;)
+                Asens_drill = A_drill(voxelpos_drill, self.voxelpos)
+                # Calculate total transformation matrix
+                Asens_g= np.vstack([Asens_grav, np.zeros_like(Asens_mag), np.zeros_like(Asens_drill)])
+                Asens_m= np.vstack([np.zeros_like(Asens_grav), Asens_mag, np.zeros_like(Asens_drill)])
+                Asens_d= np.vstack([np.zeros_like(Asens_grav), np.zeros_like(Asens_mag), Asens_drill])
+                self.Asens3 = np.hstack([Asens_g, Asens_m, Asens_d])
+                # Run actual GP inversion
+                self.mu_rec, self.cov_rec, self.logl = self.predict3(calclogl = True)
+                # Reshape results and multiply with stadnard deviatio 
+                results_rec = self.mu_rec.reshape(3, yNcube, xNcube, zNcube)
+                results_var = np.diag(self.cov_rec).reshape(3, yNcube, xNcube, zNcube)
+                #Cut off outer voxel rows
+                #results_rec = results_rec[:, 1:yNcube-1, 1:xNcube-1, :]
+                #results_var = results_var[:, 1:yNcube-1, 1:xNcube-1, :]
+                density_rec = results_rec[0] * grav_std  # Model represents deviation from the mean
+                density_var = results_var[0] * grav_std**2
+                magsus_rec = results_rec[1] * magn_std # Model represents deviation from the mean
+                magsus_var = results_var[1] * magn_std**2
+                drill_rec = results_rec[2] * drill_std  # Model represents deviation from the mean
+                drill_var = results_var[2] * drill_std**2
+                return density_rec, magsus_rec, drill_rec, density_var, magsus_var, drill_var</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="geobo.inversion.Inversion.create_cubegeometry"><code class="name flex">
+<span>def <span class="ident">create_cubegeometry</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Create Cube geometry and coordinates</p>
+<p>See settings.yaml for cube specifications</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def create_cubegeometry(self):
+        &#34;&#34;&#34;
+        Create Cube geometry and coordinates
+
+        See settings.yaml for cube specifications
+        &#34;&#34;&#34;
+        # Create voxel Edge coordinates:
+        xedge = np.linspace(0, xNcube, xNcube + 1) * xvoxsize
+        yedge = np.linspace(0, yNcube, yNcube + 1) * yvoxsize
+        zedge = np.linspace(0, -zNcube, zNcube + 1) * zvoxsize + zmax
+        #zedge = np.linspace(0.,Ncube/zfactor, Ncube/zfactor+1) * voxsize
+        xEdges, yEdges, zEdges = np.meshgrid(xedge, yedge, zedge)
+        self.Edges = np.asarray([xEdges, yEdges, -zEdges])
+        # Create voxel coordinates
+        xnew = np.arange(xvoxsize/2., xLcube + xvoxsize/2., xvoxsize)
+        ynew = np.arange(yvoxsize/2., yLcube + yvoxsize/2., yvoxsize)
+        znew = zmax - np.arange(zvoxsize/2., zLcube + zvoxsize/2., zvoxsize)
+        xx ,yy = np.meshgrid(xnew,ynew)
+        self.xxx, self.yyy, self.zzz = np.meshgrid(xnew, ynew, znew)
+        self.voxelpos = np.vstack([self.xxx.flatten(), self.yyy.flatten(), self.zzz.flatten()])
+        return self.voxelpos</code></pre>
+</details>
+</dd>
+<dt id="geobo.inversion.Inversion.cubing"><code class="name flex">
+<span>def <span class="ident">cubing</span></span>(<span>self, gravfield, magfield, drillfield, sensor_locations, drilldata0)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Joint Inversion and Cubing of sensor data</p>
+<p>PARAMETERS</p>
+<p>:param gravfield: 2D gravitational survey data
+:param magfield: 2D magnetic survey data
+:param drillfield: drilldata</p>
+<p>RETURN</p>
+<p>density_rec: cube with mean density
+magsus_rec: cube with mean magnetic susceptibility
+drill_rec: cube with mean drill-core property<br>
+density_var: varicance cube with density
+magsus_var: variance cube with magnetic susceptibility<br>
+drill_var: varianbce cube with drill-core property</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def cubing(self, gravfield, magfield, drillfield, sensor_locations, drilldata0):
+        &#34;&#34;&#34;
+        Joint Inversion and Cubing of sensor data
+
+        PARAMETERS
+
+        :param gravfield: 2D gravitational survey data
+        :param magfield: 2D magnetic survey data
+        :param drillfield: drilldata
+
+        RETURN
+
+        density_rec: cube with mean density 
+        magsus_rec: cube with mean magnetic susceptibility
+        drill_rec: cube with mean drill-core property  
+        density_var: varicance cube with density 
+        magsus_var: variance cube with magnetic susceptibility  
+        drill_var: varianbce cube with drill-core property  
+
+
+        &#34;&#34;&#34;
+        self.gravfield = gravfield
+        self.magfield = magfield
+        self.drillfield = drillfield
+        self.sensor_locations = sensor_locations
+        self.drilldata0 = drilldata0
+        # Normalize data
+        grav_mean, grav_std = self.gravfield.mean(), self.gravfield.std()
+        gravfield_norm = (self.gravfield - grav_mean) / grav_std
+        magn_mean, magn_std = self.magfield.mean(), self.magfield.std()
+        magfield_norm = (self.magfield - magn_mean) / magn_std
+        drill_mean, drill_std = self.drillfield.mean(), self.drillfield.std()
+        drillfield_norm = (self.drillfield - drill_mean) / drill_std
+        # Create kernel distance matrix
+        self.points3D = kernel.calcGridPoints3D((xNcube, yNcube, zNcube), (xvoxsize, yvoxsize, zvoxsize))
+        self.D2 = kernel.calcDistanceMatrix(self.points3D)
+        # Combine Data and Forward models
+        voxelpos_drill = np.vstack([self.xxx[self.drilldata0 != 0], self.yyy[self.drilldata0 != 0], self.zzz[self.drilldata0 != 0]])
+        # Combine data:
+        self.Fs3 = np.hstack((gravfield_norm, magfield_norm, drillfield_norm))
+        # Calculate Sensitivity matrix
+        Asens_grav, _ = A_sens(magneticField * 0., self.sensor_locations, self.Edges, &#39;grav&#39;)
+        Asens_mag, _ = A_sens(magneticField, self.sensor_locations, self.Edges, &#39;magn&#39;)
+        Asens_drill = A_drill(voxelpos_drill, self.voxelpos)
+        # Calculate total transformation matrix
+        Asens_g= np.vstack([Asens_grav, np.zeros_like(Asens_mag), np.zeros_like(Asens_drill)])
+        Asens_m= np.vstack([np.zeros_like(Asens_grav), Asens_mag, np.zeros_like(Asens_drill)])
+        Asens_d= np.vstack([np.zeros_like(Asens_grav), np.zeros_like(Asens_mag), Asens_drill])
+        self.Asens3 = np.hstack([Asens_g, Asens_m, Asens_d])
+        # Run actual GP inversion
+        self.mu_rec, self.cov_rec, self.logl = self.predict3(calclogl = True)
+        # Reshape results and multiply with stadnard deviatio 
+        results_rec = self.mu_rec.reshape(3, yNcube, xNcube, zNcube)
+        results_var = np.diag(self.cov_rec).reshape(3, yNcube, xNcube, zNcube)
+        #Cut off outer voxel rows
+        #results_rec = results_rec[:, 1:yNcube-1, 1:xNcube-1, :]
+        #results_var = results_var[:, 1:yNcube-1, 1:xNcube-1, :]
+        density_rec = results_rec[0] * grav_std  # Model represents deviation from the mean
+        density_var = results_var[0] * grav_std**2
+        magsus_rec = results_rec[1] * magn_std # Model represents deviation from the mean
+        magsus_var = results_var[1] * magn_std**2
+        drill_rec = results_rec[2] * drill_std  # Model represents deviation from the mean
+        drill_var = results_var[2] * drill_std**2
+        return density_rec, magsus_rec, drill_rec, density_var, magsus_var, drill_var</code></pre>
+</details>
+</dd>
+<dt id="geobo.inversion.Inversion.predict3"><code class="name flex">
+<span>def <span class="ident">predict3</span></span>(<span>self, calclogl=False)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Calculate mean, variance, and likelihood likelihood for GP with 3x3 kernel block matrix </p>
+<p>PARAMETERS</p>
+<p>:param calclogl: if True calculate marginal GP loglikelihood, if False logl return is set to 0</p>
+<p>RETURN:
+mean
+covariance
+log-likelihood</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def predict3(self, calclogl = False):
+        &#34;&#34;&#34;
+        Calculate mean, variance, and likelihood likelihood for GP with 3x3 kernel block matrix 
+    
+    PARAMETERS
+
+    :param calclogl: if True calculate marginal GP loglikelihood, if False logl return is set to 0
+
+    RETURN: 
+    mean
+    covariance
+    log-likelihood
+        &#34;&#34;&#34;
+        # Calculate kernel 3x3 block matrix:
+        self.datastd = np.mean([np.nanstd(self.gravfield), np.nanstd(self.magfield), np.nanstd(self.drillfield)])
+        self.kcov = kernel.create_cov(self.D2, self.gp_length, self.coeffm, fkernel = kernelfunc)
+        #Ak = np.dot(self.Asens3, kcov) # shape (3*Nsensor, 3*Ncube^3)
+        yerr = np.hstack((self.gravfield * 0. + self.gp_sigma[0], self.magfield * 0. + self.gp_sigma[1], self.drillfield *0. + self.gp_sigma[2]))
+        #try:
+        AkA = np.dot(self.Asens3, np.dot(self.kcov, self.Asens3.T)) + np.diag(yerr**2)
+        #AkA = np.dot(Ak, self.Asens3.T) + np.diag(yerr**2) # shape(2*Nsensor, 2*Nsensor)
+        # Cholesky decomposition
+        try:
+                AkA_chol = cholesky(AkA, lower=True)
+        except:
+                print(&#34;Cholesky decompostion failed, AkA matrix i likely not positive semitive.&#34;)
+                print(&#34;Change GP parameter settings&#34;)
+                sys.exit(1)
+        usolve = solve_triangular(AkA_chol, self.Fs3, lower=True) #shape(2*Nsensor)
+        # Calculate Likelihood if option is set
+        if calclogl:
+                log_det_AkA = np.log(np.diag(AkA_chol)**2).sum()
+                n_log_2pi = xNcube * yNcube * zNcube * np.log(2 * np.pi)
+                logl = -0.5 * (np.dot(usolve, usolve) + log_det_AkA + n_log_2pi)
+        else:
+                logl = 0.
+        # predicted mean
+        self._V = solve_triangular(AkA_chol, np.dot(self.Asens3, self.kcov), lower=True) #shape(2*Nsensor, 2* Ncube^3)
+        mu = np.dot(self._V.T, usolve) #* _fstd + _fmean
+        # covariance
+        covar = self.kcov - np.dot(self._V.T, self._V)
+        #var = np.diagonal(covar) #* _fstd**2
+        #except:
+        #       print(&#34;Warning: GP Inversion failed!&#34;)
+        #       mu, covar, logl = np.zeros(3*xNcube*yNcube*zNcube), kcov * 1e9, np.inf 
+        return mu, covar, logl</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="geobo" href="index.html">geobo</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="geobo.inversion.Inversion" href="#geobo.inversion.Inversion">Inversion</a></code></h4>
+<ul class="">
+<li><code><a title="geobo.inversion.Inversion.create_cubegeometry" href="#geobo.inversion.Inversion.create_cubegeometry">create_cubegeometry</a></code></li>
+<li><code><a title="geobo.inversion.Inversion.cubing" href="#geobo.inversion.Inversion.cubing">cubing</a></code></li>
+<li><code><a title="geobo.inversion.Inversion.predict3" href="#geobo.inversion.Inversion.predict3">predict3</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.4</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>

@@ -1,0 +1,1014 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.7.4" />
+<title>geobo.run_geobo API documentation</title>
+<meta name="description" content="Copyright 2020 Sebastian Haan …" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>geobo.run_geobo</code></h1>
+</header>
+<section id="section-intro">
+<p>Copyright 2020 Sebastian Haan</p>
+<p>This script creates reconstructed Cubes with mean subtracted properties of density, magnetic susceptibility,
+and
+drill core properties plus their predicted variance cubes (see inversion.py for more details)</p>
+<p>See settings.yaml for specifications.</p>
+<p>ToDo:
+- Implement GP hyperparameter optimisation at adavanced user level</p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">&#34;&#34;&#34;
+Copyright 2020 Sebastian Haan
+
+This script creates reconstructed Cubes with mean subtracted properties of density, magnetic susceptibility, 
+and  drill core properties plus their predicted variance cubes (see inversion.py for more details)
+
+See settings.yaml for specifications.
+
+ToDo: 
+- Implement GP hyperparameter optimisation at adavanced user level
+
+&#34;&#34;&#34;
+import numpy as np
+import pandas as pd
+import rasterio
+from scipy import interpolate
+from scipy.ndimage.interpolation import zoom
+from scipy.optimize import minimize, least_squares, shgo
+from scipy.stats import norm, pareto
+from scipy import interpolate
+from mpl_toolkits.mplot3d import axes3d
+import matplotlib.pyplot as plt
+from matplotlib import cm
+
+# Import custom functions
+from config_loader import * # loads settings
+import cubeshow as cs 
+from utils import *
+import inversion
+import simcube
+
+
+
+def read_surveydata(plot = True):
+        &#34;&#34;&#34;
+        Reading gravity data and magnetic data, including cropping and downsampling to Cube size
+
+        PARAMETER
+        :param plot: boolean, if True plots survey data and downsampled
+
+        RETURN
+        gravity data
+        magnetic data
+        sensor locations
+        &#34;&#34;&#34;
+        if FNAME_gravsurvey is not None:
+                gravimg = rasterio.open(inpath + FNAME_gravsurvey)
+                grav = gravimg.read(1)
+        else:
+                grav = None
+        if FNAME_magsurvey is not None:
+                magimg = rasterio.open(inpath + FNAME_magsurvey)
+                mag = magimg.read(1)
+        else:
+                mag = None
+        # downsample to Cube voxelsize
+        zoomfac = xNcube *1./grav.shape[1]
+        grav2 = zoom(grav, zoomfac)
+        assert grav2.shape == (yNcube, xNcube)
+        zoomfac = xNcube *1./mag.shape[1]
+        mag2 = zoom(mag, zoomfac)
+        assert mag2.shape == (yNcube, xNcube)
+        # Create survey sensor coordinates:
+        x_s = np.linspace(0.5, xNcube - 0.5, xNcube)  * xvoxsize
+        y_s = np.linspace(0.5, yNcube - 0.5, yNcube)  * yvoxsize
+        z_s = zmax + zoff
+        x_sensor, y_sensor, z_sensor = np.meshgrid(x_s,y_s,z_s)
+        locations = np.asarray([x_sensor.flatten(), y_sensor.flatten(), z_sensor.flatten()]).T
+        if not os.path.exists(outpath):
+                os.makedirs(outpath)
+        if plot:
+                extent=[xmin,xmax,ymin,ymax]
+                plt.imshow(grav, aspect = &#39;equal&#39;, cmap = &#39;viridis&#39;, extent=extent)
+                plt.colorbar()
+                plt.savefig(outpath + &#39;gravfield.png&#39;)
+                plt.clf()
+                plt.imshow(mag, aspect = &#39;equal&#39;, cmap = &#39;viridis&#39;, extent=extent)
+                plt.colorbar()
+                plt.savefig(outpath + &#39;magfield.png&#39;)
+                plt.clf()
+                plt.imshow(grav2, aspect = &#39;equal&#39;, cmap = &#39;viridis&#39;, extent=extent)
+                plt.colorbar()
+                plt.savefig(outpath + &#39;gravfield_downsampled.png&#39;)
+                plt.clf()
+                plt.imshow(mag2, aspect = &#39;equal&#39;, cmap = &#39;viridis&#39;, extent=extent)
+                plt.colorbar()
+                plt.savefig(outpath + &#39;magfield_downsampled.png&#39;)
+                plt.close(&#34;all&#34;)
+        return grav2.flatten(), mag2.flatten(), locations
+
+
+def read_drilldata(features):
+        &#34;&#34;&#34;
+        Reading drill data
+
+        PARAMETER
+        :param features: List of drill features of interest (see settings.yaml)
+
+        RETURN
+        Drill data
+        x,y,z coordinates of drilldata
+        x,y,z min,max arrays of drilldata
+        &#34;&#34;&#34;
+        if FNAME_drilldata is not None:
+                drill = pd.read_csv(inpath + FNAME_drilldata)
+                drill = drill[(drill.x &gt;= xmin) &amp; (drill.x &lt;= xmax) &amp; (drill.y &gt;= ymin) &amp; (drill.y &lt;= ymax) &amp; (drill.z &lt;= zmax) &amp; (drill.z &gt;= zmin)].copy()
+        else: 
+                drill = None
+        # Select data only within extent
+        # Convert to local coordinate system with origin X,Y = 0,0
+        drill[&#39;x&#39;] = drill[&#39;x&#39;] - xmin
+        drill[&#39;y&#39;] = drill[&#39;y&#39;] - ymin
+        # Set up voxel coordinate grid
+        xdrill = drill[&#39;x&#39;].values
+        ydrill = drill[&#39;y&#39;].values
+        zdrill = drill[&#39;z&#39;].values 
+        try:
+                drillfirst = drill.groupby(&#39;SiteID&#39;).first()
+                drilllast = drill.groupby(&#39;SiteID&#39;).last()
+                xdrillminmax = np.asarray([drillfirst.x.values, drilllast.x.values]).T
+                ydrillminmax = np.asarray([drillfirst.y.values, drilllast.y.values]).T
+                zdrillminmax = np.asarray([drillfirst.z.values, drilllast.z.values]).T
+        except:
+                xdrillminmax = 0.#np.asarray([xdrill.min(), xdrill.min()])
+                ydrillminmax = 0.#np.asarray([ydrill.min(), ydrill.min()])
+                zdrillminmax = 0.#np.asarray([zdrill.min(), zdrill.min()])
+        coord = np.vstack([xdrill, ydrill, zdrill]).T
+        drilldata = []
+        for feature in features:
+                data = drill[feature]
+                drilldata.append(align_drill(coord, data))
+        return np.asarray(drilldata), coord, (xdrillminmax, ydrillminmax, zdrillminmax)
+
+
+def align_drill(coord, data):
+        &#34;&#34;&#34;
+        Convert drill-core data in Model Cube shape with iteration over all voxels
+
+        PARAMETER
+        param coord: xyz Coordinates of drillcore, shape (N_drill, 3)
+        param data: 1 dim data for drillcore, shape (N_drill)
+
+        RETURN
+        drilldata in voxel shape
+        &#34;&#34;&#34;
+        dx = xvoxsize
+        dy = yvoxsize
+        dz = zvoxsize
+        data = np.asarray(data)
+        res = np.zeros_like(xxx)
+        for ix in range(xxx.shape[0]):
+                for iy in range(xxx.shape[1]):
+                        for iz in range(xxx.shape[2]):
+                                sel = np.where(((xxx[ix,iy,iz] - dx) &lt;= coord[:, 0]) &amp; (coord[:, 0] &lt; (xxx[ix,iy,iz] + dx))
+                                        &amp; ((yyy[ix,iy,iz] - dy) &lt;= coord[:, 1]) &amp; (coord[:, 1] &lt; (yyy[ix,iy,iz] + dy))
+                                        &amp; ((zzz[ix,iy,iz] - dz) &lt;= coord[:, 2]) &amp; (coord[:, 2] &lt; (zzz[ix,iy,iz] + dz)))
+                                if np.size(data[sel]) &gt; 0:
+                                        #print(sel)
+                                        m = np.nanmean(data[sel])
+                                        if np.isfinite(m):
+                                                res[ix,iy,iz] = m
+        return res
+
+
+
+&#34;&#34;&#34;
+Below: defineition of acquisition function functions for BO
+
+The key of BO is the acquisition function, which typically has to balance between 
+a) exploration, i.e., querying points that maximise the information gain and minimize the uncertainty of a model, 
+b) exploitation, i.e. querying points that maximise the reward 
+(e.g. concentrating search in the vicinity locations with high value such as minerals), and 
+c) minimize the number of samples given an expensive cost function for any new measurement. 
+
+Exploration-exploitation and cost trade-off parameters can be set in settings.yaml
+&#34;&#34;&#34;
+
+def futility_vertical(params, costs = None):
+        &#34;&#34;&#34; 
+        Utility/Aquisition function for bayesian optimisation assuming vertical drillcores
+
+        PARAMETER
+        params: parameters for drillhole (x_drill,y_drill) 
+        param costs: cube of costs with same shape as reconstructed cube
+
+        RETURN
+        Output of utility function (scalar)
+        &#34;&#34;&#34;
+        if costs is None:
+                costs = drill_rec * 0.
+        params = np.asarray(params)
+        xmaxvox = drill_rec.shape[0] - 1 
+        ymaxvox = drill_rec.shape[1] - 1
+        if np.isfinite(params).all():
+                xd = int(np.round(params[0]))
+                yd = int(np.round(params[1]))
+                if (xd &gt; 0) &amp; (xd &lt; xmaxvox) &amp; (yd &gt; 0) &amp; (yd &lt; ymaxvox):
+                        func = np.sum(drill_rec[xd, yd, :]) + kappa * np.sqrt(np.sum(drill_var[xd, yd, :])) - beta * np.sum(costs[xd,yd, :])
+                else:
+                        func = -np.inf
+        else:
+                func = -np.inf
+        return -func # (negative if optimiser use minimize)
+
+
+def futility_drill(params, length_newdrill = zLcube, costs = None): 
+        &#34;&#34;&#34;
+        Calculates utility function for proposed non-vertical drillcore, 
+        which takes into account the azimuth and dip in addition to location and drill-core length
+
+        PARAMETER
+        param params: [x0, y0, azimuth, dip] x0 and y0 in meters; azimuth and dip in degree 
+        param length_newdrill: length of drillcore in meters
+        param costs: cube of costs with same shape as reconstructed cube
+
+        RETURN
+        Output of utility function (scalar)
+        &#34;&#34;&#34;
+        if costs is None:
+                costs = drill_rec * 0.
+        x0, y0, azimuth, dip = params
+        nstep = int(2 * length_newdrill/np.min([xvoxsize, yvoxsize, zvoxsize]))
+        rladder = np.linspace(0,length_newdrill, nstep)
+        x0 = rladder * 0 + x0
+        y0 = rladder * 0 + y0
+        z0 = rladder * 0 + zmax
+        azimuth = rladder * 0 + azimuth
+        dip = rladder * 0 + dip
+        try:
+                xdrillnew, ydrillnew, zdrillnew = spherical2cartes(x0, y0, z0, azimuth * np.pi/180., (180 - dip)* np.pi/180., rladder)
+                xnew = (xdrillnew/xvoxsize).astype(int)
+                ynew = (ydrillnew/yvoxsize).astype(int)
+                znew = (-zdrillnew/zvoxsize).astype(int)
+                funct = np.sum(drill_rec[xnew,ynew,znew])  + kappa * np.sqrt(np.sum(drill_var[xnew,ynew,znew])) - beta * np.sum(costs[xnew,ynew,znew])
+        except:
+                funct = 0.
+        return -funct
+
+&#34;&#34;&#34;
+
+Chose in settings.yaml sepcifications and whether vertical or non-vertical drillcores
+
+The optimisation of the acquisitioan function is performed with a global optimiser: SHGO with sobol sampling
+This has the advantage of proposing and sorting multiple local maxima
+
+&#34;&#34;&#34;
+
+def bayesopt_vert(drillcoord = None):
+        &#34;&#34;&#34;
+        New Drillcore proposal based on mean, uncertainty, and costs as defined in acquisitian function futility_vertical
+
+        The optimisation of the acquisitioan function is performed with a global optimiser: SHGO with sobol sampling
+        This has the advantage of proposing and sorting multiple local maxima
+
+        PARAMETER
+        param drillcoord: exisiting x, y, x drill coordinates
+
+        RETURN
+        Saves list of proposal of new drillcore coordinates in file newdrill_vertical_proposals.csv
+
+        &#34;&#34;&#34;
+        print(&#39;Calculating propoals list of new vertical drillholes...&#39;)
+        # Define boundaries for optimisation:
+        bp0 = np.asarray([yNcube/2, xNcube/2])
+        blb = np.asarray([1, yNcube-1])
+        bub = np.asarray([1, xNcube-1])
+        #bopt_res = minimize(futility_vertical, bp0, bounds = (blb, bub),  method=&#39;SLSQP&#39;, options={&#39;maxiter&#39;: 500}) #tol =1e-6, method=&#39;SLSQP&#39;
+        bopt_res = shgo(futility_vertical, bounds = ((1,yNcube - 1), (1,xNcube- 1)), n=20, iters=20, sampling_method=&#39;sobol&#39; ) #tol =1e-6, method=&#39;SLSQP&#39;
+        if not bopt_res.success:
+                print(&#39;WARNING: &#39; + bopt_res.message) 
+        print(&#39;New Drillcore Proposal:&#39;)
+        print(&#39;_______________________&#39;)
+        print(&#39;EASTING [meters]: &#39;, np.round(bopt_res.x[1] * xvoxsize) + xmin + 0.5 * xvoxsize)
+        print(&#39;NORTHING [meters]: &#39;, np.round(bopt_res.x[0] * yvoxsize) + ymin + 0.5 * yvoxsize)
+
+        # Write new drillcore proposals as csv file
+        print(&#39;Saving all new drillhole proposals in file: newdrill_proposals.csv&#39;)
+        newdf_values = bopt_res.xl 
+        newdf_head = [&#39;NORTHING&#39;,&#39;EASTING&#39;]
+        df_newdrill = pd.DataFrame(np.round(newdf_values,2), columns = newdf_head)
+        df_newdrill[&#39;EASTING&#39;] = np.round(df_newdrill[&#39;EASTING&#39;]) * xvoxsize + xmin + 0.5 * xvoxsize
+        df_newdrill[&#39;NORTHING&#39;] = np.round(df_newdrill[&#39;NORTHING&#39;]) * yvoxsize + ymin + 0.5 * yvoxsize
+        df_newdrill[&#39;BO_GAIN&#39;] = -np.round(bopt_res.funl,4)
+        df_newdrill.to_csv(outpath+ &#39;newdrill_vertical_proposals.csv&#39;, index=False)
+
+        # Create image of porposed drillcore positions
+        densimg = density_rec.mean(axis = 2)
+        magsusimg = magsus_rec.mean(axis = 2)
+        drillimg = drill_rec.mean(axis = 2)
+        drillvarimg = drill_var.mean(axis = 2)
+        #extent=[xmin + xvoxsize, xmax - xvoxsize,ymin + yvoxsize,ymax- yvoxsize]
+        extent=[xmin, xmax , ymin , ymax]
+        plt.clf()
+        plt.imshow(drillimg, aspect = &#39;equal&#39;, cmap = &#39;viridis&#39;, extent=extent, origin=&#39;lower&#39;)
+        plt.xlabel(&#39;EASTING&#39;)
+        plt.ylabel(&#39;NORTHING&#39;)
+        if drillcoord is not None:
+                xdrill, ydrill, zdrill = drillcoord.T
+                plt.scatter(xdrill+xmin, ydrill+ymin, color=&#39;k&#39;)
+        plt.scatter(df_newdrill[&#39;EASTING&#39;].values, df_newdrill[&#39;NORTHING&#39;].values, color=&#39;white&#39;)
+        plt.scatter(df_newdrill.loc[0,&#39;EASTING&#39;], df_newdrill.loc[0,&#39;NORTHING&#39;], color=&#39;red&#39;)
+        plt.title(&#39;Proposed Vertical Drillcores&#39;)
+        plt.tight_layout()
+        plt.savefig(outpath + &#39;newdrill_vertical_proposals.png&#39;)
+        plt.close(&#34;all&#34;)
+
+
+def bayesopt_nonvert(drillcoord = None):
+        &#34;&#34;&#34;
+        New Drillcore proposal based on mean, uncertainty, and costs as defined in acquisitian function futility_vertical
+
+        The optimisation of the acquisitioan function is performed with a global optimiser: SHGO with sobol sampling
+        This has the advantage of proposing and sorting multiple local maxima
+
+        PARAMETER
+        param drillcoord: exisiting x, y, x drill coordinates
+
+        RETURN
+        Saves list of proposal of new drillcore coordinates in file newdrill_vertical_proposals.csv
+        &#34;&#34;&#34;
+
+        bnds = ((yvoxsize,yLcube - yvoxsize), (xvoxsize,xLcube- xvoxsize), (0,360),(30,90))
+        bopt_res = shgo(futility_drill, bnds, n=10, iters=500, sampling_method=&#39;sobol&#39;)
+        print(&#39;New Drillcore Proposal:&#39;)
+        print(&#39;_______________________&#39;)
+        print(&#39;EASTING [meters]: &#39;, np.round(bopt_res.x[1] + ymin))
+        print(&#39;NORTHING [meters]: &#39;, np.round(bopt_res.x[0] + xmin))
+        print(&#39;Azimuth Angle [degree]: &#39;, np.round(bopt_res.x[2],1))
+        print(&#39;Dip Angle [degree]: &#39;, np.round(bopt_res.x[3],1))
+
+        # Write new drillcore proposals as csv file
+        print(&#39;Saving all new drillhole proposals in file: newdrill_proposals.csv&#39;)
+        newdf_values = bopt_res.xl
+        newdf_head = [&#39;NORTHING&#39;, &#39;EASTING&#39;, &#39;AZIMUTH&#39;, &#39;DIP&#39;]
+        df_newdrill = pd.DataFrame(np.round(newdf_values,2), columns = newdf_head)
+        df_newdrill[&#39;EASTING&#39;] = np.round(df_newdrill[&#39;EASTING&#39;] + xmin,1)
+        df_newdrill[&#39;NORTHING&#39;] = np.round(df_newdrill[&#39;NORTHING&#39;] + ymin,1)
+        df_newdrill[&#39;BO_GAIN&#39;] = -np.round(bopt_res.funl,4)
+        df_newdrill.to_csv(outpath+ &#39;newdrill_proposals.csv&#39;, index=False)
+
+        # Create image of prpposed drillcore positions
+        densimg = density_rec.mean(axis = 2)
+        magsusimg = magsus_rec.mean(axis = 2)
+        drillimg = drill_rec.mean(axis = 2)
+        drillvarimg = drill_var.mean(axis = 2)
+        #extent=[xmin + xvoxsize, xmax - xvoxsize,ymin + yvoxsize,ymax- yvoxsize]
+        extent=[xmin, xmax, ymin, ymax]
+        plt.clf()
+        plt.imshow(drillimg, aspect = &#39;equal&#39;, cmap = &#39;viridis&#39;, extent=extent, origin=&#39;lower&#39;)
+        plt.xlabel(&#39;EASTING&#39;)
+        plt.ylabel(&#39;NORTHING&#39;)
+        if drillcoord is not None:
+                xdrill, ydrill, zdrill = drillcoord.T
+                plt.scatter(xdrill+xmin, ydrill+ymin, color=&#39;k&#39;)
+        plt.scatter(df_newdrill[&#39;EASTING&#39;].values, df_newdrill[&#39;NORTHING&#39;].values, color=&#39;white&#39;)
+        plt.scatter(df_newdrill.loc[0,&#39;EASTING&#39;], df_newdrill.loc[0,&#39;NORTHING&#39;], color=&#39;red&#39;)
+        plt.title(&#39;Proposed Drillcores&#39;)
+        plt.tight_layout()
+        plt.savefig(outpath + &#39;newdrill_proposals.png&#39;)
+        plt.close(&#39;all&#39;)
+
+
+def create_costcube(cubeshape = (xNcube, yNcube, zNcube)):
+        &#34;&#34;&#34;
+        User function to create costcube for drilling. Need to be same cube shape as reconstructed cube.
+        By default set to zero costs.
+
+        INPUT
+        param cubeshape: shape of cube, by default: (xNcube, yNcube, zNcube)
+
+        RETURN
+        costcube
+        &#34;&#34;&#34;
+        # Here costs are set to zero, change below
+        costcube = np.zeros(cubeshape)
+
+        return costcube
+
+
+
+### Main computation ###
+
+if gen_simulation:
+        # Create first simulated datacube, see settings.yaml
+        simcube.create_simdata(modelname)  
+
+# Initiate inversion  class
+inv = inversion.Inversion()
+
+# Create new cube geometry
+voxelpos = inv.create_cubegeometry()
+xxx, yyy, zzz = voxelpos
+xxx = inv.xxx = xxx.reshape(xNcube, yNcube, zNcube)
+yyy = inv.yyy = yyy.reshape(xNcube, yNcube, zNcube)
+zzz = inv.zzz = zzz.reshape(xNcube, yNcube, zNcube)
+
+# Read in survey data
+gravfield, magfield, sensor_locations = read_surveydata()
+
+# # Read in existing drillcore data
+drilldata, drillcoord, drillminmax = read_drilldata(drill_features)
+drilldata0 = drilldata[ifeature]
+drillfield = drilldata0[drilldata0 != 0]
+xdrillminmax, ydrillminmax, zdrillminmax = drillminmax
+
+# Joint Inversion and reconmstyrcuting of cube with geophysical properties:
+density_rec, magsus_rec, drill_rec, density_var, magsus_var, drill_var = inv.cubing(gravfield, magfield, drillfield, sensor_locations, drilldata0)
+
+### Create VTK cubes or reconstructed cubes:  
+origin = (voxelpos[0].min(), voxelpos[1].min(), voxelpos[2].min())
+voxelsize = (xvoxsize, yvoxsize,zvoxsize)
+cs.create_vtkcube(density_rec, origin, voxelsize, fname = outpath + &#39;cube_density.vtk&#39;)
+cs.create_vtkcube(magsus_rec, origin, voxelsize, fname = outpath + &#39;cube_magsus.vtk&#39;)
+cs.create_vtkcube(drill_rec, origin, voxelsize, fname = outpath + &#39;cube_drill.vtk&#39;)
+cs.create_vtkcube(density_var, origin, voxelsize, fname = outpath + &#39;cube_density_variance.vtk&#39;)
+cs.create_vtkcube(magsus_var, origin, voxelsize, fname = outpath + &#39;cube_magsus_variance.vtk&#39;)
+cs.create_vtkcube(drill_var, origin, voxelsize, fname = outpath + &#39;cube_drill_variance.vtk&#39;)
+
+
+# Create plots of 2D maps of vertically integrated cube properties:
+if plot_vertical:       
+        densimg = density_rec.mean(axis = 2)
+        magsusimg = magsus_rec.mean(axis = 2)
+        drillimg = drill_rec.mean(axis = 2)
+        extent=[xmin + xvoxsize, xmax - xvoxsize,ymin + yvoxsize,ymax- yvoxsize]
+        plt.clf()
+        plt.imshow(densimg, aspect = &#39;equal&#39;, cmap = &#39;viridis&#39;, extent=extent)
+        plt.colorbar()
+        plt.savefig(outpath + &#39;dens_rec2D_loc2.png&#39;)
+        plt.clf()
+        plt.imshow(magsusimg, aspect = &#39;equal&#39;, cmap = &#39;viridis&#39;, extent=extent)
+        plt.colorbar()
+        plt.savefig(outpath + &#39;magsus_rec2D_loc2.png&#39;)
+        plt.clf()
+        plt.imshow(drillimg, aspect = &#39;equal&#39;, cmap = &#39;viridis&#39;, extent=extent)
+        plt.colorbar()
+        plt.savefig(outpath + &#39;drill_rec2D_loc2.png&#39;)
+        plt.close(&#39;all&#39;)
+
+
+# Create 3D Cube plot if needed (same data as in VTK cube)
+if plot3d:
+                plt.clf()
+                #cs.skplot3(density_rec, Nsize = (xNcube, yNcube, zNcube), drill = (yyydrill/xvoxsize,xxxdrill/yvoxsize,-zzzdrill/zvoxsize), sensor = (x_sensor/xvoxsize, y_sensor/yvoxsize, x_sensor * 0.), show = False, path_out = outpath, filename = &#39;density-drill-mesh.png&#39;)
+                cs.skplot3(density_rec, Nsize = (yNcube, xNcube, zNcube), drill = (ydrillminmax/xvoxsize, xdrillminmax/yvoxsize,-zdrillminmax/zvoxsize), sensor = (sensor_locations[1]/xvoxsize,sensor_locations[0]/yvoxsize, sensor_locations[2] * 0. + zmax), show = False, path_out = outpath, filename = &#39;density-mesh3D.png&#39;)
+                plt.clf()
+                cs.skplot3(drill_rec, Nsize = (yNcube, xNcube, zNcube), drill = (ydrillminmax/xvoxsize, xdrillminmax/yvoxsize,-zdrillminmax/zvoxsize), sensor = (sensor_locations[1]/xvoxsize,sensor_locations[0]/yvoxsize, sensor_locations[2] * 0. + zmax), show = False, path_out = outpath, filename = &#39;drill-mesh3D.png&#39;)
+                plt.close(&#39;all&#39;)
+
+
+# Default: no costs, change in function create_costcube to specify costs 
+costcube = create_costcube
+
+# Propose new drill-core, chose in settings.yaml sepcifications and whether vertical or non-vertical drillcores
+if bayesopt_vertical:
+        bayesopt_vert(drillcoord)
+
+if bayesopt_nonvertical:
+        bayesopt_nonvert(drillcoord)</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="geobo.run_geobo.align_drill"><code class="name flex">
+<span>def <span class="ident">align_drill</span></span>(<span>coord, data)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Convert drill-core data in Model Cube shape with iteration over all voxels</p>
+<p>PARAMETER
+param coord: xyz Coordinates of drillcore, shape (N_drill, 3)
+param data: 1 dim data for drillcore, shape (N_drill)</p>
+<p>RETURN
+drilldata in voxel shape</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def align_drill(coord, data):
+        &#34;&#34;&#34;
+        Convert drill-core data in Model Cube shape with iteration over all voxels
+
+        PARAMETER
+        param coord: xyz Coordinates of drillcore, shape (N_drill, 3)
+        param data: 1 dim data for drillcore, shape (N_drill)
+
+        RETURN
+        drilldata in voxel shape
+        &#34;&#34;&#34;
+        dx = xvoxsize
+        dy = yvoxsize
+        dz = zvoxsize
+        data = np.asarray(data)
+        res = np.zeros_like(xxx)
+        for ix in range(xxx.shape[0]):
+                for iy in range(xxx.shape[1]):
+                        for iz in range(xxx.shape[2]):
+                                sel = np.where(((xxx[ix,iy,iz] - dx) &lt;= coord[:, 0]) &amp; (coord[:, 0] &lt; (xxx[ix,iy,iz] + dx))
+                                        &amp; ((yyy[ix,iy,iz] - dy) &lt;= coord[:, 1]) &amp; (coord[:, 1] &lt; (yyy[ix,iy,iz] + dy))
+                                        &amp; ((zzz[ix,iy,iz] - dz) &lt;= coord[:, 2]) &amp; (coord[:, 2] &lt; (zzz[ix,iy,iz] + dz)))
+                                if np.size(data[sel]) &gt; 0:
+                                        #print(sel)
+                                        m = np.nanmean(data[sel])
+                                        if np.isfinite(m):
+                                                res[ix,iy,iz] = m
+        return res</code></pre>
+</details>
+</dd>
+<dt id="geobo.run_geobo.bayesopt_nonvert"><code class="name flex">
+<span>def <span class="ident">bayesopt_nonvert</span></span>(<span>drillcoord=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>New Drillcore proposal based on mean, uncertainty, and costs as defined in acquisitian function futility_vertical</p>
+<p>The optimisation of the acquisitioan function is performed with a global optimiser: SHGO with sobol sampling
+This has the advantage of proposing and sorting multiple local maxima</p>
+<p>PARAMETER
+param drillcoord: exisiting x, y, x drill coordinates</p>
+<p>RETURN
+Saves list of proposal of new drillcore coordinates in file newdrill_vertical_proposals.csv</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def bayesopt_nonvert(drillcoord = None):
+        &#34;&#34;&#34;
+        New Drillcore proposal based on mean, uncertainty, and costs as defined in acquisitian function futility_vertical
+
+        The optimisation of the acquisitioan function is performed with a global optimiser: SHGO with sobol sampling
+        This has the advantage of proposing and sorting multiple local maxima
+
+        PARAMETER
+        param drillcoord: exisiting x, y, x drill coordinates
+
+        RETURN
+        Saves list of proposal of new drillcore coordinates in file newdrill_vertical_proposals.csv
+        &#34;&#34;&#34;
+
+        bnds = ((yvoxsize,yLcube - yvoxsize), (xvoxsize,xLcube- xvoxsize), (0,360),(30,90))
+        bopt_res = shgo(futility_drill, bnds, n=10, iters=500, sampling_method=&#39;sobol&#39;)
+        print(&#39;New Drillcore Proposal:&#39;)
+        print(&#39;_______________________&#39;)
+        print(&#39;EASTING [meters]: &#39;, np.round(bopt_res.x[1] + ymin))
+        print(&#39;NORTHING [meters]: &#39;, np.round(bopt_res.x[0] + xmin))
+        print(&#39;Azimuth Angle [degree]: &#39;, np.round(bopt_res.x[2],1))
+        print(&#39;Dip Angle [degree]: &#39;, np.round(bopt_res.x[3],1))
+
+        # Write new drillcore proposals as csv file
+        print(&#39;Saving all new drillhole proposals in file: newdrill_proposals.csv&#39;)
+        newdf_values = bopt_res.xl
+        newdf_head = [&#39;NORTHING&#39;, &#39;EASTING&#39;, &#39;AZIMUTH&#39;, &#39;DIP&#39;]
+        df_newdrill = pd.DataFrame(np.round(newdf_values,2), columns = newdf_head)
+        df_newdrill[&#39;EASTING&#39;] = np.round(df_newdrill[&#39;EASTING&#39;] + xmin,1)
+        df_newdrill[&#39;NORTHING&#39;] = np.round(df_newdrill[&#39;NORTHING&#39;] + ymin,1)
+        df_newdrill[&#39;BO_GAIN&#39;] = -np.round(bopt_res.funl,4)
+        df_newdrill.to_csv(outpath+ &#39;newdrill_proposals.csv&#39;, index=False)
+
+        # Create image of prpposed drillcore positions
+        densimg = density_rec.mean(axis = 2)
+        magsusimg = magsus_rec.mean(axis = 2)
+        drillimg = drill_rec.mean(axis = 2)
+        drillvarimg = drill_var.mean(axis = 2)
+        #extent=[xmin + xvoxsize, xmax - xvoxsize,ymin + yvoxsize,ymax- yvoxsize]
+        extent=[xmin, xmax, ymin, ymax]
+        plt.clf()
+        plt.imshow(drillimg, aspect = &#39;equal&#39;, cmap = &#39;viridis&#39;, extent=extent, origin=&#39;lower&#39;)
+        plt.xlabel(&#39;EASTING&#39;)
+        plt.ylabel(&#39;NORTHING&#39;)
+        if drillcoord is not None:
+                xdrill, ydrill, zdrill = drillcoord.T
+                plt.scatter(xdrill+xmin, ydrill+ymin, color=&#39;k&#39;)
+        plt.scatter(df_newdrill[&#39;EASTING&#39;].values, df_newdrill[&#39;NORTHING&#39;].values, color=&#39;white&#39;)
+        plt.scatter(df_newdrill.loc[0,&#39;EASTING&#39;], df_newdrill.loc[0,&#39;NORTHING&#39;], color=&#39;red&#39;)
+        plt.title(&#39;Proposed Drillcores&#39;)
+        plt.tight_layout()
+        plt.savefig(outpath + &#39;newdrill_proposals.png&#39;)
+        plt.close(&#39;all&#39;)</code></pre>
+</details>
+</dd>
+<dt id="geobo.run_geobo.bayesopt_vert"><code class="name flex">
+<span>def <span class="ident">bayesopt_vert</span></span>(<span>drillcoord=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>New Drillcore proposal based on mean, uncertainty, and costs as defined in acquisitian function futility_vertical</p>
+<p>The optimisation of the acquisitioan function is performed with a global optimiser: SHGO with sobol sampling
+This has the advantage of proposing and sorting multiple local maxima</p>
+<p>PARAMETER
+param drillcoord: exisiting x, y, x drill coordinates</p>
+<p>RETURN
+Saves list of proposal of new drillcore coordinates in file newdrill_vertical_proposals.csv</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def bayesopt_vert(drillcoord = None):
+        &#34;&#34;&#34;
+        New Drillcore proposal based on mean, uncertainty, and costs as defined in acquisitian function futility_vertical
+
+        The optimisation of the acquisitioan function is performed with a global optimiser: SHGO with sobol sampling
+        This has the advantage of proposing and sorting multiple local maxima
+
+        PARAMETER
+        param drillcoord: exisiting x, y, x drill coordinates
+
+        RETURN
+        Saves list of proposal of new drillcore coordinates in file newdrill_vertical_proposals.csv
+
+        &#34;&#34;&#34;
+        print(&#39;Calculating propoals list of new vertical drillholes...&#39;)
+        # Define boundaries for optimisation:
+        bp0 = np.asarray([yNcube/2, xNcube/2])
+        blb = np.asarray([1, yNcube-1])
+        bub = np.asarray([1, xNcube-1])
+        #bopt_res = minimize(futility_vertical, bp0, bounds = (blb, bub),  method=&#39;SLSQP&#39;, options={&#39;maxiter&#39;: 500}) #tol =1e-6, method=&#39;SLSQP&#39;
+        bopt_res = shgo(futility_vertical, bounds = ((1,yNcube - 1), (1,xNcube- 1)), n=20, iters=20, sampling_method=&#39;sobol&#39; ) #tol =1e-6, method=&#39;SLSQP&#39;
+        if not bopt_res.success:
+                print(&#39;WARNING: &#39; + bopt_res.message) 
+        print(&#39;New Drillcore Proposal:&#39;)
+        print(&#39;_______________________&#39;)
+        print(&#39;EASTING [meters]: &#39;, np.round(bopt_res.x[1] * xvoxsize) + xmin + 0.5 * xvoxsize)
+        print(&#39;NORTHING [meters]: &#39;, np.round(bopt_res.x[0] * yvoxsize) + ymin + 0.5 * yvoxsize)
+
+        # Write new drillcore proposals as csv file
+        print(&#39;Saving all new drillhole proposals in file: newdrill_proposals.csv&#39;)
+        newdf_values = bopt_res.xl 
+        newdf_head = [&#39;NORTHING&#39;,&#39;EASTING&#39;]
+        df_newdrill = pd.DataFrame(np.round(newdf_values,2), columns = newdf_head)
+        df_newdrill[&#39;EASTING&#39;] = np.round(df_newdrill[&#39;EASTING&#39;]) * xvoxsize + xmin + 0.5 * xvoxsize
+        df_newdrill[&#39;NORTHING&#39;] = np.round(df_newdrill[&#39;NORTHING&#39;]) * yvoxsize + ymin + 0.5 * yvoxsize
+        df_newdrill[&#39;BO_GAIN&#39;] = -np.round(bopt_res.funl,4)
+        df_newdrill.to_csv(outpath+ &#39;newdrill_vertical_proposals.csv&#39;, index=False)
+
+        # Create image of porposed drillcore positions
+        densimg = density_rec.mean(axis = 2)
+        magsusimg = magsus_rec.mean(axis = 2)
+        drillimg = drill_rec.mean(axis = 2)
+        drillvarimg = drill_var.mean(axis = 2)
+        #extent=[xmin + xvoxsize, xmax - xvoxsize,ymin + yvoxsize,ymax- yvoxsize]
+        extent=[xmin, xmax , ymin , ymax]
+        plt.clf()
+        plt.imshow(drillimg, aspect = &#39;equal&#39;, cmap = &#39;viridis&#39;, extent=extent, origin=&#39;lower&#39;)
+        plt.xlabel(&#39;EASTING&#39;)
+        plt.ylabel(&#39;NORTHING&#39;)
+        if drillcoord is not None:
+                xdrill, ydrill, zdrill = drillcoord.T
+                plt.scatter(xdrill+xmin, ydrill+ymin, color=&#39;k&#39;)
+        plt.scatter(df_newdrill[&#39;EASTING&#39;].values, df_newdrill[&#39;NORTHING&#39;].values, color=&#39;white&#39;)
+        plt.scatter(df_newdrill.loc[0,&#39;EASTING&#39;], df_newdrill.loc[0,&#39;NORTHING&#39;], color=&#39;red&#39;)
+        plt.title(&#39;Proposed Vertical Drillcores&#39;)
+        plt.tight_layout()
+        plt.savefig(outpath + &#39;newdrill_vertical_proposals.png&#39;)
+        plt.close(&#34;all&#34;)</code></pre>
+</details>
+</dd>
+<dt id="geobo.run_geobo.costcube"><code class="name flex">
+<span>def <span class="ident">costcube</span></span>(<span>cubeshape=(25, 16, 16))</span>
+</code></dt>
+<dd>
+<section class="desc"><p>User function to create costcube for drilling. Need to be same cube shape as reconstructed cube.
+By default set to zero costs.</p>
+<p>INPUT
+param cubeshape: shape of cube, by default: (xNcube, yNcube, zNcube)</p>
+<p>RETURN
+costcube</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def create_costcube(cubeshape = (xNcube, yNcube, zNcube)):
+        &#34;&#34;&#34;
+        User function to create costcube for drilling. Need to be same cube shape as reconstructed cube.
+        By default set to zero costs.
+
+        INPUT
+        param cubeshape: shape of cube, by default: (xNcube, yNcube, zNcube)
+
+        RETURN
+        costcube
+        &#34;&#34;&#34;
+        # Here costs are set to zero, change below
+        costcube = np.zeros(cubeshape)
+
+        return costcube</code></pre>
+</details>
+</dd>
+<dt id="geobo.run_geobo.create_costcube"><code class="name flex">
+<span>def <span class="ident">create_costcube</span></span>(<span>cubeshape=(25, 16, 16))</span>
+</code></dt>
+<dd>
+<section class="desc"><p>User function to create costcube for drilling. Need to be same cube shape as reconstructed cube.
+By default set to zero costs.</p>
+<p>INPUT
+param cubeshape: shape of cube, by default: (xNcube, yNcube, zNcube)</p>
+<p>RETURN
+costcube</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def create_costcube(cubeshape = (xNcube, yNcube, zNcube)):
+        &#34;&#34;&#34;
+        User function to create costcube for drilling. Need to be same cube shape as reconstructed cube.
+        By default set to zero costs.
+
+        INPUT
+        param cubeshape: shape of cube, by default: (xNcube, yNcube, zNcube)
+
+        RETURN
+        costcube
+        &#34;&#34;&#34;
+        # Here costs are set to zero, change below
+        costcube = np.zeros(cubeshape)
+
+        return costcube</code></pre>
+</details>
+</dd>
+<dt id="geobo.run_geobo.futility_drill"><code class="name flex">
+<span>def <span class="ident">futility_drill</span></span>(<span>params, length_newdrill=800.0, costs=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Calculates utility function for proposed non-vertical drillcore,
+which takes into account the azimuth and dip in addition to location and drill-core length</p>
+<p>PARAMETER
+param params: [x0, y0, azimuth, dip] x0 and y0 in meters; azimuth and dip in degree
+param length_newdrill: length of drillcore in meters
+param costs: cube of costs with same shape as reconstructed cube</p>
+<p>RETURN
+Output of utility function (scalar)</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def futility_drill(params, length_newdrill = zLcube, costs = None): 
+        &#34;&#34;&#34;
+        Calculates utility function for proposed non-vertical drillcore, 
+        which takes into account the azimuth and dip in addition to location and drill-core length
+
+        PARAMETER
+        param params: [x0, y0, azimuth, dip] x0 and y0 in meters; azimuth and dip in degree 
+        param length_newdrill: length of drillcore in meters
+        param costs: cube of costs with same shape as reconstructed cube
+
+        RETURN
+        Output of utility function (scalar)
+        &#34;&#34;&#34;
+        if costs is None:
+                costs = drill_rec * 0.
+        x0, y0, azimuth, dip = params
+        nstep = int(2 * length_newdrill/np.min([xvoxsize, yvoxsize, zvoxsize]))
+        rladder = np.linspace(0,length_newdrill, nstep)
+        x0 = rladder * 0 + x0
+        y0 = rladder * 0 + y0
+        z0 = rladder * 0 + zmax
+        azimuth = rladder * 0 + azimuth
+        dip = rladder * 0 + dip
+        try:
+                xdrillnew, ydrillnew, zdrillnew = spherical2cartes(x0, y0, z0, azimuth * np.pi/180., (180 - dip)* np.pi/180., rladder)
+                xnew = (xdrillnew/xvoxsize).astype(int)
+                ynew = (ydrillnew/yvoxsize).astype(int)
+                znew = (-zdrillnew/zvoxsize).astype(int)
+                funct = np.sum(drill_rec[xnew,ynew,znew])  + kappa * np.sqrt(np.sum(drill_var[xnew,ynew,znew])) - beta * np.sum(costs[xnew,ynew,znew])
+        except:
+                funct = 0.
+        return -funct</code></pre>
+</details>
+</dd>
+<dt id="geobo.run_geobo.futility_vertical"><code class="name flex">
+<span>def <span class="ident">futility_vertical</span></span>(<span>params, costs=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Utility/Aquisition function for bayesian optimisation assuming vertical drillcores</p>
+<p>PARAMETER
+params: parameters for drillhole (x_drill,y_drill)
+param costs: cube of costs with same shape as reconstructed cube</p>
+<p>RETURN
+Output of utility function (scalar)</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def futility_vertical(params, costs = None):
+        &#34;&#34;&#34; 
+        Utility/Aquisition function for bayesian optimisation assuming vertical drillcores
+
+        PARAMETER
+        params: parameters for drillhole (x_drill,y_drill) 
+        param costs: cube of costs with same shape as reconstructed cube
+
+        RETURN
+        Output of utility function (scalar)
+        &#34;&#34;&#34;
+        if costs is None:
+                costs = drill_rec * 0.
+        params = np.asarray(params)
+        xmaxvox = drill_rec.shape[0] - 1 
+        ymaxvox = drill_rec.shape[1] - 1
+        if np.isfinite(params).all():
+                xd = int(np.round(params[0]))
+                yd = int(np.round(params[1]))
+                if (xd &gt; 0) &amp; (xd &lt; xmaxvox) &amp; (yd &gt; 0) &amp; (yd &lt; ymaxvox):
+                        func = np.sum(drill_rec[xd, yd, :]) + kappa * np.sqrt(np.sum(drill_var[xd, yd, :])) - beta * np.sum(costs[xd,yd, :])
+                else:
+                        func = -np.inf
+        else:
+                func = -np.inf
+        return -func # (negative if optimiser use minimize)</code></pre>
+</details>
+</dd>
+<dt id="geobo.run_geobo.read_drilldata"><code class="name flex">
+<span>def <span class="ident">read_drilldata</span></span>(<span>features)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Reading drill data</p>
+<p>PARAMETER
+:param features: List of drill features of interest (see settings.yaml)</p>
+<p>RETURN
+Drill data
+x,y,z coordinates of drilldata
+x,y,z min,max arrays of drilldata</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def read_drilldata(features):
+        &#34;&#34;&#34;
+        Reading drill data
+
+        PARAMETER
+        :param features: List of drill features of interest (see settings.yaml)
+
+        RETURN
+        Drill data
+        x,y,z coordinates of drilldata
+        x,y,z min,max arrays of drilldata
+        &#34;&#34;&#34;
+        if FNAME_drilldata is not None:
+                drill = pd.read_csv(inpath + FNAME_drilldata)
+                drill = drill[(drill.x &gt;= xmin) &amp; (drill.x &lt;= xmax) &amp; (drill.y &gt;= ymin) &amp; (drill.y &lt;= ymax) &amp; (drill.z &lt;= zmax) &amp; (drill.z &gt;= zmin)].copy()
+        else: 
+                drill = None
+        # Select data only within extent
+        # Convert to local coordinate system with origin X,Y = 0,0
+        drill[&#39;x&#39;] = drill[&#39;x&#39;] - xmin
+        drill[&#39;y&#39;] = drill[&#39;y&#39;] - ymin
+        # Set up voxel coordinate grid
+        xdrill = drill[&#39;x&#39;].values
+        ydrill = drill[&#39;y&#39;].values
+        zdrill = drill[&#39;z&#39;].values 
+        try:
+                drillfirst = drill.groupby(&#39;SiteID&#39;).first()
+                drilllast = drill.groupby(&#39;SiteID&#39;).last()
+                xdrillminmax = np.asarray([drillfirst.x.values, drilllast.x.values]).T
+                ydrillminmax = np.asarray([drillfirst.y.values, drilllast.y.values]).T
+                zdrillminmax = np.asarray([drillfirst.z.values, drilllast.z.values]).T
+        except:
+                xdrillminmax = 0.#np.asarray([xdrill.min(), xdrill.min()])
+                ydrillminmax = 0.#np.asarray([ydrill.min(), ydrill.min()])
+                zdrillminmax = 0.#np.asarray([zdrill.min(), zdrill.min()])
+        coord = np.vstack([xdrill, ydrill, zdrill]).T
+        drilldata = []
+        for feature in features:
+                data = drill[feature]
+                drilldata.append(align_drill(coord, data))
+        return np.asarray(drilldata), coord, (xdrillminmax, ydrillminmax, zdrillminmax)</code></pre>
+</details>
+</dd>
+<dt id="geobo.run_geobo.read_surveydata"><code class="name flex">
+<span>def <span class="ident">read_surveydata</span></span>(<span>plot=True)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Reading gravity data and magnetic data, including cropping and downsampling to Cube size</p>
+<p>PARAMETER
+:param plot: boolean, if True plots survey data and downsampled</p>
+<p>RETURN
+gravity data
+magnetic data
+sensor locations</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def read_surveydata(plot = True):
+        &#34;&#34;&#34;
+        Reading gravity data and magnetic data, including cropping and downsampling to Cube size
+
+        PARAMETER
+        :param plot: boolean, if True plots survey data and downsampled
+
+        RETURN
+        gravity data
+        magnetic data
+        sensor locations
+        &#34;&#34;&#34;
+        if FNAME_gravsurvey is not None:
+                gravimg = rasterio.open(inpath + FNAME_gravsurvey)
+                grav = gravimg.read(1)
+        else:
+                grav = None
+        if FNAME_magsurvey is not None:
+                magimg = rasterio.open(inpath + FNAME_magsurvey)
+                mag = magimg.read(1)
+        else:
+                mag = None
+        # downsample to Cube voxelsize
+        zoomfac = xNcube *1./grav.shape[1]
+        grav2 = zoom(grav, zoomfac)
+        assert grav2.shape == (yNcube, xNcube)
+        zoomfac = xNcube *1./mag.shape[1]
+        mag2 = zoom(mag, zoomfac)
+        assert mag2.shape == (yNcube, xNcube)
+        # Create survey sensor coordinates:
+        x_s = np.linspace(0.5, xNcube - 0.5, xNcube)  * xvoxsize
+        y_s = np.linspace(0.5, yNcube - 0.5, yNcube)  * yvoxsize
+        z_s = zmax + zoff
+        x_sensor, y_sensor, z_sensor = np.meshgrid(x_s,y_s,z_s)
+        locations = np.asarray([x_sensor.flatten(), y_sensor.flatten(), z_sensor.flatten()]).T
+        if not os.path.exists(outpath):
+                os.makedirs(outpath)
+        if plot:
+                extent=[xmin,xmax,ymin,ymax]
+                plt.imshow(grav, aspect = &#39;equal&#39;, cmap = &#39;viridis&#39;, extent=extent)
+                plt.colorbar()
+                plt.savefig(outpath + &#39;gravfield.png&#39;)
+                plt.clf()
+                plt.imshow(mag, aspect = &#39;equal&#39;, cmap = &#39;viridis&#39;, extent=extent)
+                plt.colorbar()
+                plt.savefig(outpath + &#39;magfield.png&#39;)
+                plt.clf()
+                plt.imshow(grav2, aspect = &#39;equal&#39;, cmap = &#39;viridis&#39;, extent=extent)
+                plt.colorbar()
+                plt.savefig(outpath + &#39;gravfield_downsampled.png&#39;)
+                plt.clf()
+                plt.imshow(mag2, aspect = &#39;equal&#39;, cmap = &#39;viridis&#39;, extent=extent)
+                plt.colorbar()
+                plt.savefig(outpath + &#39;magfield_downsampled.png&#39;)
+                plt.close(&#34;all&#34;)
+        return grav2.flatten(), mag2.flatten(), locations</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="geobo" href="index.html">geobo</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="two-column">
+<li><code><a title="geobo.run_geobo.align_drill" href="#geobo.run_geobo.align_drill">align_drill</a></code></li>
+<li><code><a title="geobo.run_geobo.bayesopt_nonvert" href="#geobo.run_geobo.bayesopt_nonvert">bayesopt_nonvert</a></code></li>
+<li><code><a title="geobo.run_geobo.bayesopt_vert" href="#geobo.run_geobo.bayesopt_vert">bayesopt_vert</a></code></li>
+<li><code><a title="geobo.run_geobo.costcube" href="#geobo.run_geobo.costcube">costcube</a></code></li>
+<li><code><a title="geobo.run_geobo.create_costcube" href="#geobo.run_geobo.create_costcube">create_costcube</a></code></li>
+<li><code><a title="geobo.run_geobo.futility_drill" href="#geobo.run_geobo.futility_drill">futility_drill</a></code></li>
+<li><code><a title="geobo.run_geobo.futility_vertical" href="#geobo.run_geobo.futility_vertical">futility_vertical</a></code></li>
+<li><code><a title="geobo.run_geobo.read_drilldata" href="#geobo.run_geobo.read_drilldata">read_drilldata</a></code></li>
+<li><code><a title="geobo.run_geobo.read_surveydata" href="#geobo.run_geobo.read_surveydata">read_surveydata</a></code></li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.4</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>
