@@ -113,7 +113,7 @@ pandoc -V geometry:margin=1.0in README.md -o README.pdf
 
 A complete API documentation for all modules can be found here:
 
-- [`run_geobo.py`](docs/APIdocs/geobo/run_geobo.html)
+- [`run_geobo.py`](docs/APIdocs/geobo/run_geobo.md)
 - [`inversion.py`](docs/APIdocs/geobo/inversion.html)
 - [`kernels.py`](docs/APIdocs/geobo/kernels.html)
 - [`cubeshow.py`](docs/APIdocs/geobo/cubeshow.html)
@@ -136,7 +136,8 @@ A complete API documentation for all modules can be found here:
 
 2) Then run geobo
 ```sh
-python run_geobo.py settings.yaml
+cd geobo/
+python main.py settings.yaml
 ```
 
 The main functions for acquisitian function  can be found in [`run_geobo.py`](docs/APIdocs/geobo/run_geobo.html); visualisation functions and VTK export are defined in [`cubeshow.py`](docs/APIdocs/geobo/cubeshow.html); inversion functions are defined in [`inversion.py`](docs/APIdocs/geobo/inversion.html). 
@@ -160,7 +161,8 @@ Result examples of the synthetic models are stored in the subfolder `examples/te
 An example settings file is given in `settings_example1.yaml` and can be run by
 
 ```sh
-python run_geobo.py ../examples/settings_example1.yaml 
+cd geobo/
+python main.py tests/settings_example1.yaml 
 ```
 
 The output results include the generated reconstructed density and magnetic suscetibility cubes and their corresponding uncertainty cubes, visialisations of original survey data and reconstructed properties, and list of new drillcore proposals.
@@ -172,7 +174,8 @@ The ouput figure 'newdrill_proposals.png' shows the location of the already exis
 Another examples includes drillcore and gravity/magnetic survey data (`examples/testdata/sample/`). This example can be run with
 
 ```sh
-python run_geobo.py ../examples/settings_example2.yaml 
+cd geobo/
+python main.py tests/settings_example2.yaml
 ```
 and creates the reconstructed density and magnetic suscetibility cubes, uncertainity cubes
 
