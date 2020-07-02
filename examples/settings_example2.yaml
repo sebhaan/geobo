@@ -1,0 +1,99 @@
+# User settings, filenames and global model parameters
+
+##### Define Main file directories #########
+inpath: "../examples/testdata/sample/"
+outpath: "../examples/results/sample/" 
+# Filenames for input drill core data:
+FNAME_drilldata: 'Drillsample_density_magsus.csv'
+FNAME_gravsurvey: 'gravity_surveysample.tif' 
+FNAME_magsurvey:  'magnetic_TMI-RTP_surveysample.tif'
+
+# Names of drillcore data that shoud be crosscorrelated need to match header names in drilldata file
+drill_features: ['DENSITY', 'MAGSUS']
+# target feature to model from above (first = 0, second = 1):
+ifeature: 0
+
+
+######## Example setup for creating cube ############
+# Dimensions of area and cube in meters
+xmin: 0
+xmax: 3050
+ymin: 0
+ymax: 1952
+# Drill-core maximum value (set to surface maximuum point, or 0 if surface elevation already subtracted)
+zmax: 0
+# for aerial survey provide flight height above surface in meters
+zoff: 1
+
+zLcube: 800. # z Lenght of cube in meters.
+xNcube: 25 # Number of voxels in Easting 
+yNcube: 16 # Number of voxels in Northings
+zNcube: 16 # Number of voxels in vertical direction
+
+
+### Will generate simulated data first before runing inversion (use for tetsing)
+gen_simulation: no
+# specify model: 'cylinders', 'layers_2', 'layers_3'
+modelname: 'cylinders' 
+
+##### Gaussian Process Settings ###
+gp_lengthscale: 2 # times voxelsize
+gp_err: [0.1, 0.1, 0.1] # regularisation terms, should correpsond to normalized input data uncertainity (input data normalized to unity)
+#Correlation between properties (w1,w2,w3)
+#w1: density - drill correlation factor
+#w2: magentic - drill correlation factor 
+#w3: density - magnetic correlation factor
+gp_coeff: [1.0, 0.2, 0.2]
+## GP kernel function settings ##
+# Define kernel function, can be either  'sparse' (Default), 'exp' (squared exponential) or 'matern32'
+kernelfunc: 'sparse'
+# Optimize GP amplitude (default 1), lengthscale parameter (gp_lengthscale) and correlation coefficients (gp_coeff):
+optimize_gp: False # Warning: GP optmization can take a long time
+
+
+### Magnetic settings ####
+# Earth's magnetic field value at site, need to be updated
+#magneticField = np.asarray([25542, 4419, -50196])* 1e-3 # in  micro Tesla
+# if data is already processed with Reduction To Pole (RTP) or RTP with First Vertical Derivative (RTP-VD1), set magnetic field to:
+XMAG: 0
+YMAG: 0
+ZMAG: 1 
+
+
+###### PLotting options #########
+plot_vertical: yes
+#plot_data2: no #use no/yes
+#plot_data3: no
+plot3d: yes
+regrid_sparse: no
+font_scale: 1.5
+
+
+##### Bayesian Optimisation Function ####
+# Choose one of the optimisation functions:
+#only considers vertical drillcores:
+bayesopt_vertical: yes 
+# consider also dip and azimuthal angle  of drillcore  
+bayesopt_nonvertical: yes 
+# define parameters for BO acquisitian function below
+# Kappa: exploartaion - exploitation parameter, default unity. 
+# The higher kappa the more emphasis is put on uncertainity reduction (exploration) 
+# rather than focusing on regions with high density or mineral values (exploitation)
+kappa: 1
+# Parameter for importance of costs (by default costfunction set to zero, 
+# specify user costfunction in function create_costcube in run_geobo,py)
+beta: 0.0
+
+
+
+######## Constants######
+# these are some physiocal constants used for forard models and survey data conversion
+# change according to you survey data
+# By deafult geobo sets density and magnetic susceptibility to a mean value of zero
+c_G: 6.673848e-11
+c_SI_TO_MILLIGALS: 10000
+c_GCM3_TO_SI: 1000.0
+fcor_grav: 1. 
+fcor_mag: 0.001 # magnetic susceptibility is measured in 0.001 SI units  
+########################
+

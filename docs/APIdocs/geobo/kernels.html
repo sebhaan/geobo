@@ -1,0 +1,573 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.7.4" />
+<title>geobo.kernels API documentation</title>
+<meta name="description" content="Kernel library for Gaussian Processes including sparse kernels and cross-covariance terms …" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>geobo.kernels</code></h1>
+</header>
+<section id="section-intro">
+<p>Kernel library for Gaussian Processes including sparse kernels and cross-covariance terms</p>
+<p>The choice for an appropriate covariance function is important,
+as the GP's output directly depends on it. These parameters of the covariance function are
+referred to as the hyperparameters of the GP, which can be either given by a fixed covariance scale
+and noise, or learned from data by optimising the marginal likelihood. To handle the computational problem
+of inverting a large covariance matrix, sparse covariance function are included here as well.
+To take fully into account cross-covariances between multiple model parameters
+(e.g., rock density and magnetic susceptibility), we construct cross-covariance terms (here labeled with edning "2")
+between all kernel pairs. One important requirement for constructing cross-covariance terms is that they must be defined
+to be both positive semi-definite and informative; for an overview how to construct such as matrix in detail see Melkumyan 2011.</p>
+<p>Author: Sebastian Haan</p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">&#34;&#34;&#34;
+Kernel library for Gaussian Processes including sparse kernels and cross-covariance terms
+
+The choice for an appropriate covariance function is important, 
+as the GP&#39;s output directly depends on it. These parameters of the covariance function are 
+referred to as the hyperparameters of the GP, which can be either given by a fixed covariance scale 
+and noise, or learned from data by optimising the marginal likelihood. To handle the computational problem 
+of inverting a large covariance matrix, sparse covariance function are included here as well.
+To take fully into account cross-covariances between multiple model parameters 
+(e.g., rock density and magnetic susceptibility), we construct cross-covariance terms (here labeled with edning &#34;2&#34;)
+between all kernel pairs. One important requirement for constructing cross-covariance terms is that they must be defined 
+to be both positive semi-definite and informative; for an overview how to construct such as matrix in detail see Melkumyan 2011.
+
+Author: Sebastian Haan
+&#34;&#34;&#34;
+from scipy import reshape, sqrt, identity
+import numpy as np
+
+
+def calcGridPoints3D(Lpix, pixscale):
+    &#34;&#34;&#34;
+    returns grid points for distance matrix calculation.
+    :param Lpix: number of pixels in each dimension as array (xLpix, yLpix, zLpix)
+    :param pixscale: pixelscale in each dimension as array (xpixscale, ypixscale, zpixscale)
+    &#34;&#34;&#34;
+    Lpix = np.asarray(Lpix)
+    pixscale = np.asarray(pixscale)
+    xLpix, yLpix, zLpix = Lpix[0], Lpix[1], Lpix[2]
+    xpixscale, ypixscale, zpixscale = pixscale[0], pixscale[1], pixscale[2]
+    xrange = np.arange(1, xLpix+1) * xpixscale
+    yrange = np.arange(1, yLpix+1) * ypixscale
+    zrange = np.arange(1, zLpix+1) * zpixscale
+    _xg, _yg, _zg = np.meshgrid(xrange, yrange, zrange)
+    xr, yr, zr = _xg.ravel(), _yg.ravel(), _zg.ravel()
+    return np.asarray([xr, yr, zr]).T
+
+
+def calcDistanceMatrix(nDimPoints, 
+                       distFunc=lambda deltaPoint: np.sum(deltaPoint[d]**2 for d in range(len(deltaPoint)))):
+    &#34;&#34;&#34; Returns the matrix of squared distances from one coordinate to any other
+    :param nDimPoints: list of n-dim tuples
+    :param distFunc: calculates the distance based on the differences
+    &#34;&#34;&#34;
+    nDimPoints = np.array(nDimPoints)
+    dim = len(nDimPoints[0])
+    delta = [None]*dim
+    for d in range(dim):
+        data = nDimPoints[:,d]
+        delta[d] = data - np.reshape(data,(len(data),1)) # computes all possible combinations
+
+    dist = distFunc(delta)
+    #dist = dist + np.identity(len(data))*dist.max() # eliminate self matching
+    # returns  squared distance:
+    return dist 
+
+
+def calc_square_distances2D(Lpix, pixscale):
+    &#34;&#34;&#34;
+    Initialize (squared) distance matrix for stationary kernel.
+    &#34;&#34;&#34;
+    Lpix = np.asarray(Lpix)
+    pixscale = np.asarray(pixscale)
+    xLpix, yLpix = Lpix[0], Lpix[1]
+    xpixscale, ypixscale = pixscale[0], pixscale[1]
+    xrange = (np.arange(0, xLpix) - xLpix/2.0) * xpixscale
+    yrange = (np.arange(0, yLpix) - xLpix/2.0) * ypixscale
+    _xg, _yg = np.meshgrid(xrange, yrange)
+    xr, yr = _xg.ravel(), _yg.ravel()
+    Dx = xr[:, np.newaxis] - xr[np.newaxis,:]
+    Dy = yr[:, np.newaxis] - yr[np.newaxis,:]
+    return Dx**2 + Dy**2
+
+
+def gpkernel(D2, gamma):
+    &#34;&#34;&#34;2-D round  RBF kernel, with length scale = standard deviation of
+    the PSF of a Gaussian process scene drawn from this kernel.
+    Squared Exponential kernel
+    :param D2: pairwise square distances
+    :param gamma: kernel length scale
+    &#34;&#34;&#34;
+    return np.exp(-0.5 * D2/gamma**2)
+
+def gpkernel2(D2, gammas):
+    &#34;&#34;&#34;exp squared x qxp squared kernel
+    the PSF of a Gaussian process scene drawn from this kernel.
+    Squared Exponential kernel
+    :param D2: pairwise square distances
+    :param gamma: kernel length scales (gamma1, gamma2)
+    &#34;&#34;&#34;
+    l1 = gammas[0]
+    l2 =gammas[1]
+    return np.sqrt(2.*l1 * l2/(l1**2 + l2**2)) * np.exp(- D2/(l1**2 + l2**2))
+
+def gpkernel_sparse(D2, gamma):
+    &#34;&#34;&#34;2-D round sparse RBF kernel, defined in Melkumyan and Ramos, 2009
+    lengthscale is roughly equivlanet to 4 times the lengthcale of squared exponential
+    Same as in gpcubesolve_r1.py
+    :param D2: pairwise square distances
+    :param gamma: kernel length scale
+    &#34;&#34;&#34;
+    D2 = np.sqrt(D2)
+    #gamma = 4 * gamma
+    res = np.zeros_like(D2)
+    res[D2 &lt; gamma] = (2 + np.cos(2*np.pi * D2[D2 &lt; gamma] /gamma))/3.*(1-D2[D2 &lt; gamma] /gamma) + 1/(2.*np.pi) * np.sin(2*np.pi*D2[D2 &lt; gamma] /gamma)
+    # Remove floating errors
+    res[res&lt;0.] = 0.
+    return res
+
+def gpkernel_sparse2(D2, gammas):
+    &#34;&#34;&#34; sparse matrix x sparse matrix
+    :param D2: pairwise square distances
+    :param gamma: kernel length scales (gamma1, gamma2)
+    &#34;&#34;&#34;
+    D2 = np.sqrt(D2)
+    l1 = gammas[0]
+    l2 = gammas[1]
+    # offset for avoiding non-zero terms
+    if l1 == l2:
+        l2 += 1e-3 * l2
+    lmean = np.mean([l1, l2])
+    lmin = np.min([l1,l2])
+    lmax = np.max([l1,l2])
+    #if D2 &gt;= lmean:
+    res = np.zeros_like(D2)
+    #if D2 &lt;= abs(l2 - l1) / 2.:
+    res[D2 &lt;= abs(l2 - l1) / 2.] = 2./(3*np.sqrt(l1*l2)) * (lmin + 1/np.pi*lmax**3/(lmax**2 - lmin**2) * np.sin(np.pi*lmin/lmax*np.cos(2*np.pi*D2[D2 &lt;= abs(l2 - l1) / 2.]/lmax)))
+    #if (D2 &gt;= abs(l2 - l1)/2.) &amp; (D2&lt;=(l1 + l2)/2.):
+    res[(D2 &gt;= abs(l2 - l1)/2.) &amp; (D2&lt;=(l1 + l2)/2.)] = 2./(3*np.sqrt(l1*l2)) * (lmean - D2[(D2 &gt;= abs(l2 - l1)/2.) &amp; (D2&lt;=(l1 + l2)/2.)] + l1**3*np.sin(np.pi*(l2-2.*D2[(D2 &gt;= abs(l2 - l1)/2.) &amp; (D2&lt;=(l1 + l2)/2.)])/l1)/(2*np.pi*(l1**2-l2**2)) - l2**3*np.sin(np.pi*(l1-2.*D2[(D2 &gt;= abs(l2 - l1)/2.) &amp; (D2&lt;=(l1 + l2)/2.)])/l2)/(2*np.pi*(l1**2-l2**2)))
+    # Remove floating errors
+    res[res&lt;0.] = 0.
+    return res
+
+def gpkernel_matern32(D2, gamma):
+    &#39;&#39;&#39; Matern3/2 kernel
+    :param D2: pairwise square distances
+    :param gamma: kernel length scale
+    &#39;&#39;&#39;
+    nu = np.sqrt(3) * np.sqrt(D2) / gamma    
+    return (1 + nu) * np.exp(-nu)
+
+def gpkernel_matern32_2(D2, gammas):
+    &#39;&#39;&#39; Matern3/2 x Matern3/2 kernel
+    :param D2: pairwise square distances
+    :param gammas: kernel length scales (gamma1, gamma2)
+    &#39;&#39;&#39;
+    l1 = gammas[0]
+    l2 = gammas[1]
+    norm = 2*np.sqrt(l1 * l2)/(l1**2 - l2**2)
+    return  norm * (l1 * np.exp(- np.sqrt(3*D2)/l1) - l2 * np.exp(- np.sqrt(3*D2)/l2))
+
+def create_cov(D2, gplength, crossweights = [1,1,1], fkernel = &#39;sparse&#39;):
+    &#34;&#34;&#34;
+    Compute cross-correlation covariance matrix
+    :param D2: distance matrix
+    :param gplengths: scalar or array with lengthscales for each of the properties (up to three)
+    :param crossweights: array with cross-correlation coefficents correspdoning to the output property (w1,w2,w3)
+    :param fkernel: kernel function, which can be either &#39;sparse&#39; (Default), &#39;exp&#39; (squared exponential) or &#39;matern32&#39;
+
+    Cross weights (w1,w2,w3) defined as 
+    w1: density - drill correltion
+    w2: magentic - drill correlation 
+    w3: density - magnetic correlation
+
+    Return: cross-correlation matrix
+    &#34;&#34;&#34;
+    # first calculate kernel
+    params= np.asarray(gplength)
+    if params[1] == params[0]:
+        params[1] = 1.01 * params[0]
+    if params[2] == params[0]:
+        params[1] = 1.02 * params[0]
+    if params[2] == params[1]:
+        params[2] = 1.01 * params[1]
+    w1, w2, w3 = np.asarray(crossweights)
+    #kcov = np.asarray([gpkernel(D2, params[0]), gpkernel2(D2, params[0:2]), gpkernel2(D2, params[0:2]), gpkernel(D2, params[1])]).T
+    if fkernel == &#39;matern32&#39;:
+        kcov1 = np.vstack([gpkernel_matern32(D2, params[0]), w3 * gpkernel_matern32_2(D2, params[[0,1]]), w1 * gpkernel_matern32_2(D2, params[[0,2]])])
+        kcov2 = np.vstack([w3 * gpkernel_matern32_2(D2, params[[1,0]]), gpkernel_matern32(D2, params[1]), w2 * gpkernel_matern32_2(D2, params[[1,2]])])
+        kcov3 = np.vstack([w1* gpkernel_matern32_2(D2, params[[2,0]]), w2 * gpkernel_matern32_2(D2, params[[2,1]]), gpkernel_matern32(D2, params[2])])
+    if fkernel == &#39;sparse&#39;:
+        kcov1 = np.vstack([gpkernel_sparse(D2, params[0]), w3 * gpkernel_sparse2(D2, params[[0,1]]), w1 * gpkernel_sparse2(D2, params[[0,2]])])
+        kcov2 = np.vstack([w3 * gpkernel_sparse2(D2, params[[1,0]]), gpkernel_sparse(D2, params[1]), w2 * gpkernel_sparse2(D2, params[[1,2]])])
+        kcov3 = np.vstack([w1 * gpkernel_sparse2(D2, params[[2,0]]), w2 * gpkernel_sparse2(D2, params[[2,1]]), gpkernel_sparse(D2, params[2])])
+    if fkernel == &#39;exp&#39;:
+        kcov1 = np.vstack([gpkernel(D2, params[0]), w3 * gpkernel2(D2, params[[0,1]]), w1 * gpkernel2(D2, params[[0,2]])])
+        kcov2 = np.vstack([w3 * gpkernel2(D2, params[[1,0]]), gpkernel(D2, params[1]), w2 * gpkernel2(D2, params[[1,2]])])
+        kcov3 = np.vstack([w1 * gpkernel2(D2, params[[2,0]]), w2 * gpkernel2(D2, params[[2,1]]), gpkernel(D2, params[2])])
+    return np.hstack([kcov1, kcov2, kcov3])</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="geobo.kernels.calcDistanceMatrix"><code class="name flex">
+<span>def <span class="ident">calcDistanceMatrix</span></span>(<span>nDimPoints, distFunc=&lt;function &lt;lambda&gt;&gt;)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns the matrix of squared distances from one coordinate to any other
+:param nDimPoints: list of n-dim tuples
+:param distFunc: calculates the distance based on the differences</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def calcDistanceMatrix(nDimPoints, 
+                       distFunc=lambda deltaPoint: np.sum(deltaPoint[d]**2 for d in range(len(deltaPoint)))):
+    &#34;&#34;&#34; Returns the matrix of squared distances from one coordinate to any other
+    :param nDimPoints: list of n-dim tuples
+    :param distFunc: calculates the distance based on the differences
+    &#34;&#34;&#34;
+    nDimPoints = np.array(nDimPoints)
+    dim = len(nDimPoints[0])
+    delta = [None]*dim
+    for d in range(dim):
+        data = nDimPoints[:,d]
+        delta[d] = data - np.reshape(data,(len(data),1)) # computes all possible combinations
+
+    dist = distFunc(delta)
+    #dist = dist + np.identity(len(data))*dist.max() # eliminate self matching
+    # returns  squared distance:
+    return dist </code></pre>
+</details>
+</dd>
+<dt id="geobo.kernels.calcGridPoints3D"><code class="name flex">
+<span>def <span class="ident">calcGridPoints3D</span></span>(<span>Lpix, pixscale)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>returns grid points for distance matrix calculation.
+:param Lpix: number of pixels in each dimension as array (xLpix, yLpix, zLpix)
+:param pixscale: pixelscale in each dimension as array (xpixscale, ypixscale, zpixscale)</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def calcGridPoints3D(Lpix, pixscale):
+    &#34;&#34;&#34;
+    returns grid points for distance matrix calculation.
+    :param Lpix: number of pixels in each dimension as array (xLpix, yLpix, zLpix)
+    :param pixscale: pixelscale in each dimension as array (xpixscale, ypixscale, zpixscale)
+    &#34;&#34;&#34;
+    Lpix = np.asarray(Lpix)
+    pixscale = np.asarray(pixscale)
+    xLpix, yLpix, zLpix = Lpix[0], Lpix[1], Lpix[2]
+    xpixscale, ypixscale, zpixscale = pixscale[0], pixscale[1], pixscale[2]
+    xrange = np.arange(1, xLpix+1) * xpixscale
+    yrange = np.arange(1, yLpix+1) * ypixscale
+    zrange = np.arange(1, zLpix+1) * zpixscale
+    _xg, _yg, _zg = np.meshgrid(xrange, yrange, zrange)
+    xr, yr, zr = _xg.ravel(), _yg.ravel(), _zg.ravel()
+    return np.asarray([xr, yr, zr]).T</code></pre>
+</details>
+</dd>
+<dt id="geobo.kernels.calc_square_distances2D"><code class="name flex">
+<span>def <span class="ident">calc_square_distances2D</span></span>(<span>Lpix, pixscale)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Initialize (squared) distance matrix for stationary kernel.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def calc_square_distances2D(Lpix, pixscale):
+    &#34;&#34;&#34;
+    Initialize (squared) distance matrix for stationary kernel.
+    &#34;&#34;&#34;
+    Lpix = np.asarray(Lpix)
+    pixscale = np.asarray(pixscale)
+    xLpix, yLpix = Lpix[0], Lpix[1]
+    xpixscale, ypixscale = pixscale[0], pixscale[1]
+    xrange = (np.arange(0, xLpix) - xLpix/2.0) * xpixscale
+    yrange = (np.arange(0, yLpix) - xLpix/2.0) * ypixscale
+    _xg, _yg = np.meshgrid(xrange, yrange)
+    xr, yr = _xg.ravel(), _yg.ravel()
+    Dx = xr[:, np.newaxis] - xr[np.newaxis,:]
+    Dy = yr[:, np.newaxis] - yr[np.newaxis,:]
+    return Dx**2 + Dy**2</code></pre>
+</details>
+</dd>
+<dt id="geobo.kernels.create_cov"><code class="name flex">
+<span>def <span class="ident">create_cov</span></span>(<span>D2, gplength, crossweights=[1, 1, 1], fkernel='sparse')</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Compute cross-correlation covariance matrix
+:param D2: distance matrix
+:param gplengths: scalar or array with lengthscales for each of the properties (up to three)
+:param crossweights: array with cross-correlation coefficents correspdoning to the output property (w1,w2,w3)
+:param fkernel: kernel function, which can be either 'sparse' (Default), 'exp' (squared exponential) or 'matern32'</p>
+<p>Cross weights (w1,w2,w3) defined as
+w1: density - drill correltion
+w2: magentic - drill correlation
+w3: density - magnetic correlation</p>
+<p>Return: cross-correlation matrix</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def create_cov(D2, gplength, crossweights = [1,1,1], fkernel = &#39;sparse&#39;):
+    &#34;&#34;&#34;
+    Compute cross-correlation covariance matrix
+    :param D2: distance matrix
+    :param gplengths: scalar or array with lengthscales for each of the properties (up to three)
+    :param crossweights: array with cross-correlation coefficents correspdoning to the output property (w1,w2,w3)
+    :param fkernel: kernel function, which can be either &#39;sparse&#39; (Default), &#39;exp&#39; (squared exponential) or &#39;matern32&#39;
+
+    Cross weights (w1,w2,w3) defined as 
+    w1: density - drill correltion
+    w2: magentic - drill correlation 
+    w3: density - magnetic correlation
+
+    Return: cross-correlation matrix
+    &#34;&#34;&#34;
+    # first calculate kernel
+    params= np.asarray(gplength)
+    if params[1] == params[0]:
+        params[1] = 1.01 * params[0]
+    if params[2] == params[0]:
+        params[1] = 1.02 * params[0]
+    if params[2] == params[1]:
+        params[2] = 1.01 * params[1]
+    w1, w2, w3 = np.asarray(crossweights)
+    #kcov = np.asarray([gpkernel(D2, params[0]), gpkernel2(D2, params[0:2]), gpkernel2(D2, params[0:2]), gpkernel(D2, params[1])]).T
+    if fkernel == &#39;matern32&#39;:
+        kcov1 = np.vstack([gpkernel_matern32(D2, params[0]), w3 * gpkernel_matern32_2(D2, params[[0,1]]), w1 * gpkernel_matern32_2(D2, params[[0,2]])])
+        kcov2 = np.vstack([w3 * gpkernel_matern32_2(D2, params[[1,0]]), gpkernel_matern32(D2, params[1]), w2 * gpkernel_matern32_2(D2, params[[1,2]])])
+        kcov3 = np.vstack([w1* gpkernel_matern32_2(D2, params[[2,0]]), w2 * gpkernel_matern32_2(D2, params[[2,1]]), gpkernel_matern32(D2, params[2])])
+    if fkernel == &#39;sparse&#39;:
+        kcov1 = np.vstack([gpkernel_sparse(D2, params[0]), w3 * gpkernel_sparse2(D2, params[[0,1]]), w1 * gpkernel_sparse2(D2, params[[0,2]])])
+        kcov2 = np.vstack([w3 * gpkernel_sparse2(D2, params[[1,0]]), gpkernel_sparse(D2, params[1]), w2 * gpkernel_sparse2(D2, params[[1,2]])])
+        kcov3 = np.vstack([w1 * gpkernel_sparse2(D2, params[[2,0]]), w2 * gpkernel_sparse2(D2, params[[2,1]]), gpkernel_sparse(D2, params[2])])
+    if fkernel == &#39;exp&#39;:
+        kcov1 = np.vstack([gpkernel(D2, params[0]), w3 * gpkernel2(D2, params[[0,1]]), w1 * gpkernel2(D2, params[[0,2]])])
+        kcov2 = np.vstack([w3 * gpkernel2(D2, params[[1,0]]), gpkernel(D2, params[1]), w2 * gpkernel2(D2, params[[1,2]])])
+        kcov3 = np.vstack([w1 * gpkernel2(D2, params[[2,0]]), w2 * gpkernel2(D2, params[[2,1]]), gpkernel(D2, params[2])])
+    return np.hstack([kcov1, kcov2, kcov3])</code></pre>
+</details>
+</dd>
+<dt id="geobo.kernels.gpkernel"><code class="name flex">
+<span>def <span class="ident">gpkernel</span></span>(<span>D2, gamma)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>2-D round
+RBF kernel, with length scale = standard deviation of
+the PSF of a Gaussian process scene drawn from this kernel.
+Squared Exponential kernel
+:param D2: pairwise square distances
+:param gamma: kernel length scale</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def gpkernel(D2, gamma):
+    &#34;&#34;&#34;2-D round  RBF kernel, with length scale = standard deviation of
+    the PSF of a Gaussian process scene drawn from this kernel.
+    Squared Exponential kernel
+    :param D2: pairwise square distances
+    :param gamma: kernel length scale
+    &#34;&#34;&#34;
+    return np.exp(-0.5 * D2/gamma**2)</code></pre>
+</details>
+</dd>
+<dt id="geobo.kernels.gpkernel2"><code class="name flex">
+<span>def <span class="ident">gpkernel2</span></span>(<span>D2, gammas)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>exp squared x qxp squared kernel
+the PSF of a Gaussian process scene drawn from this kernel.
+Squared Exponential kernel
+:param D2: pairwise square distances
+:param gamma: kernel length scales (gamma1, gamma2)</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def gpkernel2(D2, gammas):
+    &#34;&#34;&#34;exp squared x qxp squared kernel
+    the PSF of a Gaussian process scene drawn from this kernel.
+    Squared Exponential kernel
+    :param D2: pairwise square distances
+    :param gamma: kernel length scales (gamma1, gamma2)
+    &#34;&#34;&#34;
+    l1 = gammas[0]
+    l2 =gammas[1]
+    return np.sqrt(2.*l1 * l2/(l1**2 + l2**2)) * np.exp(- D2/(l1**2 + l2**2))</code></pre>
+</details>
+</dd>
+<dt id="geobo.kernels.gpkernel_matern32"><code class="name flex">
+<span>def <span class="ident">gpkernel_matern32</span></span>(<span>D2, gamma)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Matern3/2 kernel
+:param D2: pairwise square distances
+:param gamma: kernel length scale</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def gpkernel_matern32(D2, gamma):
+    &#39;&#39;&#39; Matern3/2 kernel
+    :param D2: pairwise square distances
+    :param gamma: kernel length scale
+    &#39;&#39;&#39;
+    nu = np.sqrt(3) * np.sqrt(D2) / gamma    
+    return (1 + nu) * np.exp(-nu)</code></pre>
+</details>
+</dd>
+<dt id="geobo.kernels.gpkernel_matern32_2"><code class="name flex">
+<span>def <span class="ident">gpkernel_matern32_2</span></span>(<span>D2, gammas)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Matern3/2 x Matern3/2 kernel
+:param D2: pairwise square distances
+:param gammas: kernel length scales (gamma1, gamma2)</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def gpkernel_matern32_2(D2, gammas):
+    &#39;&#39;&#39; Matern3/2 x Matern3/2 kernel
+    :param D2: pairwise square distances
+    :param gammas: kernel length scales (gamma1, gamma2)
+    &#39;&#39;&#39;
+    l1 = gammas[0]
+    l2 = gammas[1]
+    norm = 2*np.sqrt(l1 * l2)/(l1**2 - l2**2)
+    return  norm * (l1 * np.exp(- np.sqrt(3*D2)/l1) - l2 * np.exp(- np.sqrt(3*D2)/l2))</code></pre>
+</details>
+</dd>
+<dt id="geobo.kernels.gpkernel_sparse"><code class="name flex">
+<span>def <span class="ident">gpkernel_sparse</span></span>(<span>D2, gamma)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>2-D round sparse RBF kernel, defined in Melkumyan and Ramos, 2009
+lengthscale is roughly equivlanet to 4 times the lengthcale of squared exponential
+Same as in gpcubesolve_r1.py
+:param D2: pairwise square distances
+:param gamma: kernel length scale</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def gpkernel_sparse(D2, gamma):
+    &#34;&#34;&#34;2-D round sparse RBF kernel, defined in Melkumyan and Ramos, 2009
+    lengthscale is roughly equivlanet to 4 times the lengthcale of squared exponential
+    Same as in gpcubesolve_r1.py
+    :param D2: pairwise square distances
+    :param gamma: kernel length scale
+    &#34;&#34;&#34;
+    D2 = np.sqrt(D2)
+    #gamma = 4 * gamma
+    res = np.zeros_like(D2)
+    res[D2 &lt; gamma] = (2 + np.cos(2*np.pi * D2[D2 &lt; gamma] /gamma))/3.*(1-D2[D2 &lt; gamma] /gamma) + 1/(2.*np.pi) * np.sin(2*np.pi*D2[D2 &lt; gamma] /gamma)
+    # Remove floating errors
+    res[res&lt;0.] = 0.
+    return res</code></pre>
+</details>
+</dd>
+<dt id="geobo.kernels.gpkernel_sparse2"><code class="name flex">
+<span>def <span class="ident">gpkernel_sparse2</span></span>(<span>D2, gammas)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>sparse matrix x sparse matrix
+:param D2: pairwise square distances
+:param gamma: kernel length scales (gamma1, gamma2)</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def gpkernel_sparse2(D2, gammas):
+    &#34;&#34;&#34; sparse matrix x sparse matrix
+    :param D2: pairwise square distances
+    :param gamma: kernel length scales (gamma1, gamma2)
+    &#34;&#34;&#34;
+    D2 = np.sqrt(D2)
+    l1 = gammas[0]
+    l2 = gammas[1]
+    # offset for avoiding non-zero terms
+    if l1 == l2:
+        l2 += 1e-3 * l2
+    lmean = np.mean([l1, l2])
+    lmin = np.min([l1,l2])
+    lmax = np.max([l1,l2])
+    #if D2 &gt;= lmean:
+    res = np.zeros_like(D2)
+    #if D2 &lt;= abs(l2 - l1) / 2.:
+    res[D2 &lt;= abs(l2 - l1) / 2.] = 2./(3*np.sqrt(l1*l2)) * (lmin + 1/np.pi*lmax**3/(lmax**2 - lmin**2) * np.sin(np.pi*lmin/lmax*np.cos(2*np.pi*D2[D2 &lt;= abs(l2 - l1) / 2.]/lmax)))
+    #if (D2 &gt;= abs(l2 - l1)/2.) &amp; (D2&lt;=(l1 + l2)/2.):
+    res[(D2 &gt;= abs(l2 - l1)/2.) &amp; (D2&lt;=(l1 + l2)/2.)] = 2./(3*np.sqrt(l1*l2)) * (lmean - D2[(D2 &gt;= abs(l2 - l1)/2.) &amp; (D2&lt;=(l1 + l2)/2.)] + l1**3*np.sin(np.pi*(l2-2.*D2[(D2 &gt;= abs(l2 - l1)/2.) &amp; (D2&lt;=(l1 + l2)/2.)])/l1)/(2*np.pi*(l1**2-l2**2)) - l2**3*np.sin(np.pi*(l1-2.*D2[(D2 &gt;= abs(l2 - l1)/2.) &amp; (D2&lt;=(l1 + l2)/2.)])/l2)/(2*np.pi*(l1**2-l2**2)))
+    # Remove floating errors
+    res[res&lt;0.] = 0.
+    return res</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="geobo" href="index.html">geobo</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="geobo.kernels.calcDistanceMatrix" href="#geobo.kernels.calcDistanceMatrix">calcDistanceMatrix</a></code></li>
+<li><code><a title="geobo.kernels.calcGridPoints3D" href="#geobo.kernels.calcGridPoints3D">calcGridPoints3D</a></code></li>
+<li><code><a title="geobo.kernels.calc_square_distances2D" href="#geobo.kernels.calc_square_distances2D">calc_square_distances2D</a></code></li>
+<li><code><a title="geobo.kernels.create_cov" href="#geobo.kernels.create_cov">create_cov</a></code></li>
+<li><code><a title="geobo.kernels.gpkernel" href="#geobo.kernels.gpkernel">gpkernel</a></code></li>
+<li><code><a title="geobo.kernels.gpkernel2" href="#geobo.kernels.gpkernel2">gpkernel2</a></code></li>
+<li><code><a title="geobo.kernels.gpkernel_matern32" href="#geobo.kernels.gpkernel_matern32">gpkernel_matern32</a></code></li>
+<li><code><a title="geobo.kernels.gpkernel_matern32_2" href="#geobo.kernels.gpkernel_matern32_2">gpkernel_matern32_2</a></code></li>
+<li><code><a title="geobo.kernels.gpkernel_sparse" href="#geobo.kernels.gpkernel_sparse">gpkernel_sparse</a></code></li>
+<li><code><a title="geobo.kernels.gpkernel_sparse2" href="#geobo.kernels.gpkernel_sparse2">gpkernel_sparse2</a></code></li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.4</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>

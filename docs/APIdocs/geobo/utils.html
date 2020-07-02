@@ -1,0 +1,506 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.7.4" />
+<title>geobo.utils API documentation</title>
+<meta name="description" content="" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>geobo.utils</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python"># Utility functions for coordinate conversion and reading ion drillcore and survey data
+
+import numpy as np
+import pandas as pd
+import rasterio
+import os
+from scipy.ndimage.interpolation import zoom
+from config_loader import *
+
+def spherical2cartes(x0, y0, z0, phi, theta, r):
+        &#34;&#34;&#34; Conversion from spherical coordinates to cartesian
+
+        PARAMETER
+        param x0, y0,z0: coordinates of origin
+        param phi: azimuthal angle
+        param theta: polar angle
+        param r: radial length
+
+        RETURN
+        x ,y, z coordinates
+        &#34;&#34;&#34;
+        x = x0 + r * np.sin(theta) * np.cos(phi)
+        y = y0 + r * np.sin(theta) * np.sin(phi)
+        z = z0 + r * np.cos(theta)
+        return x, y, z
+
+
+def cartes2spherial(x0, y0, z0, x1, y1, z1):
+        &#34;&#34;&#34; Conversion from cartesian coordinates to spehrical
+
+        PARAMETER
+        param x0, y0,z0: coordinates of origin
+        param x1, y1,z1: coordinates of end point
+
+        RETURN
+        radius, polar angle, azimuthal angle
+        &#34;&#34;&#34;
+        r = np.sqrt((x0-x1)**2 + (y0-y1)**2 + (z0-z1)**2)
+        theta = np.arccos((z1-z0)/r)
+        phi = np.arctan2((y1-y0),(x1-x0))
+        return r, theta, phi
+
+
+def align_drill2(coord, data):
+        &#34;&#34;&#34;Convert drill-core data in Model Cube shape with iteratinon over all voxels
+
+        PARAMETER
+
+        param coord: xyz Coordinates of drillcore, shape (N_drill, 3)
+        param data: 1 dim data for drillcore, shape (N_drill)
+
+        RETURN
+
+        drillcore voxel data cube
+        &#34;&#34;&#34;
+        dx = xvoxsize
+        dy = yvoxsize
+        dz = zvoxsize
+        data = np.asarray(data)
+        res = np.zeros_like(xxx)
+        for ix in range(xxx.shape[0]):
+                for iy in range(xxx.shape[1]):
+                        for iz in range(xxx.shape[2]):
+                                sel = np.where(((xxx[ix,iy,iz] - dx) &lt;= coord[:, 0]) &amp; (coord[:, 0] &lt; (xxx[ix,iy,iz] + dx))
+                                        &amp; ((yyy[ix,iy,iz] - dy) &lt;= coord[:, 1]) &amp; (coord[:, 1] &lt; (yyy[ix,iy,iz] + dy))
+                                        &amp; ((zzz[ix,iy,iz] - dz) &lt;= coord[:, 2]) &amp; (coord[:, 2] &lt; (zzz[ix,iy,iz] + dz)))
+                                if np.size(sel) &gt; 0:
+                                        #print(sel)
+                                        m = np.nanmean(data[sel])
+                                        if np.isfinite(m):
+                                                res[ix,iy,iz] = m
+        return res
+
+
+def normalize(x):
+        &#34;&#34;&#34; Normalise x
+        :param x: input 1D array to normalise
+        
+        Return
+        normalized array
+        &#34;&#34;&#34;
+        if abs(x.max() - x.min()) &gt; 0:
+                norm = (x- x.min()) / (x.max() - x.min())  
+        else:
+                norm = x / x.max()
+        return norm
+
+
+def readcsv_drill(fname, prop_names, pos_names, cartesian = True):
+        &#34;&#34;&#34; Read csv file with drill-core data and ectract data for density, magsus, and mineral content
+        Drill-core data is converted in casrtesian xyz coordinates if only xy position, length and azimuth and dip angle available
+
+        PARAMETER
+
+        :param fname: Path and filename of csv file
+        :param prop_names: string array of property names in header of file, e.g [&#39;density&#39;, &#39;magsus&#39;, &#39;mineral&#39;]
+        :param pos_names: string array of position names in header [&#39;x&#39;, &#39;y&#39;, &#39;z&#39;] 
+                or [&#39;East&#39;, &#39;North&#39;, &#39;Elev&#39;, DepthFrom&#39;, &#39;DepthTo&#39;, &#39;Azimuth&#39;, &#39;Dip&#39;] with Easting and Northings in meter and Azimuth and Drip in degrees
+        :param cartesian: if &#39;True&#39; (Default), the drill positions are provided in xyz fromat in meters, 
+                if &#39;False&#39; the drill positions are cualcuated from drill depth, azimuth and dip
+
+
+        RETURN
+
+        returns: pandas array with positions and drill properties
+        &#34;&#34;&#34;
+
+        names = prop_names + pos_names
+        drill = pd.read_csv(fname_drilldata, names = names)
+        if cartesian:
+                xdrill, ydrill, zdrill = drill[pos_names[0]].values, drill[pos_names[1]].values, drill[pos_names[2]].values
+        else:
+                xdrill,ydrill,zdrill = spherical2cartes(drill.East.values, drill.North.values, drill.Elev.values, 
+                        drill.Azimuth.values * np.pi/180., (90 - drill.Dip.values)* np.pi/180., 0.5*(drill.DepthFrom.values + drill.DepthTo.values))
+        data = pd.DataFrame()
+        data[&#39;x&#39;] = xdrill
+        data[&#39;y&#39;] = ydrill
+        data[&#39;z&#39;] = zdrill
+        data[&#39;density&#39;] = drill[prop_names[0]].values
+        data[&#39;magsus&#39;] = drill[prop_names[1]].values
+        data[&#39;mineral&#39;] = drill[prop_names[2]].values
+        return data
+
+
+def readraster_survey(fname, pixres = None, clipext = None):
+        &#34;&#34;&#34; Read geotif rasterfile with one band per property
+
+        PARAMETER
+        :param fname: Path and filename of csv file
+        :param pixres: desired pixel resolution in meters (assuming same resolution for x and y) 
+        :param clipext: provide boundary box [xmin,ymin,xmax,ymax] to crop data to extent
+
+
+        RETURN
+        returns: numpy array with survey data and x,y pixelcoordinates
+        &#34;&#34;&#34;
+
+        img = rasterio.open(fname)
+        bounds = img.bounds #format: [xmin, ymin, xmax, ymax]
+        img_shape = img.shape
+        # Native pixel resolutiojn:
+        ypixres, xpixres = img.res
+        # if ypixsize == xpixsize:
+        #       print(&#34;WARNING, Input raster pixelsize (resolution) is not the same in vertical and horizontal direction&#34;)
+        # Read in data into numpy array:
+        array = img.read(1)
+        # Regrid array to desired 
+        if pixres is not None:
+                assert ypixres == xpixres, &#34; Raster pixelsize (resolution) is not the same in vertical and horizontal direction&#34;
+                array  = zoom(array, ypixsize / pixres)
+                xpixres = ypixres = pixres
+        # Define pixel coordinates of original image
+        xx, yy = np.meshgrid(np.linspace(bounds[0] + 0.5*xpixres, bounds[2] - 0.5*xpixres, array.shape[1]), 
+                                np.linspace(bounds[1] + 0.5*ypixres, bounds[3] - 0.5*ypixres, array.shape[0]))
+        if clipext is not None:
+                clipext = np.asarray(clipext)
+                # check if clip extent is within boudning box&#39;;
+                if ((bounds[0]&lt;= clipext[0] &lt;= bounds[2]) &amp;  
+                        (bounds[1]&lt;= clipext[1] &lt;= bounds[3]) &amp;
+                        (bounds[0]&lt;= clipext[2] &lt;= bounds[2]) &amp;
+                        (bounds[1]&lt;= clipext[3] &lt;= bounds[3])):
+                        # Clip array:
+                        array = array[((xx - 0.5*xpixres) &gt;= clipext[0]) &amp; ((xx +0.5*xpixres) &lt; clipext[2])
+                         &amp; ((yy - 0.5*ypixres) &gt;= clipext[1]) &amp; ((yy + 0.5*ypixres) &gt;= clipext[3])]
+                        xx2 = xx[((xx - 0.5*xpixres) &gt;= clipext[0]) &amp; ((xx +0.5*xpixres) &lt; clipext[2])
+                         &amp; ((yy - 0.5*ypixres) &gt;= clipext[1]) &amp; ((yy + 0.5*ypixres) &gt;= clipext[3])]
+                        yy2 = yy[((xx - 0.5*xpixres) &gt;= clipext[0]) &amp; ((xx +0.5*xpixres) &lt; clipext[2])
+                         &amp; ((yy - 0.5*ypixres) &gt;= clipext[1]) &amp; ((yy + 0.5*ypixres) &gt;= clipext[3])]
+                        array = array.reshape( np.round((yy2.max()-yy2.min())/ypixres + 1).astype(int), np.round((xx2.max()-xx.min())/xpixres + 1).astype(int))
+                        xx2 = xx2.reshape( np.round((yy2.max()-yy2.min())/ypixres + 1).astype(int), np.round((xx2.max()-xx.min())/xpixres + 1).astype(int))
+                        yy2 = yy2.reshape( np.round((yy2.max()-yy2.min())/ypixres + 1).astype(int), np.round((xx2.max()-xx.min())/xpixres + 1).astype(int))
+                else:
+                        print(&#39;WARNING: Clip extent exceeds image boundary!... No clipping is applied&#39;)
+        else: 
+                xx2, yy2 = xx, yy
+        return array, np.asarray([xx2, yy2])</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="geobo.utils.align_drill2"><code class="name flex">
+<span>def <span class="ident">align_drill2</span></span>(<span>coord, data)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Convert drill-core data in Model Cube shape with iteratinon over all voxels</p>
+<p>PARAMETER</p>
+<p>param coord: xyz Coordinates of drillcore, shape (N_drill, 3)
+param data: 1 dim data for drillcore, shape (N_drill)</p>
+<p>RETURN</p>
+<p>drillcore voxel data cube</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def align_drill2(coord, data):
+        &#34;&#34;&#34;Convert drill-core data in Model Cube shape with iteratinon over all voxels
+
+        PARAMETER
+
+        param coord: xyz Coordinates of drillcore, shape (N_drill, 3)
+        param data: 1 dim data for drillcore, shape (N_drill)
+
+        RETURN
+
+        drillcore voxel data cube
+        &#34;&#34;&#34;
+        dx = xvoxsize
+        dy = yvoxsize
+        dz = zvoxsize
+        data = np.asarray(data)
+        res = np.zeros_like(xxx)
+        for ix in range(xxx.shape[0]):
+                for iy in range(xxx.shape[1]):
+                        for iz in range(xxx.shape[2]):
+                                sel = np.where(((xxx[ix,iy,iz] - dx) &lt;= coord[:, 0]) &amp; (coord[:, 0] &lt; (xxx[ix,iy,iz] + dx))
+                                        &amp; ((yyy[ix,iy,iz] - dy) &lt;= coord[:, 1]) &amp; (coord[:, 1] &lt; (yyy[ix,iy,iz] + dy))
+                                        &amp; ((zzz[ix,iy,iz] - dz) &lt;= coord[:, 2]) &amp; (coord[:, 2] &lt; (zzz[ix,iy,iz] + dz)))
+                                if np.size(sel) &gt; 0:
+                                        #print(sel)
+                                        m = np.nanmean(data[sel])
+                                        if np.isfinite(m):
+                                                res[ix,iy,iz] = m
+        return res</code></pre>
+</details>
+</dd>
+<dt id="geobo.utils.cartes2spherial"><code class="name flex">
+<span>def <span class="ident">cartes2spherial</span></span>(<span>x0, y0, z0, x1, y1, z1)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Conversion from cartesian coordinates to spehrical</p>
+<p>PARAMETER
+param x0, y0,z0: coordinates of origin
+param x1, y1,z1: coordinates of end point</p>
+<p>RETURN
+radius, polar angle, azimuthal angle</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def cartes2spherial(x0, y0, z0, x1, y1, z1):
+        &#34;&#34;&#34; Conversion from cartesian coordinates to spehrical
+
+        PARAMETER
+        param x0, y0,z0: coordinates of origin
+        param x1, y1,z1: coordinates of end point
+
+        RETURN
+        radius, polar angle, azimuthal angle
+        &#34;&#34;&#34;
+        r = np.sqrt((x0-x1)**2 + (y0-y1)**2 + (z0-z1)**2)
+        theta = np.arccos((z1-z0)/r)
+        phi = np.arctan2((y1-y0),(x1-x0))
+        return r, theta, phi</code></pre>
+</details>
+</dd>
+<dt id="geobo.utils.normalize"><code class="name flex">
+<span>def <span class="ident">normalize</span></span>(<span>x)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Normalise x
+:param x: input 1D array to normalise</p>
+<p>Return
+normalized array</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def normalize(x):
+        &#34;&#34;&#34; Normalise x
+        :param x: input 1D array to normalise
+        
+        Return
+        normalized array
+        &#34;&#34;&#34;
+        if abs(x.max() - x.min()) &gt; 0:
+                norm = (x- x.min()) / (x.max() - x.min())  
+        else:
+                norm = x / x.max()
+        return norm</code></pre>
+</details>
+</dd>
+<dt id="geobo.utils.readcsv_drill"><code class="name flex">
+<span>def <span class="ident">readcsv_drill</span></span>(<span>fname, prop_names, pos_names, cartesian=True)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Read csv file with drill-core data and ectract data for density, magsus, and mineral content
+Drill-core data is converted in casrtesian xyz coordinates if only xy position, length and azimuth and dip angle available</p>
+<p>PARAMETER</p>
+<p>:param fname: Path and filename of csv file
+:param prop_names: string array of property names in header of file, e.g ['density', 'magsus', 'mineral']
+:param pos_names: string array of position names in header ['x', 'y', 'z']
+or ['East', 'North', 'Elev', DepthFrom', 'DepthTo', 'Azimuth', 'Dip'] with Easting and Northings in meter and Azimuth and Drip in degrees
+:param cartesian: if 'True' (Default), the drill positions are provided in xyz fromat in meters,
+if 'False' the drill positions are cualcuated from drill depth, azimuth and dip</p>
+<p>RETURN</p>
+<p>returns: pandas array with positions and drill properties</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def readcsv_drill(fname, prop_names, pos_names, cartesian = True):
+        &#34;&#34;&#34; Read csv file with drill-core data and ectract data for density, magsus, and mineral content
+        Drill-core data is converted in casrtesian xyz coordinates if only xy position, length and azimuth and dip angle available
+
+        PARAMETER
+
+        :param fname: Path and filename of csv file
+        :param prop_names: string array of property names in header of file, e.g [&#39;density&#39;, &#39;magsus&#39;, &#39;mineral&#39;]
+        :param pos_names: string array of position names in header [&#39;x&#39;, &#39;y&#39;, &#39;z&#39;] 
+                or [&#39;East&#39;, &#39;North&#39;, &#39;Elev&#39;, DepthFrom&#39;, &#39;DepthTo&#39;, &#39;Azimuth&#39;, &#39;Dip&#39;] with Easting and Northings in meter and Azimuth and Drip in degrees
+        :param cartesian: if &#39;True&#39; (Default), the drill positions are provided in xyz fromat in meters, 
+                if &#39;False&#39; the drill positions are cualcuated from drill depth, azimuth and dip
+
+
+        RETURN
+
+        returns: pandas array with positions and drill properties
+        &#34;&#34;&#34;
+
+        names = prop_names + pos_names
+        drill = pd.read_csv(fname_drilldata, names = names)
+        if cartesian:
+                xdrill, ydrill, zdrill = drill[pos_names[0]].values, drill[pos_names[1]].values, drill[pos_names[2]].values
+        else:
+                xdrill,ydrill,zdrill = spherical2cartes(drill.East.values, drill.North.values, drill.Elev.values, 
+                        drill.Azimuth.values * np.pi/180., (90 - drill.Dip.values)* np.pi/180., 0.5*(drill.DepthFrom.values + drill.DepthTo.values))
+        data = pd.DataFrame()
+        data[&#39;x&#39;] = xdrill
+        data[&#39;y&#39;] = ydrill
+        data[&#39;z&#39;] = zdrill
+        data[&#39;density&#39;] = drill[prop_names[0]].values
+        data[&#39;magsus&#39;] = drill[prop_names[1]].values
+        data[&#39;mineral&#39;] = drill[prop_names[2]].values
+        return data</code></pre>
+</details>
+</dd>
+<dt id="geobo.utils.readraster_survey"><code class="name flex">
+<span>def <span class="ident">readraster_survey</span></span>(<span>fname, pixres=None, clipext=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Read geotif rasterfile with one band per property</p>
+<p>PARAMETER
+:param fname: Path and filename of csv file
+:param pixres: desired pixel resolution in meters (assuming same resolution for x and y)
+:param clipext: provide boundary box [xmin,ymin,xmax,ymax] to crop data to extent</p>
+<p>RETURN
+returns: numpy array with survey data and x,y pixelcoordinates</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def readraster_survey(fname, pixres = None, clipext = None):
+        &#34;&#34;&#34; Read geotif rasterfile with one band per property
+
+        PARAMETER
+        :param fname: Path and filename of csv file
+        :param pixres: desired pixel resolution in meters (assuming same resolution for x and y) 
+        :param clipext: provide boundary box [xmin,ymin,xmax,ymax] to crop data to extent
+
+
+        RETURN
+        returns: numpy array with survey data and x,y pixelcoordinates
+        &#34;&#34;&#34;
+
+        img = rasterio.open(fname)
+        bounds = img.bounds #format: [xmin, ymin, xmax, ymax]
+        img_shape = img.shape
+        # Native pixel resolutiojn:
+        ypixres, xpixres = img.res
+        # if ypixsize == xpixsize:
+        #       print(&#34;WARNING, Input raster pixelsize (resolution) is not the same in vertical and horizontal direction&#34;)
+        # Read in data into numpy array:
+        array = img.read(1)
+        # Regrid array to desired 
+        if pixres is not None:
+                assert ypixres == xpixres, &#34; Raster pixelsize (resolution) is not the same in vertical and horizontal direction&#34;
+                array  = zoom(array, ypixsize / pixres)
+                xpixres = ypixres = pixres
+        # Define pixel coordinates of original image
+        xx, yy = np.meshgrid(np.linspace(bounds[0] + 0.5*xpixres, bounds[2] - 0.5*xpixres, array.shape[1]), 
+                                np.linspace(bounds[1] + 0.5*ypixres, bounds[3] - 0.5*ypixres, array.shape[0]))
+        if clipext is not None:
+                clipext = np.asarray(clipext)
+                # check if clip extent is within boudning box&#39;;
+                if ((bounds[0]&lt;= clipext[0] &lt;= bounds[2]) &amp;  
+                        (bounds[1]&lt;= clipext[1] &lt;= bounds[3]) &amp;
+                        (bounds[0]&lt;= clipext[2] &lt;= bounds[2]) &amp;
+                        (bounds[1]&lt;= clipext[3] &lt;= bounds[3])):
+                        # Clip array:
+                        array = array[((xx - 0.5*xpixres) &gt;= clipext[0]) &amp; ((xx +0.5*xpixres) &lt; clipext[2])
+                         &amp; ((yy - 0.5*ypixres) &gt;= clipext[1]) &amp; ((yy + 0.5*ypixres) &gt;= clipext[3])]
+                        xx2 = xx[((xx - 0.5*xpixres) &gt;= clipext[0]) &amp; ((xx +0.5*xpixres) &lt; clipext[2])
+                         &amp; ((yy - 0.5*ypixres) &gt;= clipext[1]) &amp; ((yy + 0.5*ypixres) &gt;= clipext[3])]
+                        yy2 = yy[((xx - 0.5*xpixres) &gt;= clipext[0]) &amp; ((xx +0.5*xpixres) &lt; clipext[2])
+                         &amp; ((yy - 0.5*ypixres) &gt;= clipext[1]) &amp; ((yy + 0.5*ypixres) &gt;= clipext[3])]
+                        array = array.reshape( np.round((yy2.max()-yy2.min())/ypixres + 1).astype(int), np.round((xx2.max()-xx.min())/xpixres + 1).astype(int))
+                        xx2 = xx2.reshape( np.round((yy2.max()-yy2.min())/ypixres + 1).astype(int), np.round((xx2.max()-xx.min())/xpixres + 1).astype(int))
+                        yy2 = yy2.reshape( np.round((yy2.max()-yy2.min())/ypixres + 1).astype(int), np.round((xx2.max()-xx.min())/xpixres + 1).astype(int))
+                else:
+                        print(&#39;WARNING: Clip extent exceeds image boundary!... No clipping is applied&#39;)
+        else: 
+                xx2, yy2 = xx, yy
+        return array, np.asarray([xx2, yy2])</code></pre>
+</details>
+</dd>
+<dt id="geobo.utils.spherical2cartes"><code class="name flex">
+<span>def <span class="ident">spherical2cartes</span></span>(<span>x0, y0, z0, phi, theta, r)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Conversion from spherical coordinates to cartesian</p>
+<p>PARAMETER
+param x0, y0,z0: coordinates of origin
+param phi: azimuthal angle
+param theta: polar angle
+param r: radial length</p>
+<p>RETURN
+x ,y, z coordinates</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def spherical2cartes(x0, y0, z0, phi, theta, r):
+        &#34;&#34;&#34; Conversion from spherical coordinates to cartesian
+
+        PARAMETER
+        param x0, y0,z0: coordinates of origin
+        param phi: azimuthal angle
+        param theta: polar angle
+        param r: radial length
+
+        RETURN
+        x ,y, z coordinates
+        &#34;&#34;&#34;
+        x = x0 + r * np.sin(theta) * np.cos(phi)
+        y = y0 + r * np.sin(theta) * np.sin(phi)
+        z = z0 + r * np.cos(theta)
+        return x, y, z</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="geobo" href="index.html">geobo</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="two-column">
+<li><code><a title="geobo.utils.align_drill2" href="#geobo.utils.align_drill2">align_drill2</a></code></li>
+<li><code><a title="geobo.utils.cartes2spherial" href="#geobo.utils.cartes2spherial">cartes2spherial</a></code></li>
+<li><code><a title="geobo.utils.normalize" href="#geobo.utils.normalize">normalize</a></code></li>
+<li><code><a title="geobo.utils.readcsv_drill" href="#geobo.utils.readcsv_drill">readcsv_drill</a></code></li>
+<li><code><a title="geobo.utils.readraster_survey" href="#geobo.utils.readraster_survey">readraster_survey</a></code></li>
+<li><code><a title="geobo.utils.spherical2cartes" href="#geobo.utils.spherical2cartes">spherical2cartes</a></code></li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.4</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>

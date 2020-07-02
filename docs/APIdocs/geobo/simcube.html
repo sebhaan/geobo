@@ -1,0 +1,527 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.7.4" />
+<title>geobo.simcube API documentation</title>
+<meta name="description" content="Script for generating simulated cubes and sensors …" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>geobo.simcube</code></h1>
+</header>
+<section id="section-intro">
+<p>Script for generating simulated cubes and sensors</p>
+<p>Set of multiple distinct synthetic geophysical models can be created,
+including two-dipping body ("cylinders") and
+layered models.
+For each model
+a 3D voxel cube with geological structures is generated
+given by their density and magnetic susceptibility
+as well as the corresponding 2D gravity and magnetic remote sensor measurements. </p>
+<p>Other custom models can be included by adding a new model in function create_syncube()</p>
+<p>Author: Sebastian Haan</p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">&#34;&#34;&#34; 
+Script for generating simulated cubes and sensors
+
+Set of multiple distinct synthetic geophysical models can be created, 
+including two-dipping body (&#34;cylinders&#34;) and  layered models. 
+For each model  a 3D voxel cube with geological structures is generated 
+given by their density and magnetic susceptibility 
+as well as the corresponding 2D gravity and magnetic remote sensor measurements. 
+
+Other custom models can be included by adding a new model in function create_syncube()
+
+Author: Sebastian Haan
+&#34;&#34;&#34;
+
+from mpl_toolkits.mplot3d import axes3d
+import matplotlib.pyplot as plt
+from matplotlib import cm
+import pandas as pd
+import random
+import rasterio
+from config_loader import *
+import inversion
+from sensormodel import * 
+import cubeshow as cs
+
+
+def create_syncube(modelname, voxelpos):
+        &#34;&#34;&#34;Creates synthetic cube for density and magnetic susceptibility
+        
+        Generates two output files, one vtk cube and one csv file
+
+        PARAMETER
+
+        param modelname: String, options: &#34;layers_2&#34;, &#34;layers_3&#34;, &#34;cylinders&#34; 
+        param voxelpos: voxel positions (x, y, z)
+
+        RETURN
+
+        density cube
+        susceptibility cube 
+        &#34;&#34;&#34;
+        print(&#34;Creating simulated cube data ...&#34;)
+        xxx, yyy, zzz = voxelpos
+        x3 = xxx.reshape(yNcube, xNcube, zNcube)
+        y3 = yyy.reshape(yNcube, xNcube, zNcube)
+        z3 = zzz.reshape(yNcube, xNcube, zNcube)
+        if modelname == &#39;layers_2&#39;:
+                zshift = zLcube/8. * 1. / (1 + np.exp(2.*(-y3 + zLcube/2)))
+                layer1 = 4. * (1./(1+np.exp(-2*(-z3 - zLcube * 0.3 + zshift) )) - 1./(1+np.exp(-2*(-z3 - zLcube * 0.325 + zshift))))
+                cut1 = np.percentile(layer1,90)
+                layer1[layer1 &lt; cut1] = 0.
+                layer1[layer1 &gt;= cut1] = layer1.max()
+                layer2 = 8. * (1./(1+np.exp(-2*(-z3 - zLcube * 0.25 + zshift) )) - 1./(1+np.exp(-2*(-z3 - zLcube * 0.275 + zshift))))
+                cut2 = np.percentile(layer2,90)
+                layer2[layer2 &lt; cut2] = 0.
+                layer2[layer2 &gt;= cut2] = layer2.max()
+                density = 0.5 + layer1 + layer2 #
+                # assume simple correlation between magnetism and density:
+                magsus = gp_coeff[1] * density
+        if modelname == &#39;layers_3&#39;:
+                zshift = zLcube/8. * 1. / (1 + np.exp(2.*(-y3 + yLcube/2.)))
+                layer3 = 6. * (1./(1+np.exp(-2*(-z3 - zLcube * 0.35 + zshift) )) - 1./(1+np.exp(-2*(-z3 - zLcube * 0.375 + zshift))))
+                cut3 = np.percentile(layer3,90)
+                layer3[layer3 &lt; cut3] = 0.
+                layer3[layer3 &gt;= cut3] = layer3.max()
+                layer1 = 4. * (1./(1+np.exp(-2*(-z3 - zLcube * 0.3 + zshift) )) - 1./(1+np.exp(-2*(-z3 - zLcube * 0.325 + zshift))))
+                cut1 = np.percentile(layer1,90)
+                layer1[layer1 &lt; cut1] = 0.
+                layer1[layer1 &gt;= cut1] = layer1.max()
+                layer2 = 8. * (1./(1+np.exp(-2*(-z3 - zLcube * 0.25 + zshift) )) - 1./(1+np.exp(-2*(-z3 - zLcube * 0.275 + zshift))))
+                cut2 = np.percentile(layer2,90)
+                layer2[layer2 &lt; cut2] = 0.
+                layer2[layer2 &gt;= cut2] = layer2.max()
+                density = 0.5 + layer1 + layer2 + layer3
+                magsus = gp_coeff[1] * density
+        if modelname == &#39;cylinders&#39;:
+                rad = yLcube/18.
+                rc1 = ((y3-yLcube/1.3 - rad)**2 ) + ((z3 + zLcube/(4)  - rad)**2)
+                rc2 = ((y3-yLcube/4. - rad)**2 ) + ((z3 + zLcube/(4)  - rad)**2)
+                density = x3 * 0. + 0.1
+                density[rc2 &lt;= rad**2] = 1.
+                density[rc1 &lt;= rad**2] = 1.
+                density[(x3&lt;xLcube/5.) | (x3&gt;xLcube * 4./5.)] = 0.1
+                #magnetic = density
+                magsus = gp_coeff[1] * density
+
+        # Create simulated VTK cube
+        origin = (voxelpos[0].min(), voxelpos[1].min(), voxelpos[2].min())
+        voxelsize = (xvoxsize, yvoxsize,zvoxsize)
+        cs.create_vtkcube(density, origin, voxelsize, fname = inpath + &#39;simcube_&#39; + modelname + &#39;.vtk&#39;)
+
+        # Save simulated data as csv file:
+        newdf_head = [&#39;x&#39;,&#39;y&#39;,&#39;z&#39;, &#39;DENSITY&#39;, &#39;MAGSUS&#39;]
+        data = np.asarray([x3.flatten(), y3.flatten(), z3.flatten(), density.flatten(), magsus.flatten()])
+        df= pd.DataFrame(data.T, columns = newdf_head)
+        df.to_csv(inpath + &#39;simcube_&#39; + modelname + &#39;.csv&#39;, index = False)
+
+        # Create simulated drill data from 4 drillcores:
+        #select four random x,y coordinates
+        dfdrill = df.copy()
+        xdrill = [random.randint(2,xNcube -2) for p in range(2)] 
+        ydrill = [random.randrange(2,yNcube -2) for p in range(2)]
+        xdrill = np.asarray(xdrill) * xvoxsize + 0.5 * xvoxsize
+        ydrill = np.asarray(ydrill) * yvoxsize+ 0.5 * yvoxsize
+        dfdrill = dfdrill.loc[(dfdrill[&#39;x&#39;].isin(xdrill)) &amp; (dfdrill[&#39;y&#39;].isin(ydrill))]
+        dfdrill[&#39;SiteID&#39;] = &#39;SiteID_&#39; + dfdrill[&#39;x&#39;].astype(str) + dfdrill[&#39;y&#39;].astype(str)
+        dfdrill.to_csv(inpath + &#39;simdrill_&#39; + modelname + &#39;.csv&#39;, index = False)
+
+        return density, magsus
+
+
+def create_synsurvey(modelname, density, magsus):
+        &#34;&#34;&#34;
+        Generates synthetic gravity and magntics survey data. Sensors are positiones on top of cube data
+
+        PARAMETER
+
+        param density: density cube data
+        param magsus: magnetic susceptibiity cube data
+
+        RETURN
+
+        gravity 2D array
+        magnetic 2D array
+        &#34;&#34;&#34;
+        print(&#34;Creating simulated sensor data...&#34;)
+        # Create voxel edges
+        xedge = np.linspace(0, xNcube, xNcube + 1) * xvoxsize
+        yedge = np.linspace(0, yNcube, yNcube + 1) * yvoxsize
+        zedge = np.linspace(0, -zNcube, zNcube + 1) * zvoxsize + zmax
+        xEdges, yEdges, zEdges = np.meshgrid(xedge, yedge, zedge)
+        Edges = np.asarray([xEdges, yEdges, -zEdges])
+        # Create sensor positions
+        xnew = np.arange(xvoxsize/2., xLcube + xvoxsize/2., xvoxsize)
+        ynew = np.arange(yvoxsize/2., yLcube + yvoxsize/2., yvoxsize)
+        xx ,yy = np.meshgrid(xnew,ynew)
+        zz = xx * 0. + zoff
+        sensor_locations = np.asarray([xx.flatten(), yy.flatten(), zz.flatten()]).T
+        # Calculate sensitivities
+        gravsens, _ = A_sens(magneticField * 0., sensor_locations, Edges, &#39;grav&#39;)
+        magsens, _ = A_sens(magneticField, sensor_locations, Edges, &#39;magn&#39;)
+        gravfield = np.dot(gravsens, density.flatten()) # shape Nsensor, equivalent to (gravsens * properties).sum(axis = 1)
+        magfield =  np.dot(magsens, magsus.flatten())
+        grav2D = gravfield.reshape(xx.shape)
+        magn2D = magfield.reshape(xx.shape)
+        # Write csv file
+        newdf_head = [&#39;X&#39;,&#39;Y&#39;, &#39;GRAVITY&#39;, &#39;MAGNETIC&#39;]
+        data = np.asarray([xx.flatten(), yy.flatten(), gravfield, magfield])
+        df= pd.DataFrame(data.T, columns = newdf_head)
+        df.to_csv(inpath + &#39;simsurveydata_&#39; + modelname + &#39;.csv&#39;, index = False)
+
+        return grav2D, magn2D
+
+
+def create_simdata(modelname = &#34;cylinders&#34;, plot = True):
+        &#34;&#34;&#34; 
+        Generates two simulated 3D cubes (density and magnetic susceptibility) 
+        plus their corresponding gravity and magnetics 2D sensor data above surface.
+
+        Sensor data is calculated via forward models as specified in sensormodel.py.
+        Other settings such as cube geometry, earth&#39;s magnetic field, and sensor height 
+        above ground are specified in settings. Sensor x,y positions are by default centered 
+        as grid on top of voxel centers.
+
+        PARAMETER
+        param modelname: String [&#34;layers_2&#34;, &#34;layers_3&#34;, &#34;cylinders&#34;], defaults to &#34;cylinders&#34; 
+        param plot: boolean, if True, 2D plots of sensor and simulated data are created
+
+        RETURN
+        The simulated data is saved in output directory (settings) as csv files (one for cube and one for sensor data) 
+        The Two cubes are aslo saved in addition as VTK format files.
+        Gravity and magentic survey data as tif file.
+        Plots of sensor and vertically integrated cube data are saved in output directory.
+        &#34;&#34;&#34;
+        inv = inversion.Inversion()
+
+        voxelpos = inv.create_cubegeometry()
+
+        # Create cubes
+        density, magsus = create_syncube(modelname, voxelpos)
+
+        # Create sensor data
+        grav2D, magn2D = create_synsurvey(modelname, density, magsus)
+
+        # Create tif survey files:
+        with rasterio.open(inpath + &#39;gravity_simdata_&#39; + modelname +&#39;.tif&#39;, &#39;w&#39;,driver = &#39;GTiff&#39;, width = grav2D.shape[1], height=grav2D.shape[0], count=1, dtype=&#39;float32&#39;) as dst: 
+                dst.write(grav2D.astype(rasterio.float32), 1) 
+        with rasterio.open(inpath + &#39;magnetic_simdata_&#39; + modelname +&#39;.tif&#39;, &#39;w&#39;,driver = &#39;GTiff&#39;, width = magn2D.shape[1], height=magn2D.shape[0], count=1, dtype=&#39;float32&#39;) as dst: 
+                dst.write(magn2D.astype(rasterio.float32), 1) 
+
+        # Plot sensor data and integrated cube data along vertical axis
+        if plot:
+                print(&#34;Creating plots of simulated data ...&#34;)
+                extent = np.asarray([0, xLcube, 0, yLcube])
+                fig, axs = plt.subplots(2, 2, sharex=True, sharey=True, figsize=(10, 8))
+                axs[0,0].imshow(grav2D, extent = extent)
+                axs[0,0].set_title(&#39;Gravity Measurements&#39;)
+                axs[0,0].grid(True)
+                axs[0,1].imshow(magn2D, extent = extent)
+                axs[0,1].set_title(&#39;Magnetic Meauerements&#39;)
+                axs[0,1].grid(True)
+                axs[1,0].imshow(np.sum(density, axis =2), extent = extent)
+                axs[1,0].set_title(&#39;Vertical Sum Density&#39;)
+                axs[1,0].grid(True)
+                axs[1,1].imshow(np.sum(magsus, axis =2), extent = extent)
+                axs[1,1].set_title(&#39;Vertical Sum Magnetic Susceptibility&#39;)
+                axs[1,1].grid(True)
+                plt.tight_layout()
+                plt.savefig(inpath + &#39;figure_simdata_&#39; + modelname +&#39;.png&#39;, dpi = 300)
+                plt.close()</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="geobo.simcube.create_simdata"><code class="name flex">
+<span>def <span class="ident">create_simdata</span></span>(<span>modelname='cylinders', plot=True)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Generates two simulated 3D cubes (density and magnetic susceptibility)
+plus their corresponding gravity and magnetics 2D sensor data above surface.</p>
+<p>Sensor data is calculated via forward models as specified in sensormodel.py.
+Other settings such as cube geometry, earth's magnetic field, and sensor height
+above ground are specified in settings. Sensor x,y positions are by default centered
+as grid on top of voxel centers.</p>
+<p>PARAMETER
+param modelname: String ["layers_2", "layers_3", "cylinders"], defaults to "cylinders"
+param plot: boolean, if True, 2D plots of sensor and simulated data are created</p>
+<p>RETURN
+The simulated data is saved in output directory (settings) as csv files (one for cube and one for sensor data)
+The Two cubes are aslo saved in addition as VTK format files.
+Gravity and magentic survey data as tif file.
+Plots of sensor and vertically integrated cube data are saved in output directory.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def create_simdata(modelname = &#34;cylinders&#34;, plot = True):
+        &#34;&#34;&#34; 
+        Generates two simulated 3D cubes (density and magnetic susceptibility) 
+        plus their corresponding gravity and magnetics 2D sensor data above surface.
+
+        Sensor data is calculated via forward models as specified in sensormodel.py.
+        Other settings such as cube geometry, earth&#39;s magnetic field, and sensor height 
+        above ground are specified in settings. Sensor x,y positions are by default centered 
+        as grid on top of voxel centers.
+
+        PARAMETER
+        param modelname: String [&#34;layers_2&#34;, &#34;layers_3&#34;, &#34;cylinders&#34;], defaults to &#34;cylinders&#34; 
+        param plot: boolean, if True, 2D plots of sensor and simulated data are created
+
+        RETURN
+        The simulated data is saved in output directory (settings) as csv files (one for cube and one for sensor data) 
+        The Two cubes are aslo saved in addition as VTK format files.
+        Gravity and magentic survey data as tif file.
+        Plots of sensor and vertically integrated cube data are saved in output directory.
+        &#34;&#34;&#34;
+        inv = inversion.Inversion()
+
+        voxelpos = inv.create_cubegeometry()
+
+        # Create cubes
+        density, magsus = create_syncube(modelname, voxelpos)
+
+        # Create sensor data
+        grav2D, magn2D = create_synsurvey(modelname, density, magsus)
+
+        # Create tif survey files:
+        with rasterio.open(inpath + &#39;gravity_simdata_&#39; + modelname +&#39;.tif&#39;, &#39;w&#39;,driver = &#39;GTiff&#39;, width = grav2D.shape[1], height=grav2D.shape[0], count=1, dtype=&#39;float32&#39;) as dst: 
+                dst.write(grav2D.astype(rasterio.float32), 1) 
+        with rasterio.open(inpath + &#39;magnetic_simdata_&#39; + modelname +&#39;.tif&#39;, &#39;w&#39;,driver = &#39;GTiff&#39;, width = magn2D.shape[1], height=magn2D.shape[0], count=1, dtype=&#39;float32&#39;) as dst: 
+                dst.write(magn2D.astype(rasterio.float32), 1) 
+
+        # Plot sensor data and integrated cube data along vertical axis
+        if plot:
+                print(&#34;Creating plots of simulated data ...&#34;)
+                extent = np.asarray([0, xLcube, 0, yLcube])
+                fig, axs = plt.subplots(2, 2, sharex=True, sharey=True, figsize=(10, 8))
+                axs[0,0].imshow(grav2D, extent = extent)
+                axs[0,0].set_title(&#39;Gravity Measurements&#39;)
+                axs[0,0].grid(True)
+                axs[0,1].imshow(magn2D, extent = extent)
+                axs[0,1].set_title(&#39;Magnetic Meauerements&#39;)
+                axs[0,1].grid(True)
+                axs[1,0].imshow(np.sum(density, axis =2), extent = extent)
+                axs[1,0].set_title(&#39;Vertical Sum Density&#39;)
+                axs[1,0].grid(True)
+                axs[1,1].imshow(np.sum(magsus, axis =2), extent = extent)
+                axs[1,1].set_title(&#39;Vertical Sum Magnetic Susceptibility&#39;)
+                axs[1,1].grid(True)
+                plt.tight_layout()
+                plt.savefig(inpath + &#39;figure_simdata_&#39; + modelname +&#39;.png&#39;, dpi = 300)
+                plt.close()</code></pre>
+</details>
+</dd>
+<dt id="geobo.simcube.create_syncube"><code class="name flex">
+<span>def <span class="ident">create_syncube</span></span>(<span>modelname, voxelpos)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Creates synthetic cube for density and magnetic susceptibility</p>
+<p>Generates two output files, one vtk cube and one csv file</p>
+<p>PARAMETER</p>
+<p>param modelname: String, options: "layers_2", "layers_3", "cylinders"
+param voxelpos: voxel positions (x, y, z)</p>
+<p>RETURN</p>
+<p>density cube
+susceptibility cube</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def create_syncube(modelname, voxelpos):
+        &#34;&#34;&#34;Creates synthetic cube for density and magnetic susceptibility
+        
+        Generates two output files, one vtk cube and one csv file
+
+        PARAMETER
+
+        param modelname: String, options: &#34;layers_2&#34;, &#34;layers_3&#34;, &#34;cylinders&#34; 
+        param voxelpos: voxel positions (x, y, z)
+
+        RETURN
+
+        density cube
+        susceptibility cube 
+        &#34;&#34;&#34;
+        print(&#34;Creating simulated cube data ...&#34;)
+        xxx, yyy, zzz = voxelpos
+        x3 = xxx.reshape(yNcube, xNcube, zNcube)
+        y3 = yyy.reshape(yNcube, xNcube, zNcube)
+        z3 = zzz.reshape(yNcube, xNcube, zNcube)
+        if modelname == &#39;layers_2&#39;:
+                zshift = zLcube/8. * 1. / (1 + np.exp(2.*(-y3 + zLcube/2)))
+                layer1 = 4. * (1./(1+np.exp(-2*(-z3 - zLcube * 0.3 + zshift) )) - 1./(1+np.exp(-2*(-z3 - zLcube * 0.325 + zshift))))
+                cut1 = np.percentile(layer1,90)
+                layer1[layer1 &lt; cut1] = 0.
+                layer1[layer1 &gt;= cut1] = layer1.max()
+                layer2 = 8. * (1./(1+np.exp(-2*(-z3 - zLcube * 0.25 + zshift) )) - 1./(1+np.exp(-2*(-z3 - zLcube * 0.275 + zshift))))
+                cut2 = np.percentile(layer2,90)
+                layer2[layer2 &lt; cut2] = 0.
+                layer2[layer2 &gt;= cut2] = layer2.max()
+                density = 0.5 + layer1 + layer2 #
+                # assume simple correlation between magnetism and density:
+                magsus = gp_coeff[1] * density
+        if modelname == &#39;layers_3&#39;:
+                zshift = zLcube/8. * 1. / (1 + np.exp(2.*(-y3 + yLcube/2.)))
+                layer3 = 6. * (1./(1+np.exp(-2*(-z3 - zLcube * 0.35 + zshift) )) - 1./(1+np.exp(-2*(-z3 - zLcube * 0.375 + zshift))))
+                cut3 = np.percentile(layer3,90)
+                layer3[layer3 &lt; cut3] = 0.
+                layer3[layer3 &gt;= cut3] = layer3.max()
+                layer1 = 4. * (1./(1+np.exp(-2*(-z3 - zLcube * 0.3 + zshift) )) - 1./(1+np.exp(-2*(-z3 - zLcube * 0.325 + zshift))))
+                cut1 = np.percentile(layer1,90)
+                layer1[layer1 &lt; cut1] = 0.
+                layer1[layer1 &gt;= cut1] = layer1.max()
+                layer2 = 8. * (1./(1+np.exp(-2*(-z3 - zLcube * 0.25 + zshift) )) - 1./(1+np.exp(-2*(-z3 - zLcube * 0.275 + zshift))))
+                cut2 = np.percentile(layer2,90)
+                layer2[layer2 &lt; cut2] = 0.
+                layer2[layer2 &gt;= cut2] = layer2.max()
+                density = 0.5 + layer1 + layer2 + layer3
+                magsus = gp_coeff[1] * density
+        if modelname == &#39;cylinders&#39;:
+                rad = yLcube/18.
+                rc1 = ((y3-yLcube/1.3 - rad)**2 ) + ((z3 + zLcube/(4)  - rad)**2)
+                rc2 = ((y3-yLcube/4. - rad)**2 ) + ((z3 + zLcube/(4)  - rad)**2)
+                density = x3 * 0. + 0.1
+                density[rc2 &lt;= rad**2] = 1.
+                density[rc1 &lt;= rad**2] = 1.
+                density[(x3&lt;xLcube/5.) | (x3&gt;xLcube * 4./5.)] = 0.1
+                #magnetic = density
+                magsus = gp_coeff[1] * density
+
+        # Create simulated VTK cube
+        origin = (voxelpos[0].min(), voxelpos[1].min(), voxelpos[2].min())
+        voxelsize = (xvoxsize, yvoxsize,zvoxsize)
+        cs.create_vtkcube(density, origin, voxelsize, fname = inpath + &#39;simcube_&#39; + modelname + &#39;.vtk&#39;)
+
+        # Save simulated data as csv file:
+        newdf_head = [&#39;x&#39;,&#39;y&#39;,&#39;z&#39;, &#39;DENSITY&#39;, &#39;MAGSUS&#39;]
+        data = np.asarray([x3.flatten(), y3.flatten(), z3.flatten(), density.flatten(), magsus.flatten()])
+        df= pd.DataFrame(data.T, columns = newdf_head)
+        df.to_csv(inpath + &#39;simcube_&#39; + modelname + &#39;.csv&#39;, index = False)
+
+        # Create simulated drill data from 4 drillcores:
+        #select four random x,y coordinates
+        dfdrill = df.copy()
+        xdrill = [random.randint(2,xNcube -2) for p in range(2)] 
+        ydrill = [random.randrange(2,yNcube -2) for p in range(2)]
+        xdrill = np.asarray(xdrill) * xvoxsize + 0.5 * xvoxsize
+        ydrill = np.asarray(ydrill) * yvoxsize+ 0.5 * yvoxsize
+        dfdrill = dfdrill.loc[(dfdrill[&#39;x&#39;].isin(xdrill)) &amp; (dfdrill[&#39;y&#39;].isin(ydrill))]
+        dfdrill[&#39;SiteID&#39;] = &#39;SiteID_&#39; + dfdrill[&#39;x&#39;].astype(str) + dfdrill[&#39;y&#39;].astype(str)
+        dfdrill.to_csv(inpath + &#39;simdrill_&#39; + modelname + &#39;.csv&#39;, index = False)
+
+        return density, magsus</code></pre>
+</details>
+</dd>
+<dt id="geobo.simcube.create_synsurvey"><code class="name flex">
+<span>def <span class="ident">create_synsurvey</span></span>(<span>modelname, density, magsus)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Generates synthetic gravity and magntics survey data. Sensors are positiones on top of cube data</p>
+<p>PARAMETER</p>
+<p>param density: density cube data
+param magsus: magnetic susceptibiity cube data</p>
+<p>RETURN</p>
+<p>gravity 2D array
+magnetic 2D array</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def create_synsurvey(modelname, density, magsus):
+        &#34;&#34;&#34;
+        Generates synthetic gravity and magntics survey data. Sensors are positiones on top of cube data
+
+        PARAMETER
+
+        param density: density cube data
+        param magsus: magnetic susceptibiity cube data
+
+        RETURN
+
+        gravity 2D array
+        magnetic 2D array
+        &#34;&#34;&#34;
+        print(&#34;Creating simulated sensor data...&#34;)
+        # Create voxel edges
+        xedge = np.linspace(0, xNcube, xNcube + 1) * xvoxsize
+        yedge = np.linspace(0, yNcube, yNcube + 1) * yvoxsize
+        zedge = np.linspace(0, -zNcube, zNcube + 1) * zvoxsize + zmax
+        xEdges, yEdges, zEdges = np.meshgrid(xedge, yedge, zedge)
+        Edges = np.asarray([xEdges, yEdges, -zEdges])
+        # Create sensor positions
+        xnew = np.arange(xvoxsize/2., xLcube + xvoxsize/2., xvoxsize)
+        ynew = np.arange(yvoxsize/2., yLcube + yvoxsize/2., yvoxsize)
+        xx ,yy = np.meshgrid(xnew,ynew)
+        zz = xx * 0. + zoff
+        sensor_locations = np.asarray([xx.flatten(), yy.flatten(), zz.flatten()]).T
+        # Calculate sensitivities
+        gravsens, _ = A_sens(magneticField * 0., sensor_locations, Edges, &#39;grav&#39;)
+        magsens, _ = A_sens(magneticField, sensor_locations, Edges, &#39;magn&#39;)
+        gravfield = np.dot(gravsens, density.flatten()) # shape Nsensor, equivalent to (gravsens * properties).sum(axis = 1)
+        magfield =  np.dot(magsens, magsus.flatten())
+        grav2D = gravfield.reshape(xx.shape)
+        magn2D = magfield.reshape(xx.shape)
+        # Write csv file
+        newdf_head = [&#39;X&#39;,&#39;Y&#39;, &#39;GRAVITY&#39;, &#39;MAGNETIC&#39;]
+        data = np.asarray([xx.flatten(), yy.flatten(), gravfield, magfield])
+        df= pd.DataFrame(data.T, columns = newdf_head)
+        df.to_csv(inpath + &#39;simsurveydata_&#39; + modelname + &#39;.csv&#39;, index = False)
+
+        return grav2D, magn2D</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="geobo" href="index.html">geobo</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="geobo.simcube.create_simdata" href="#geobo.simcube.create_simdata">create_simdata</a></code></li>
+<li><code><a title="geobo.simcube.create_syncube" href="#geobo.simcube.create_syncube">create_syncube</a></code></li>
+<li><code><a title="geobo.simcube.create_synsurvey" href="#geobo.simcube.create_synsurvey">create_synsurvey</a></code></li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.4</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>
