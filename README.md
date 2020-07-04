@@ -1,6 +1,6 @@
 # GeoBO: A Python package for Multi-Objective Bayesian Optimisation and Joint Inversion in Geosciences
 
-``GeoBO`` is build upon a probabilistic framework using Gaussian Process (GP) priors to jointly solve multi-linear forward models. This software generates multi-output 3D cubes of geophysical properties (e.g. density, magnetic susceptibility, mineral concentrations) and their uncertainties from 2D survey data (e.g. magnetics and gravity) and any pre-existing drillcore measurements. The reconstructed 3D model is then used to query the next most promising measurement location given an expensive cost function (e.g. for drillcores). A ranked list of new measurements is proposed based on user-defined objectives as defined in the acquisitian function which typically aims to optimize exploration (reducing global model uncertainty) and exploitation (focusing on highly promising regions) while minimizing costs. 
+``GeoBO`` is build upon a probabilistic framework using Gaussian Process (GP) priors to jointly solve multi-linear forward models. This software generates multi-output 3D cubes of geophysical properties (e.g. density, magnetic susceptibility, mineral concentrations) and their uncertainties from 2D survey data (e.g. magnetics and gravity) and any pre-existing drillcore measurements. The reconstructed 3D model is then used to query the next most promising measurement location given an expensive cost function (e.g. for drillcores). A ranked list of new measurements is proposed based on user-defined objectives as defined in the acquisition function which typically aims to optimize exploration (reducing global model uncertainty) and exploitation (focusing on highly promising regions) while minimizing costs. 
 
 ![GeoBO Framework](docs/Overview_illustration.png?raw=True)
 
@@ -37,19 +37,19 @@ c) minimize the number of samples given an expensive cost function for any new m
 
 ### Forward Models and Joint Inversion
 In geology and geophysics, inversion problems occur whenever the goal is to reconstruct the geological conditions, i.e. the 3D distribution of physical rock properties, that give rise to a set of (2D) geophysical observations. Since the number of possible geological configurations is typically greater than the number of observational constraints, the problem is nearly always under-determined.
-Forward models transform the localized measurement of a remote sensor grid into a 3D representation of geophysical properties of a region. The most common geophysical linear forward model are gravity and magnetic forward models, which are computed using Li’s tractable approximation. Joint inversionis  simultaneously interpreting  multiple (distinct) sensor measurements using a single model to provide a better constrained joint solution rather than taking individual solutions that only satisfy their aspect of data on their own. 
+Forward models transform the localized measurement of a remote sensor grid into a 3D representation of geophysical properties of a region. The most common geophysical linear forward model are gravity and magnetic forward models, which are computed using Li’s tractable approximation. Joint inversion is  simultaneously interpreting  multiple (distinct) sensor measurements using a single model to provide a better constrained joint solution rather than taking individual solutions that only satisfy their aspect of data on their own. 
 
 
 
 ## Functionality
 
-GeoBO's probablistic framework includes all steps from  prior selection, data fusion and inversion, to sensor optimisation and real world model output. The main functionalities of GeoBO are summarised in the following:
+GeoBO's probabilistic framework includes all steps from  prior selection, data fusion and inversion, to sensor optimisation and real world model output. The main functionalities of GeoBO are summarised in the following:
 
- - Joint probabilistic inversion tool by solving simultanously multi-linear forward models (e.g. gravity, magnetics) using cross-variances between geophysical properties (cross-variance terms can be specified by user)
+ - Joint probabilistic inversion tool by solving simultaneously multi-linear forward models (e.g. gravity, magnetics) using cross-variances between geophysical properties (cross-variance terms can be specified by user)
  - Output 1: Generation of cubes and computation of complete posterior distribution for all geophysical properties (described by their mean and variance value at each location (cubecell aka voxel). 
- - Output 2: Generation of ranked proposal list for new most promising drillcores based on global optimisation of acquisitian function
- - Templates for acquisitian function to use in Bayesian Optimisation
- - Flexible parameter settings for exploration-exploitation trade-off and inclusion of local 3D cost function in acquisitian function 
+ - Output 2: Generation of ranked proposal list for new most promising drillcores based on global optimisation of acquisition function
+ - Templates for acquisition function to use in Bayesian Optimisation
+ - Flexible parameter settings for exploration-exploitation trade-off and inclusion of local 3D cost function in acquisition function 
 
 
 Other features are:
@@ -61,7 +61,7 @@ Other features are:
  - Options to include any pre-existing drillcore data 
  - Library of Gaussian Process (GP) kernels including sparse GP kernels
  - Flexible settings for any cube geometry and resolution
- - (Optional) Optimization of GP hyperparameters and cross-correlation coeffcients via computation of marginal GP likelihood
+ - (Optional) Optimization of GP hyperparameters and cross-correlation coefficients via computation of marginal GP likelihood
 
 Example outputs can be found in the directory `examples/results/`.
 
@@ -127,11 +127,11 @@ A complete API documentation for all modules can be found here:
 
 1) Change the main settings such as filenames and parameters in `settings.yaml`. These settings specify:
 
-- directory, filenames, and geophsyical drillcore properties
-- the gnererated cube's geometry, size, and resolution
-- Gaussian Process settings (lengthscale, input data uncertainity, correlation coefficients, kernel function)
+- directory, filenames, and geophysical drillcore properties
+- the generated cube's geometry, size, and resolution
+- Gaussian Process settings (lengthscale, input data uncertainty, correlation coefficients, kernel function)
 - local Earth's magnetic field vector
-- Bayesian Optimisation Settings (vertical/non-vertical drillcores, the eploration/exploitation and cost weighting)
+- Bayesian Optimisation Settings (vertical/non-vertical drillcores, the exploration/exploitation and cost weighting)
 - plotting settings
 - optional generation of simulated data 
 
@@ -141,7 +141,7 @@ cd geobo/
 python main.py settings.yaml
 ```
 
-The main functions for acquisitian function  can be found in [`run_geobo.py`](docs/APIdocs/geobo/run_geobo.html); visualisation functions and VTK export are defined in [`cubeshow.py`](docs/APIdocs/geobo/cubeshow.html); inversion functions are defined in [`inversion.py`](docs/APIdocs/geobo/inversion.html). 
+The main functions for the acquisition function can be found in [`run_geobo.py`](docs/APIdocs/geobo/run_geobo.html); visualisation functions and VTK export are defined in [`cubeshow.py`](docs/APIdocs/geobo/cubeshow.html); inversion functions are defined in [`inversion.py`](docs/APIdocs/geobo/inversion.html). 
 
 
 ## Examples and Tests
@@ -166,8 +166,8 @@ cd geobo/
 python main.py tests/settings_example1.yaml 
 ```
 
-The output results include the generated reconstructed density and magnetic suscetibility cubes and their corresponding uncertainty cubes, visialisations of original survey data and reconstructed properties, and list of new drillcore proposals.
-The ouput figure 'newdrill_proposals.png' shows the location of the already existing drills (black points), proposed new drill positions (white), and  the best new drill location (red). 
+The output results include the generated reconstructed density and magnetic susceptibility cubes and their corresponding uncertainty cubes, visualisations of original survey data and reconstructed properties, and list of new drillcore proposals.
+The output figure 'newdrill_proposals.png' shows the location of the already existing drills (black points), proposed new drill positions (white), and  the best new drill location (red). 
 
 
 ### Drillcore Test Example
@@ -178,7 +178,7 @@ Another examples includes drillcore and gravity/magnetic survey data (`examples/
 cd geobo/
 python main.py tests/settings_example2.yaml
 ```
-and creates the reconstructed density and magnetic suscetibility cubes, uncertainity cubes
+and creates the reconstructed density and magnetic susceptibility cubes, uncertainty cubes
 
 
 ## Literature
@@ -193,9 +193,20 @@ Arman Melkumyan and Fabio Ramos, “A sparse covariance function for exact gauss
 
 Armon Melkuyman and Fabio Ramos, “Multi-kernel gaussian processes,” in IJCAI, 2011, vol. 22, p. 1408
 
-Reid, A., O. Simon Timothy, E. V. Bonilla, L. McCalman, T. Rawling, and F. Ramos, 2013, Bayesian joint inversions for the exploration of earth resources.: IJCAI, 2877{2884.
+Reid, A., O. Simon Timothy, E. V. Bonilla, L. McCalman, T. Rawling, and F. Ramos, 2013, Bayesian joint inversions for the exploration of earth resources.: IJCAI, 2877
 
 Eric Brochu, Vlad M Cora, and Nando De Freitas, “A tutorial on bayesian optimization of expensive cost functions, with application to active user modeling and hierarchical reinforcement learning,” arXiv preprint arXiv:1012.2599, 2010.
+
+
+## Related Software
+
+For the inversion part, GeoBO uses a direct inversion method via transformation of Gaussian Process priors, which enables joint inversion but is limited to linear forward models (e.g. gravity, magnetics, drillcores). For solving more complex non-linear forward models (e.g., seismic, or prior geological knowledge), the following bayesian inversion methods can potentially be applied to generate 3D geophysical surrogate models or to further refine GeoBo's 3D posterior model:
+
+- hIPPYlib: an Extensible Software Framework for Large-scale Deterministic and Bayesian Inverse Problems. [Publication Link](https://www.theoj.org/joss-papers/joss.00940/10.21105.joss.00940.pdf); the software code is available at [hippylib.github.io](https://hippylib.github.io/)
+
+- Obsidian: a flexible software platform for MCMC sampling of 3-D multi-modal geophysical models on distributed computing clusters. [Publication Link](https://gmd.copernicus.org/articles/12/2941/2019/); the code for version 0.1.2 of Obsidian is available at [https://doi.org/10.5281/zenodo.2580422](https://doi.org/10.5281/zenodo.2580422)
+
+- GemPy: open-source stochastic geological modeling and inversion; geoscientific model development. See [gempy.org](https://www.gempy.org/)
 
 
 
