@@ -16,6 +16,7 @@
   - [Synthetic Models](#synthetic-models)
   - [Drillcore Test Example](#drillcore-estt-example)
 - [Literature](#literature)
+- [Related Software](#related-software)
 - [Attribution and Acknowledgments](#attribution-and-acknowledgements)
   - [Project Contributors](#project-contributors)
 - [License](#license)
