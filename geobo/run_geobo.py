@@ -445,6 +445,8 @@ if len(sys.argv) == 2:
 			#cs.skplot3(density_rec, Nsize = (xNcube, yNcube, zNcube), drill = (yyydrill/xvoxsize,xxxdrill/yvoxsize,-zzzdrill/zvoxsize), sensor = (x_sensor/xvoxsize, y_sensor/yvoxsize, x_sensor * 0.), show = False, path_out = outpath, filename = 'density-drill-mesh.png')
 			cs.skplot3(density_rec, Nsize = (yNcube, xNcube, zNcube), drill = (ydrillminmax/xvoxsize, xdrillminmax/yvoxsize,-zdrillminmax/zvoxsize), sensor = (sensor_locations[1]/xvoxsize,sensor_locations[0]/yvoxsize, sensor_locations[2] * 0. + zmax), show = False, path_out = outpath, filename = 'density-mesh3D.png')
 			plt.clf()
+			cs.skplot3(magsus_rec, Nsize = (yNcube, xNcube, zNcube), drill = (ydrillminmax/xvoxsize, xdrillminmax/yvoxsize,-zdrillminmax/zvoxsize), sensor = (sensor_locations[1]/xvoxsize,sensor_locations[0]/yvoxsize, sensor_locations[2] * 0. + zmax), show = False, path_out = outpath, filename = 'magsus-mesh3D.png')
+			plt.clf()
 			cs.skplot3(drill_rec, Nsize = (yNcube, xNcube, zNcube), drill = (ydrillminmax/xvoxsize, xdrillminmax/yvoxsize,-zdrillminmax/zvoxsize), sensor = (sensor_locations[1]/xvoxsize,sensor_locations[0]/yvoxsize, sensor_locations[2] * 0. + zmax), show = False, path_out = outpath, filename = 'drill-mesh3D.png')
 			plt.close('all')
 
