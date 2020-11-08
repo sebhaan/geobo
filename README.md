@@ -14,7 +14,11 @@
 - [Usage and Settings](#usage-and-settings) 
 - [Examples and Tests](#examples)
   - [Synthetic Models](#synthetic-models)
-  - [Drillcore Test Example](#drillcore-estt-example)
+  - [Drillcore Test Example](#drillcore-test-example)
+  - [Results and Output Files](#results-and-output-files)
+- [Options and Customization](#options-and-customization)
+  - [Custom Linear Forward Models](#custom-linear-forward-models)
+  - [Gaussian Process Kernel Functions][#gaussian-process-kernel-functions]
 - [Literature](#literature)
 - [Related Software](#related-software)
 - [Attribution and Acknowledgments](#attribution-and-acknowledgements)
@@ -29,7 +33,8 @@ to evaluate, do not have a closed-form (e.g. black-boxfunctions), or have no acc
 
 ### Acquisition function 
 
-The key of BO is the acquisition function, which typically has to balance between 
+The key of BO is the acquisition function, which typically has to balance between: 
+
 a) exploration, i.e., querying points that maximise the information gain and minimize the uncertainty of a model
 b) exploitation, i.e. querying points that maximise the reward (e.g. concentrating search in the
 vicinity locations with high value such as minerals)
@@ -46,7 +51,7 @@ Forward models transform the localized measurement of a remote sensor grid into 
 
 GeoBO's probabilistic framework includes all steps from  prior selection, data fusion and inversion, to sensor optimisation and real world model output. The main functionalities of GeoBO are summarised in the following:
 
- - Joint probabilistic inversion tool by solving simultaneously multi-linear forward models (e.g. gravity, magnetics) using cross-variances between geophysical properties (cross-variance terms can be specified by user)
+ - Joint probabilistic inversion tool by solving simultaneously multi-linear forward models (e.g. gravity, magnetics) using cross-variances between geophysical properties (cross-variance terms can be specified by user). 
  - Output 1: Generation of cubes and computation of complete posterior distribution for all geophysical properties (described by their mean and variance value at each location (cubecell aka voxel). 
  - Output 2: Generation of ranked proposal list for new most promising drillcores based on global optimisation of acquisition function
  - Templates for acquisition function to use in Bayesian Optimisation
@@ -60,6 +65,7 @@ Other features are:
  - Generation of 2D/3D visualisation plots of reconstructed cubes and survey data
  - 3D Cube export in VTK format (for subsequent analysis, e.g., in Python or with ParaView)
  - Options to include any pre-existing drillcore data 
+ - Included linear forward models: density-to-gravity and magnetic susceptibility-to-magnetic field; custom linear forward models can be added (see [Custom Linear Forward Models](#custom-linear-forward-models))
  - Library of Gaussian Process (GP) kernels including sparse GP kernels
  - Flexible settings for any cube geometry and resolution
  - (Optional) Optimization of GP hyperparameters and cross-correlation coefficients via computation of marginal GP likelihood
@@ -167,9 +173,6 @@ cd geobo/
 python main.py tests/settings_example1.yaml 
 ```
 
-The output results include the generated reconstructed density and magnetic susceptibility cubes and their corresponding uncertainty cubes, visualisations of original survey data and reconstructed properties, and list of new drillcore proposals.
-The output figure 'newdrill_proposals.png' shows the location of the already existing drills (black points), proposed new drill positions (white), and  the best new drill location (red). 
-
 
 ### Drillcore Test Example
 
@@ -182,9 +185,60 @@ python main.py tests/settings_example2.yaml
 and creates the reconstructed density and magnetic susceptibility cubes, uncertainty cubes
 
 
+### Results and Output Files
+
+The output results include the generated reconstructed density and magnetic susceptibility cubes and their corresponding uncertainty cubes, visualisations of original survey data and reconstructed properties, and list of new measurement proposals.
+
+List of Joint Inversion Result Outputs: 
+
+- 3D Cube files in vtk format (to use, e.g., with PyVista or ParaView): Output of cross-correlated reconstructed properties (density: **cube_density.vtk**, magnetic susceptibility: **cube_magsus.vtk**, property from drill: **cube_drill.vtk**) and their uncertainity cubes in terms of standard deviation (**cube_density_variance.vtk, cube_drill_variance.vtk, cube_drill_variance.vtk**). In case the cross-covariance terms (`gp_coeff` in the settings file) are all set to zero, the solutions for each forward model are independent from each other.
+- Optional (Default optiion: plot=True in function `read_surveydata()`): Images of the input gravitational field (**gravfield.png**) and magnetic field (**magfield.png**) and their corresponding downsampled images (**gravfield_downsampled.png, magfield_downsampled.png**) 
+- Optional (if `plot3d`:True in settings): 3D Preview of reconstructed properties: density (**density-mesh3D.png**), magnetic suscpetibility (**magsus-mesh3D.png**), and drill property (**drill-mesh3D.png**). However, it is recommended to use PyVista or Paraview instead. Future updates for 3D visualisations will be based on PyVista. 
+- Optional (if `plot_vertical`:True in settings): 2D maps of vertically (along z-axis) mean value of cube properties (**dens_rec2D_loc2.png, magsus_rec2D_loc2.png, drill_rec2D_loc2.png**)
+
+List of Bayesian Optimisation Output:
+
+- List of all new measurement proposals (here for drillcores) ranked from maximum (hightest gain) to minimum of optimisation function. The results are saved as csv file (**newdrill_proposals_non-vertical.csv** or **newdrill_proposals_vertical.csv**) and include for vertical drillcores the position (Easting, Northing) and for non-vertical drillcores position and drill angles (Azimuth, Dip).
+- Points of proposed measurement positions on top of reconstructed drill property image (mean projection along z-axis): The output figure (non-vertical drillcores:**newdrill_proposals.png** or vertical drillcores:**newdrill_vertical_proposals.png**) shows the location of the already existing drills as given by input measurements (black points), the new proposed drill positions (white), and the best (maximum of optimsation function) new drill location (red). 
+
+![Example image of new measurement proposals (black_ existing, white: new proposed, red: best proposal) on top of reconstructed property (mean value projection)](docs/newdrill_proposals.png.?raw=True).
+
+## Options and Customization
+
+
+### Custom Linear Forward Models
+
+The relationship between a physical system (or its model parameters) $\Phi$ and the observed sensor data $y$ is described by a linear forward model
+$$y = G \Phi,$$  
+where $G$ is the transformation operator or matrix. The gravitational and magnetic forward model can be determined analytically by using Li's tractable approximation (see Li and Oldenburg 1998) for a 3D field of prisms of constant susceptibility and density, and GeoBO applies this prism shape model to compute the corresponding sensor sensitivity for gravity and anomalous magnetic field related to each prism cell.
+
+The current implementation includes magnetic and gravity forward models, which are defined in the module `sensormodel.py` by the functions `A_sens()`,`grav_func()`, and `magn_func()`. The easiest way to add custom models is to create a new forward model function similar to the included functions `grav_func()` or `magn_func` and to compute the forward model matrix with `A_sens()`, if possible. The custom function need to describe the sensitivity or relationship for a particular point relative to the sensor origin (see, e.g., `grav_func()`).
+
+In general any linear forward model can be added by changing accordingly the forward model matrix as computed by `A_sens()` as long as this function returns the matrix $G$ that satisfies the linear relation $y = G \Phi$.
+
+
+### Gaussian Process Kernel Functions
+
+Gaussian Processes (GPs) are a flexible, probabilistic approach using kernel machines and can propagate consistently uncertainties from input to output space under the Bayesian formalism. Another advantage of GPs is that their marginal likelihood function is well defined by the values of their hyper-parameters, and can thus be optimized.
+The choice for an appropriate covariance (kernel) function is important and there are many stationary (invariant to translation in input space) and non-stationary covariance functions available (for an overview, see, e.g., Rasmussen and Williams 2006}. To handle the computational problem of inverting a large covariance matrix, GeoBO uses by default an intrinsically sparse covariance function (Melkumyan et, al. 2009). However, other standard kernel functions are available (see module `kernels.py`), which includes the squared exponential 
+and Matern32 function and their their corresponding multi-kernel covariance functions (see Melkumyan et. al. 2011). 
+
+The settings yaml file allows you to choose the kernel function by configuring the parameter `kernelfunc`,  which can be set either to 'sparse' (Default), 'exp' (squared exponential) or 'matern32'. New custom kernels can be a added in the module `kernels.py`, which requires to write their covariance function (see as example `gpkernel()`) and cross-covariance function (see as example `gpkernel_sparse()`), and then to add their function name to settings.yaml and to `create_cov()` in `kernels.py`.  
+
+The hyperparameters of the GP kernel can be configured in the settings yaml file (see Gaussian Process Settings) and are given by the lengthscale (`gp_lengthscale`), the noise regularization terms (`gp_err`) per forward model, and the cross-covariance amplitude terms which (`w1,w2,w3`) that coorrepond to the correlation coefficients between the model properties (e.g., rock density ,magnetic susceptibility, and drillcore measurements). The mathematical details for construction of the Multi-Kernel Covariance Functions are described in Haan et al 2020.
+
+
+### Bayesian Optimisation Options
+
+To find the optimal new sampling point, GeoBO maximises the objective (acquisition) function which is defined by the Upper Confidence Bound (UCB)
+$$ UCB (\mathbf { x }) = \mu ( \mathbf { x } ) + \kappa \cdot \sigma (\mathbf { x }) - \beta c(x) $$
+with the mean value for the prediction $\mu (\mathbf{x})$, the variance $\sigma^2 ( \mathbf{x} )$, and a cost function  $c(x)$, which is defined by the cost of obtaining a measurement at the sample point $x$. The parameter $\kappa$ and $\gamma$ define the trade-off in exploration-to-exploitation and gain-to-cost, respectively. For example, maximizing the mean value can be beneficial if the goal is to sample new data at locations with high density or mineral content, and not only where the uncertainty is high. 
+The parameters $\kappa$ and $\beta$ can be accordingly specified by the user in the settings yaml file. Moerover, the settings allow the user to choose between vertical and non-vertical drillcore; in the latter case GeoBO is optimising also dip and azimuthal angle of the  drillcore in addition to drillcore position.
+
+
 ## Literature
 
-Sebastian Haan, Fabio Ramos, Dietmar Muller, "Multi-Objective Bayesian Optimisation and Joint Inversion for Active Sensor Fusion", GEOPHYSICS
+Sebastian Haan, Fabio Ramos, Dietmar Muller, "Multi-Objective Bayesian Optimisation and Joint Inversion for Active Sensor Fusion", Geophysics, 86(1), pp.1-78. [arXiv](https://arxiv.org/abs/2010.05386)
 
 Carl Edward Rasmussen and Christopher KI Williams, Gaussian process for machine learning, MIT press, 2006.
 
