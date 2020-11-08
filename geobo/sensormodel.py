@@ -25,7 +25,9 @@ def A_sens(magneticField, locations, Edges, func):
 
 	PARAMETER
 
-	:param magneicField: ambient magnetic field
+	:param magneticField: ambient magnetic field vector as array with length 3 (x,y,z)
+	:param locations: X,Y,Z sensor position with shape (N Sensors, 3)
+	:param Edges: Cube edge positions
 	:param func: 'grav' for gravity, 'magn' for magnetic
 
 	RETURNS
