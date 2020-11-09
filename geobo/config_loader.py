@@ -1,7 +1,14 @@
 """
 Loading configuration and settings from settings yaml file
 
-Author: Sebastian Haan
+Copyright 2020 Sebastian Haan
+
+This file is part of GeoBO.
+
+GeoBO is free software made available under the AGPL License. 
+For details see the LICENSE file.
+
+@author: Sebastian Haan
 """
 
 import yaml

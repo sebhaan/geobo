@@ -1,4 +1,15 @@
-# Utility functions for coordinate conversion and reading ion drillcore and survey data
+"""
+Utility functions for coordinate conversion and reading ion drillcore and survey data
+
+Copyright 2020 Sebastian Haan
+
+This file is part of GeoBO.
+
+GeoBO is free software made available under the AGPL License. 
+For details see the LICENSE file.
+
+@author: Sebastian Haan
+"""
 
 import numpy as np
 import pandas as pd

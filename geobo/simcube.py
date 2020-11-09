@@ -9,8 +9,14 @@ as well as the corresponding 2D gravity and magnetic remote sensor measurements.
 
 Other custom models can be included by adding a new model in function create_syncube()
 
-Copyright 2020 Sebastian Haan, The University of Sydney
-This is a free software made available under the AGPL License.
+Copyright 2020 Sebastian Haan
+
+This file is part of GeoBO.
+
+GeoBO is free software made available under the AGPL License. 
+For details see the LICENSE file.
+
+@author: Sebastian Haan
 """
 import os
 from mpl_toolkits.mplot3d import axes3d

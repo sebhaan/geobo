@@ -1,6 +1,14 @@
 # User settings, filenames and global model parameters
 # Please change example settings below
-# Author: Sebastian Haan
+#
+#Copyright 2020 Sebastian Haan
+#
+#This file is part of GeoBO.
+#
+#GeoBO is free software made available under the AGPL License. 
+#For details see the LICENSE file.
+#
+#@author: Sebastian Haan
 
 ##### Define Main file directories #########
 inpath: "tests/data/synthetic/"

@@ -1,6 +1,15 @@
-# Wrapper around main geobo script to include settings filename as argument.
-# Copyright 2020 Sebastian Haan, The University of Sydney
+"""
+Wrapper around main geobo script to include settings filename as argument.
 
+Copyright 2020 Sebastian Haan
+
+This file is part of GeoBO.
+
+GeoBO is free software made available under the AGPL License. 
+For details see the LICENSE file.
+
+@author: Sebastian Haan
+"""
 import os 
 import sys
 

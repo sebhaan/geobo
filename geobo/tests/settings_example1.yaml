@@ -1,6 +1,15 @@
 # User settings, filenames and global model parameters
 # Please change example settings below
-# Author: Sebastian Haan
+#
+# Copyright 2020 Sebastian Haan
+#
+# This file is part of GeoBO.
+#
+# GeoBO is free software made available under the AGPL License. 
+# For details see the LICENSE file.
+#
+# @author: Sebastian Haan
+
 
 ##### Define Main file directories #########
 inpath: "tests/testdata/synthetic/"
@@ -41,7 +50,7 @@ modelname: 'cylinders'
 
 ##### Gaussian Process Settings ###
 gp_lengthscale: 2 # times voxelsize
-gp_err: [0.1, 0.1, 0.1] # regularisation terms, should correpsond to normalized input data uncertainity (input data normalized to unity)
+gp_err: [0.1, 0.1, 0.1] # regularisation terms, should correspond to normalized input data uncertainity (input data normalized to unity)
 #Correlation between properties (w1,w2,w3)
 #w1: density - drill correlation factor
 #w2: magentic - drill correlation factor 
@@ -90,9 +99,9 @@ beta: 0.0
 
 
 ######## Constants######
-# these are some physiocal constants used for forard models and survey data conversion
+# these are some physical constants used for forward models and survey data conversion
 # change according to you survey data
-# By deafult geobo sets density and magnetic susceptibility to a mean value of zero
+# By default geobo sets density and magnetic susceptibility to a mean value of zero
 c_G: 6.673848e-11
 c_SI_TO_MILLIGALS: 10000
 c_GCM3_TO_SI: 1000.0

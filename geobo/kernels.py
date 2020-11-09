@@ -11,7 +11,14 @@ To take fully into account cross-covariances between multiple model parameters
 between all kernel pairs. One important requirement for constructing cross-covariance terms is that they must be defined 
 to be both positive semi-definite and informative; for an overview how to construct such as matrix in detail see Melkumyan 2011.
 
-Author: Sebastian Haan
+Copyright 2020 Sebastian Haan
+
+This file is part of GeoBO.
+
+GeoBO is free software made available under the AGPL License. 
+For details see the LICENSE file.
+
+@author: Sebastian Haan
 """
 from scipy import reshape, sqrt, identity
 import numpy as np

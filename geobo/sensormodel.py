@@ -11,7 +11,14 @@ which depends on the magnetic mineral content below the surface and is measured
 by the response of their magnetic dipoles induced by the Earth's magnetic field. 
 The joint GP inversion takes into account a covariance that exists between density and magnetic susceptibility.
 
-Author: Sebastian Haan
+Copyright 2020 Sebastian Haan
+
+This file is part of GeoBO.
+
+GeoBO is free software made available under the AGPL License. 
+For details see the LICENSE file.
+
+@author: Sebastian Haan
 """
 
 import numpy as np

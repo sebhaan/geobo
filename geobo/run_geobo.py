@@ -4,7 +4,14 @@ and  drill core properties plus their predicted variance cubes (see inversion.py
 
 See settings.yaml for specifications.
 
-Author: Sebastian Haan
+Copyright 2020 Sebastian Haan
+
+This file is part of GeoBO.
+
+GeoBO is free software made available under the AGPL License. 
+For details see the LICENSE file.
+
+@author: Sebastian Haan
 """
 import os
 import sys
