@@ -18,7 +18,7 @@
   - [Results and Output Files](#results-and-output-files)
 - [Options and Customization](#options-and-customization)
   - [Custom Linear Forward Models](#custom-linear-forward-models)
-  - [Gaussian Process Kernel Functions][#gaussian-process-kernel-functions]
+  - [Gaussian Process Kernel Functions](#gaussian-process-kernel-functions)
 - [Literature](#literature)
 - [Related Software](#related-software)
 - [Attribution and Acknowledgments](#attribution-and-acknowledgements)
@@ -201,7 +201,7 @@ List of Bayesian Optimisation Output:
 - List of all new measurement proposals (here for drillcores) ranked from maximum (hightest gain) to minimum of optimisation function. The results are saved as csv file (**newdrill_proposals_non-vertical.csv** or **newdrill_proposals_vertical.csv**) and include for vertical drillcores the position (Easting, Northing) and for non-vertical drillcores position and drill angles (Azimuth, Dip).
 - Points of proposed measurement positions on top of reconstructed drill property image (mean projection along z-axis): The output figure (non-vertical drillcores:**newdrill_proposals.png** or vertical drillcores:**newdrill_vertical_proposals.png**) shows the location of the already existing drills as given by input measurements (black points), the new proposed drill positions (white), and the best (maximum of optimsation function) new drill location (red). 
 
-![Example image of new measurement proposals (black_ existing, white: new proposed, red: best proposal) on top of reconstructed property (mean value projection)](docs/newdrill_proposals.png.?raw=True).
+![Example image of new measurement proposals (black_ existing, white: new proposed, red: best proposal) on top of reconstructed property (mean value projection)](docs/newdrill_proposals.png?raw=True).
 
 ## Options and Customization
 
@@ -287,4 +287,10 @@ Key project contributors to the GeoBO project are:
 
 Copyright 2020 Sebastian Haan
 
-This is a free software made available under the AGPL License. For details see the LICENSE file.
+GeoBO is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License (AGPL version 3) as published by the Free Software Foundation.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License along with this program (see LICENSE.md). If not, see [https://www.gnu.org/licenses/](https://www.gnu.org/licenses/).
+
+
