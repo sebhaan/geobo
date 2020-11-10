@@ -208,19 +208,21 @@ List of Bayesian Optimisation Output:
 
 ### Custom Linear Forward Models
 
-The relationship between a physical system (or its model parameters) $\Phi$ and the observed sensor data $y$ is described by a linear forward model
-$$y = G \Phi,$$  
-where $G$ is the transformation operator or matrix. The gravitational and magnetic forward model can be determined analytically by using Li's tractable approximation (see Li and Oldenburg 1998) for a 3D field of prisms of constant susceptibility and density, and GeoBO applies this prism shape model to compute the corresponding sensor sensitivity for gravity and anomalous magnetic field related to each prism cell.
+The relationship between a physical system (or its model parameters) ***P*** and the observed sensor data **y** is described by a linear forward model
+
+**y** = **G** ***P***,  
+
+where **G** is the transformation operator or matrix. The gravitational and magnetic forward model can be determined analytically by using Li's tractable approximation (see Li and Oldenburg 1998) for a 3D field of prisms of constant susceptibility and density, and GeoBO applies this prism shape model to compute the corresponding sensor sensitivity for gravity and anomalous magnetic field related to each prism cell.
 
 The current implementation includes magnetic and gravity forward models, which are defined in the module `sensormodel.py` by the functions `A_sens()`,`grav_func()`, and `magn_func()`. The easiest way to add custom models is to create a new forward model function similar to the included functions `grav_func()` or `magn_func` and to compute the forward model matrix with `A_sens()`, if possible. The custom function need to describe the sensitivity or relationship for a particular point relative to the sensor origin (see, e.g., `grav_func()`).
 
-In general any linear forward model can be added by changing accordingly the forward model matrix as computed by `A_sens()` as long as this function returns the matrix $G$ that satisfies the linear relation $y = G \Phi$.
+In general any linear forward model can be added by changing accordingly the forward model matrix as computed by `A_sens()` as long as this function returns the matrix $G$ that satisfies the linear relation **y** = **G** ***P***.
 
 
 ### Gaussian Process Kernel Functions
 
 Gaussian Processes (GPs) are a flexible, probabilistic approach using kernel machines and can propagate consistently uncertainties from input to output space under the Bayesian formalism. Another advantage of GPs is that their marginal likelihood function is well defined by the values of their hyper-parameters, and can thus be optimized.
-The choice for an appropriate covariance (kernel) function is important and there are many stationary (invariant to translation in input space) and non-stationary covariance functions available (for an overview, see, e.g., Rasmussen and Williams 2006}. To handle the computational problem of inverting a large covariance matrix, GeoBO uses by default an intrinsically sparse covariance function (Melkumyan et, al. 2009). However, other standard kernel functions are available (see module `kernels.py`), which includes the squared exponential 
+The choice for an appropriate covariance (kernel) function is important and there are many stationary (invariant to translation in input space) and non-stationary covariance functions available (for an overview, see, e.g., Rasmussen and Williams 2006). To handle the computational problem of inverting a large covariance matrix, GeoBO uses by default an intrinsically sparse covariance function (Melkumyan et, al. 2009). However, other standard kernel functions are available (see module `kernels.py`), which includes the squared exponential 
 and Matern32 function and their their corresponding multi-kernel covariance functions (see Melkumyan et. al. 2011). 
 
 The settings yaml file allows you to choose the kernel function by configuring the parameter `kernelfunc`,  which can be set either to 'sparse' (Default), 'exp' (squared exponential) or 'matern32'. New custom kernels can be a added in the module `kernels.py`, which requires to write their covariance function (see as example `gpkernel()`) and cross-covariance function (see as example `gpkernel_sparse()`), and then to add their function name to settings.yaml and to `create_cov()` in `kernels.py`.  
@@ -230,15 +232,17 @@ The hyperparameters of the GP kernel can be configured in the settings yaml file
 
 ### Bayesian Optimisation Options
 
-To find the optimal new sampling point, GeoBO maximises the objective (acquisition) function which is defined by the Upper Confidence Bound (UCB)
-$$ UCB (\mathbf { x }) = \mu ( \mathbf { x } ) + \kappa \cdot \sigma (\mathbf { x }) - \beta c(x) $$
-with the mean value for the prediction $\mu (\mathbf{x})$, the variance $\sigma^2 ( \mathbf{x} )$, and a cost function  $c(x)$, which is defined by the cost of obtaining a measurement at the sample point $x$. The parameter $\kappa$ and $\gamma$ define the trade-off in exploration-to-exploitation and gain-to-cost, respectively. For example, maximizing the mean value can be beneficial if the goal is to sample new data at locations with high density or mineral content, and not only where the uncertainty is high. 
-The parameters $\kappa$ and $\beta$ can be accordingly specified by the user in the settings yaml file. Moerover, the settings allow the user to choose between vertical and non-vertical drillcore; in the latter case GeoBO is optimising also dip and azimuthal angle of the  drillcore in addition to drillcore position.
+To find the optimal new sampling point, GeoBO maximises the objective function (acquisition function) which is defined by the Upper Confidence Bound (UCB)
+
+UCB(x) = *m*(x) + *k* *sigma*(x) - *b* *c*(x)
+
+with the mean value for the prediction *m*(x), the variance *sigma*<sup>2</sup>(x), and a cost function *c*(x), which is defined by the cost of obtaining a measurement at the sample point x. The parameter *k* and *b* define the trade-off in exploration-to-exploitation and gain-to-cost, respectively. For example, maximizing the mean value can be beneficial if the goal is to sample new data at locations with high density or mineral content, and not only where the uncertainty is high. 
+The parameters *k* and *b* can be accordingly specified by the user in the settings yaml file.  Moreover, the settings allow the user to choose between vertical and non-vertical drillcore; in the latter case GeoBO is optimising also dip and azimuthal angle of the  drillcore in addition to drillcore position.
 
 
 ## Literature
 
-Sebastian Haan, Fabio Ramos, Dietmar Muller, "Multi-Objective Bayesian Optimisation and Joint Inversion for Active Sensor Fusion", Geophysics, 86(1), pp.1-78. [arXiv](https://arxiv.org/abs/2010.05386)
+Sebastian Haan, Fabio Ramos, Dietmar Muller, "Multi-Objective Bayesian Optimisation and Joint Inversion for Active Sensor Fusion", Geophysics, 86(1), pp.1-78. [arXiv Preprint](https://arxiv.org/abs/2010.05386)
 
 Carl Edward Rasmussen and Christopher KI Williams, Gaussian process for machine learning, MIT press, 2006.
 
