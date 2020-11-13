@@ -13,7 +13,7 @@ authors:
 affiliations:
   - name: Sydney Informatics Hub, The University of Sydney, Australia
     index: 1
-date: 2 July 2020
+date: 14 November 2020
 bibliography: paper.bib
 ---
 <!-- pandoc -V geometry:margin=1in -V fontsize:11pt --filter pandoc-citeproc -o paper.pdf paper.md -->
@@ -22,11 +22,16 @@ bibliography: paper.bib
 
 A critical decision process in geophysical data collection is how to efficiently combine a variety of sensor types and where to collect new observations, in particular if measurements are very costly or resources are limited. This may include drill-core placements or the layout of a geophysical survey. Bayesian Optimisation (BO) solves this decision making problem by finding global optimal solutions given multiple, often distinct measurements and model uncertainties. One of the major challenges for applying BO in geoscience still lies in constructing a 3D model from sparse, typically 2D sensor data that can be computationally efficiently evaluated and that transforms the combined data and uncertainties from multiple sensor measurements coherently into a posterior function approximating the true model; this is also know as an inversion problem.
 
-``GeoBO`` is a Python package that solves both, Multi-Objective Optimisation and Joint Inversion, within one probabilistic framework: from prior selection and input, data fusion and inversion, to the final sensor optimisation and real world model output. Fig.1 shows a graphical overview model of ``GeoBO``; the two main process steps are summarized in the following. 
+``GeoBO`` is a Python package that solves both, Multi-Objective Optimisation and Joint Inversion, within one probabilistic framework: from prior selection and input, data fusion and inversion, to the final sensor optimisation and real world model output. 
+<!-- While the current implementation generates 3D geophysical properties based on gravity and magnetic inversion and searching for optimal new drillcore measurements, in principle, the same model can be applied to a wide range of sensor fusion problems and allocation problems, such as: How to position or activate sensors for quasi-linear inverse problems (e.g. seismic, tomography) or if the model state is dynamic?  Where to sample if the cost function is incomplete? -->
+Fig.1 shows a graphical overview model of ``GeoBO``; the two main process steps are summarized in thee following. 
 
-First, ``GeoBO`` jointly solves multi-linear forward models of 2D survey data (e.g. magnetics and gravity) to 3D-geophysical properties using Gaussian Process kernels [see e.g. @Rasmussen:2006; @Melkumyan:2009], without the requirement of prior geological knowledge. In addition, sparse drillhole measurements can be taken into account. One of the key features is to consider correlations  between geophysical properties by solving simultaneously multiple forward models [@Melkumyan:2011; @Reid:2013]. Thus, this approach provides a better constrained combined solution of multiple, distinct sensor types, rather than taking their individual solutions. By using non-parametric Gaussian Process priors, the solution of the inverse problem provides a complete posterior distribution for all geophysical properties which are described by their mean and variance value at each location (voxel). While this inversion method is limited to linear forward models, the reconstructed posterior distribution of the geophysical properties can be further refined using site-specific knowledge or more complex inversion methods for sampling non-linear forward models, such as hIPPYlib [@Hippylib], Obsidian [@Obsidian], or GemPy [@GemPy].
+First, ``GeoBO`` jointly solves multi-linear forward models of 2D survey data (e.g. magnetics and gravity) to 3D-geophysical properties using Gaussian Process kernels [see e.g. @Rasmussen:2006; @Melkumyan:2009], without the requirement of prior geological knowledge. In addition, sparse drillhole measurements can be taken into account. One of the key features is to consider correlations between geophysical properties by solving simultaneously multiple forward models [@Melkumyan:2011; @Reid:2013]. Thus, this approach provides a better constrained combined solution of multiple, distinct sensor types, rather than taking their individual solutions. Another practical advantage of this probabilistic approach is that predictions are described by posterior distributions for each location (voxel or cube cell), which quantify the uncertainty in the predictions and their credible intervals. Most other work in the field of joint inversion only report point estimates of the quantities of interest (see, e.g., @Zeyen:1993, @Gallardo:2003, @Moorkamp:2011})
+
+While this inversion method is limited to linear forward models, the reconstructed posterior distribution of the geophysical properties can be further refined using site-specific knowledge or more complex inversion methods for sampling non-linear forward models, such as hIPPYlib [@Hippylib], Obsidian [@Obsidian], or GemPy [@GemPy].
 
 In a second step, ``GeoBO`` allows the user to define objectives in an acquisition function [@Brochu:2010] which typically has to balance between a) exploration, i.e., querying points that maximise the information gain and minimize the uncertainty of a geophysical site model, b) exploitation, i.e. querying points that maximise the reward (e.g. concentrating search in the vicinity locations with high value such as minerals), and c) minimize the number of samples given a cost function for any new measurement (e.g. costly drill-cores). The reconstructed 3D model output of the joint inversion model is then used to query for the next most promising point based on the aquisitian function, which guides the search for a user-defined optimum.
+
 
 ``GeoBO`` allows applications to specify priors as additional options, such as a) the typical correlation lengthscale of the geological structure via GP hyperparameters, b) the gain/cost parameters in the BO acquisition function, and c) the correlation coefficients between different geophysical properties. This package includes forward models for gravity and magnetics surveys [@Li:1998], drillcores, and test-sets of geological models and data. 
 
@@ -58,10 +63,15 @@ Other features are:
  - Generation of 2D/3D visualisation plots of reconstructed cubes and survey data (see plot settings in settings.yaml)
  - 3D Cube export in VTK format (for subsequent analysis, e.g., with ParaView)
  - Options to include any pre-existing drillcore data (see settings.yaml for feature names as well as format of sample drilldata)
+ - Included linear forward models: density-to-gravity and magnetic susceptibility-to-magnetic field; custom linear forward models can be added (sensormodel.py)
  - Library of Gaussian Process (GP) kernels including sparse GP kernels (kernels.py)
  - Flexible settings for any cube geometry and resolution (cube length/width/height and voxel resolutions)
  - Optional  marginal GP likelihood for  optimization of GP hyperparameters and inversion process
 
+
+## Results and Output
+
+First, the joint inversion generates the reconstructed properties and their uncertainties as 3D cubes, such as density and magnetic susceptibility. Other 3D physical properties can be obtained by adding custom forward models (see section *Custom Linear Forward Models* in README). Secondly, Bayesian Optimisation uses these probabilistic inversion results to query new potential measurements based on a specific set of objectives as defined in an acquisition function, which guides the search for a user-defined optimum. Finally a list of all new measurement proposals ranked from maximum to minimum improvement is generated including a map of the most promising new measurement locations.
 
 
 # Acknowledgements
