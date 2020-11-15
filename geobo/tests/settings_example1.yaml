@@ -97,15 +97,19 @@ kappa: 1
 beta: 0.0
 
 
-
 ######## Constants######
 # these are some physical constants used for forward models and survey data conversion
+# Note that by default geobo sets density and magnetic susceptibility to a mean value of zero
 # change according to you survey data
-# By default geobo sets density and magnetic susceptibility to a mean value of zero
-c_G: 6.673848e-11
+# See also sensormodel.py
+# For gravity forward model the following unit conversion is used for Li's approximation
+# c_MILLIGALS_UNITS = c_G * c_SI_TO_MILLIGALS * c_GCM3_TO_SI
+c_G: 6.673848e-11 # Gravitational Constant
 c_SI_TO_MILLIGALS: 10000
 c_GCM3_TO_SI: 1000.0
+#density in 1 SI units:
 fcor_grav: 1. 
-fcor_mag: 0.001 # magnetic susceptibility is measured in 0.001 SI units  
+# magnetic susceptibility is measured in 0.001 SI units:
+fcor_mag: 0.001  
 ########################
 
