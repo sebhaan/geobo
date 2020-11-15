@@ -216,7 +216,7 @@ where **G** is the transformation operator or matrix. The gravitational and magn
 
 The current implementation includes magnetic and gravity forward models, which are defined in the module `sensormodel.py` by the functions `A_sens()`,`grav_func()`, and `magn_func()`. The easiest way to add custom models is to create a new forward model function similar to the included functions `grav_func()` or `magn_func` and to compute the forward model matrix with `A_sens()`, if possible. The custom function need to describe the sensitivity or relationship for a particular point relative to the sensor origin (see, e.g., `grav_func()`).
 
-In general any linear forward model can be added by changing accordingly the forward model matrix as computed by `A_sens()` as long as this function returns the matrix $G$ that satisfies the linear relation **y** = **G** ***P***.
+In general any linear forward model can be added by changing accordingly the forward model matrix as computed by `A_sens()` as long as this function returns the matrix **G** that satisfies the linear relation **y** = **G** ***P***.
 
 
 ### Gaussian Process Kernel Functions
