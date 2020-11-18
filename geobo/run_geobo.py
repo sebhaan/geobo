@@ -46,7 +46,7 @@ def read_surveydata(plot = True):
 	else:
 		grav = None
 	if FNAME_magsurvey is not None:
-		magimg = rasterio.open(os.path.join(inpath + FNAME_magsurvey))
+		magimg = rasterio.open(os.path.join(inpath, FNAME_magsurvey))
 		mag = magimg.read(1)
 	else:
 		mag = None
