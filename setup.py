@@ -6,7 +6,7 @@ import subprocess
 import io
 
 ## in development set version
-PYPI_VERSION = '0.1.0'
+PYPI_VERSION = '0.1.1'
 
 # Return the git revision as a string (from numpy)
 def git_version():
@@ -47,7 +47,7 @@ if __name__ == "__main__":
     setup(name = 'geobo',
           author            = "Sebastian Haan",
           author_email      = "sebastian.haan@sydney.edu.au",
-          url               = "https://github.com/sebhaan/geobo/tree/release",
+          url               = "https://github.com/sebhaan/geobo",
           version           = PYPI_VERSION,
           description       = "Python package for Multi-Objective Bayesian Optimisation and Joint Inversion in Geosciences",
           long_description  = long_description,
@@ -59,9 +59,8 @@ if __name__ == "__main__":
                               'scipy>=1.1.0',
                               'rasterio>=1.0.20',
                               'pandas>=0.23.4',
-                              'pyvista>=0.23.0'],
-                              #'skimage>=0.0',
-                              #'PyYAML>=5.3'],
+                              'pyvista>=0.23.0',
+                              'PyYAML>=5.3'],
           python_requires   = '>=3.6',
           setup_requires    = ["pytest-runner", 'webdav'],
           tests_require     = ["pytest", 'webdav'],
