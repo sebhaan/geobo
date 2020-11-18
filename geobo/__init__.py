@@ -72,3 +72,5 @@ pip3 install geobo
 2) Then run geobo
 python run_main.py settings.yaml
 """
+__version__ = "0.1.1"
+__author__ = "Sebastian Haan"
