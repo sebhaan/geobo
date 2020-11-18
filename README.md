@@ -2,7 +2,7 @@
 
 ``GeoBO`` is build upon a probabilistic framework using Gaussian Process (GP) priors to jointly solve multi-linear forward models. This software generates multi-output 3D cubes of geophysical properties (e.g. density, magnetic susceptibility, mineral concentrations) and their uncertainties from 2D survey data (e.g. magnetics and gravity) and any pre-existing drillcore measurements. The reconstructed 3D model is then used to query the next most promising measurement location given an expensive cost function (e.g. for drillcores). A ranked list of new measurements is proposed based on user-defined objectives as defined in the acquisition function which typically aims to optimize exploration (reducing global model uncertainty) and exploitation (focusing on highly promising regions) while minimizing costs. 
 
-![GeoBO Framework](docs/Overview_illustration.png?raw=True)
+![GeoBO Framework](https://github.com/sebhaan/geobo/blob/master/docs/Overview_illustration.png?raw=True)
 
 ## Table of Contents
 - [Definitions](#definitions)
@@ -29,7 +29,7 @@
 ## Definitions
 
 Bayesian Optimisation (BO) is a powerful framework for finding the extrema of objective functions that are noisy, expensive
-to evaluate, do not have a closed-form (e.g. black-boxfunctions), or have no accessible derivatives. The model used for approximating the objective function is called surrogate model, which is typically based on a [Gaussian Process models](https://en.wikipedia.org/wiki/Gaussian_process) for tractability. Gaussian Processes define a prior over functions (typically given by a kernel function) and is used to propose points in the search space where sampling is likely to yield an improvement. The specific set of objectives for the improvement are defined in an acquisition function, which guides the search for a user-defined optimum.
+to evaluate, do not have a closed-form (e.g. black-boxfunctions), or have no accessible derivatives. The model used for approximating the objective function is called surrogate model, which is typically based on a [Gaussian Process models](https://en.wikipedia.org/wiki/Gaussian_process) for tractability. Gaussian Processes define a prior over functions (typically given by a kernel function) and is used to propose points in the search space where sampling is likely to yield an improvement. The specific set of objectives for the improvement are defined in an acquisition function, which guides the search for a user-defined optimum. An example use case scenario is described in a nutshell in [OPTIMIZATION_FOR_ACTIVE_SENSORFUSION_IN_A_NUTSHELL.pdf](https://github.com/sebhaan/geobo/blob/master/docs/OPTIMIZATION_FOR_ACTIVE_SENSORFUSION_IN_A_NUTSHELL.pdf).
 
 ### Acquisition function 
 
@@ -201,7 +201,7 @@ List of Bayesian Optimisation Output:
 - List of all new measurement proposals (here for drillcores) ranked from maximum (hightest gain) to minimum of optimisation function. The results are saved as csv file (**newdrill_proposals_non-vertical.csv** or **newdrill_proposals_vertical.csv**) and include for vertical drillcores the position (Easting, Northing) and for non-vertical drillcores position and drill angles (Azimuth, Dip).
 - Points of proposed measurement positions on top of reconstructed drill property image (mean projection along z-axis): The output figure (non-vertical drillcores:**newdrill_proposals.png** or vertical drillcores:**newdrill_vertical_proposals.png**) shows the location of the already existing drills as given by input measurements (black points), the new proposed drill positions (white), and the best (maximum of optimsation function) new drill location (red). 
 
-![Example image of new measurement proposals (black_ existing, white: new proposed, red: best proposal) on top of reconstructed property (mean value projection)](docs/newdrill_proposals.png?raw=True).
+![Example image of new measurement proposals (black_ existing, white: new proposed, red: best proposal) on top of reconstructed property (mean value projection)](https://github.com/sebhaan/geobo/blob/master/docs/newdrill_proposals.png?raw=True).
 
 ## Options and Customization
 

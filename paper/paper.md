@@ -16,7 +16,9 @@ affiliations:
 date: 14 November 2020
 bibliography: paper.bib
 ---
-<!-- pandoc -V geometry:margin=1in -V fontsize:11pt --filter pandoc-citeproc -o paper.pdf paper.md -->
+<!-- pandoc -V geometry:margin=1in -V fontsize:11pt --filter pandoc-citeproc  -o paper.pdf paper.md -->
+<!--add "author: Sebastian Haan" to meta for standard pandoc conversion --> 
+
 
 # Summary
 
