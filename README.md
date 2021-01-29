@@ -1,3 +1,5 @@
+![](https://github.com/sebhaan/geobo/blob/master/docs/Logo_GeoBO.png?raw=True)
+
 # GeoBO: A Python package for Multi-Objective Bayesian Optimisation and Joint Inversion in Geosciences
 
 ``GeoBO`` is build upon a probabilistic framework using Gaussian Process (GP) priors to jointly solve multi-linear forward models. This software generates multi-output 3D cubes of geophysical properties (e.g. density, magnetic susceptibility, mineral concentrations) and their uncertainties from 2D survey data (e.g. magnetics and gravity) and any pre-existing drillcore measurements. The reconstructed 3D model is then used to query the next most promising measurement location given an expensive cost function (e.g. for drillcores). A ranked list of new measurements is proposed based on user-defined objectives as defined in the acquisition function which typically aims to optimize exploration (reducing global model uncertainty) and exploitation (focusing on highly promising regions) while minimizing costs. 
