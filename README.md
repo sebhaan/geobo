@@ -178,7 +178,7 @@ python main.py tests/settings_example1.yaml
 
 ### Drillcore Test Example
 
-Another examples includes drillcore and gravity/magnetic survey data (`examples/testdata/sample/`). This example can be run with
+Another example includes drillcore and gravity/magnetic survey data (`examples/testdata/sample/`). This example can be run with
 
 ```sh
 cd geobo/
@@ -195,7 +195,7 @@ List of Joint Inversion Result Outputs:
 
 - 3D Cube files in vtk format (to use, e.g., with PyVista or ParaView): Output of cross-correlated reconstructed properties (density: **cube_density.vtk**, magnetic susceptibility: **cube_magsus.vtk**, property from drill: **cube_drill.vtk**) and their uncertainity cubes in terms of standard deviation (**cube_density_variance.vtk, cube_drill_variance.vtk, cube_drill_variance.vtk**). In case the cross-covariance terms (`gp_coeff` in the settings file) are all set to zero, the solutions for each forward model are independent from each other.
 - Optional (Default optiion: plot=True in function `read_surveydata()`): Images of the input gravitational field (**gravfield.png**) and magnetic field (**magfield.png**) and their corresponding downsampled images (**gravfield_downsampled.png, magfield_downsampled.png**) 
-- Optional (if `plot3d`:True in settings): 3D Preview of reconstructed properties: density (**density-mesh3D.png**), magnetic suscpetibility (**magsus-mesh3D.png**), and drill property (**drill-mesh3D.png**). However, it is recommended to use PyVista or Paraview instead. Future updates for 3D visualisations will be based on PyVista. 
+- Optional (if `plot3d`:True in settings): 3D Preview of reconstructed properties: density (**density-mesh3D.png**), magnetic susceptibility (**magsus-mesh3D.png**), and drill property (**drill-mesh3D.png**). However, it is recommended to use PyVista or Paraview instead. Future updates for 3D visualisations will be based on PyVista. 
 - Optional (if `plot_vertical`:True in settings): 2D maps of vertically (along z-axis) mean value of cube properties (**dens_rec2D_loc2.png, magsus_rec2D_loc2.png, drill_rec2D_loc2.png**)
 
 List of Bayesian Optimisation Output:
@@ -229,7 +229,7 @@ and Matern32 function and their their corresponding multi-kernel covariance func
 
 The settings yaml file allows you to choose the kernel function by configuring the parameter `kernelfunc`,  which can be set either to 'sparse' (Default), 'exp' (squared exponential) or 'matern32'. New custom kernels can be a added in the module `kernels.py`, which requires to write their covariance function (see as example `gpkernel()`) and cross-covariance function (see as example `gpkernel_sparse()`), and then to add their function name to settings.yaml and to `create_cov()` in `kernels.py`.  
 
-The hyperparameters of the GP kernel can be configured in the settings yaml file (see Gaussian Process Settings) and are given by the lengthscale (`gp_lengthscale`), the noise regularization terms (`gp_err`) per forward model, and the cross-covariance amplitude terms which (`w1,w2,w3`) that coorrepond to the correlation coefficients between the model properties (e.g., rock density ,magnetic susceptibility, and drillcore measurements). The mathematical details for construction of the Multi-Kernel Covariance Functions are described in Haan et al 2020.
+The hyperparameters of the GP kernel can be configured in the settings yaml file (see Gaussian Process Settings) and are given by the lengthscale (`gp_lengthscale`), the noise regularization terms (`gp_err`) per forward model, and the cross-covariance amplitude terms which (`w1,w2,w3`) that coorrepond to the correlation coefficients between the model properties (e.g., rock density, magnetic susceptibility, and drillcore measurements). The mathematical details for construction of the Multi-Kernel Covariance Functions are described in Haan et al 2020.
 
 
 ### Bayesian Optimisation Options
