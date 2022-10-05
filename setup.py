@@ -52,7 +52,7 @@ if __name__ == "__main__":
           description       = "Python package for Multi-Objective Bayesian Optimisation and Joint Inversion in Geosciences",
           long_description  = long_description,
           long_description_content_type='text/markdown',
-          install_requires  = ['numpy>=1.15.0', 
+          install_requires  = ['numpy>=1.19.0', 
                               'scipy>=1.1.0', 
                               'matplotlib>=2.2.2',
                               'scikit_image>=0.14.0',
